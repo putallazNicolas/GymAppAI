@@ -277,7 +277,7 @@ export const createDomainServices: CreateDomainServices = (repos, options = {}) 
     },
 
     async importAllData(payload) {
-      const snapshot = parseImportPayload(payload);
+      const snapshot = parseImportPayload(payload, { seedCreatedAt: nowIso() });
       await repos.backup.restore(snapshot);
       return importResultOf(snapshot);
     },

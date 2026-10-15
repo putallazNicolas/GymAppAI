@@ -38,6 +38,19 @@ const ICONS = {
   close: <Path d="M6 6l12 12M18 6L6 18" />,
   chevron: <Path d="M9 6l6 6-6 6" />,
   chevronLeft: <Path d="M15 6l-6 6 6 6" />,
+  upload: (
+    <>
+      <Path d="M12 15V3M7 8l5-5 5 5" />
+      <Path d="M4 14v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5" />
+    </>
+  ),
+  download: (
+    <>
+      <Path d="M12 3v12M7 10l5 5 5-5" />
+      <Path d="M4 14v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5" />
+    </>
+  ),
+  chevronDown: <Path d="M6 9l6 6 6-6" />,
   up: <Path d="M12 19V5M6 11l6-6 6 6" />,
   down: <Path d="M12 5v14M6 13l6 6 6-6" />,
   more: (

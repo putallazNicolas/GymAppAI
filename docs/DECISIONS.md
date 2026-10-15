@@ -63,3 +63,14 @@ Formato: fecha — decisión — motivo.
 - 2026-10-15 — (QA) Bug encontrado en web: tocar ✓ rápido en varias series deja el ejercicio sin colapsar (estado viejo en el handler). Se corrige en R2. — SCREENS 4.2.
 - 2026-10-15 — (Rediseño) Override raíz `react-native-gesture-handler ~2.32.0`. — expo-router traía 3.3.0 duplicado (expo-doctor).
 - 2026-10-15 — (Rediseño, R1) Tokens extra para no dejar literales: `textBody`, `accentFaint`, `accentHalo`, `successPressed`, `successBorderStrong`, `transparent`, tipos `bodyStrong`/`badge`/`buttonM`/`buttonS`/`tab`; íconos SVG propios (sin expo-symbols); switch encendido en `accent` como P06. — Regla de tokens y diseño.
+- 2026-10-15 — (R2) "Día X de N" = orden del día + 1 sobre los días de la rutina activa; "S series" = series de todo el día. — Como el ejemplo de P01.
+- 2026-10-15 — (R2) Badge PR en vivo solo si el ejercicio tiene historial (la primera sesión nunca es PR), con mejor acumulado dentro del entrenamiento. — Mismo criterio que el resumen.
+- 2026-10-15 — (R2) Toques rápidos en ✓: estado en refs, completado optimista, guardados en cola en orden de toque (se revierte si falla) y colapso calculado sobre el estado más reciente tras 350 ms. — Bug encontrado en la prueba web.
+- 2026-10-15 — (R2) Se conserva la card "Buen laburo / Finalizar y ver resumen" de P03 al completar todo; el anillo de descanso queda verde lleno en "A LA BARRA". — Diseño.
+- 2026-10-15 — (R3) Series con stepper −/+ (1–20) que guarda en cada toque, como P07; descanso sigue en segundos ("DESCANSO (s)"), no "3:00". — P07 / formato del contrato.
+- 2026-10-15 — (R3, choque) Borrar día o ejercicio mantiene la confirmación (el mockup no la tiene). — SCREENS: confirmar antes de eliminar.
+- 2026-10-15 — (R3) Rutinas archivadas: menú con "Activar" y "Desarchivar"; "Nueva rutina" del header oculto en el estado vacío. — Una sola acción naranja por pantalla.
+- 2026-10-15 — (R4) Progreso: "PR" si el e1RM de la sesión supera a todas las anteriores, "PR PESO" si solo el peso; rango por defecto 3M; 12 barras semanales (P09 dibuja 8 pero dice 12 semanas). — Coherencia con el título.
+- 2026-10-15 — (R4, choque) Perfil usa el aviso completo de SCREENS 4.9 ("…Si borrás la app, se pierden. Exportalos seguido."), P11 lo acorta. — Texto requerido por el dueño.
+- 2026-10-15 — (R4) Switch de temporizador de descanso bajo una sección "DESCANSO" agregada en Perfil; "Última exportación" guardada en un archivo local (best effort). — P11 no tenía ese ajuste.
+- 2026-10-15 — (Cierre) Fila de PR de peso en el Resumen muestra la serie más pesada (antes mostraba la mejor por e1RM); duración < 1 h como "m:ss". — Encontrado en la prueba web.

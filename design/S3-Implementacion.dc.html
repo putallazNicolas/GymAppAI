@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Notas de implementación</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.num{font-family:'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums}
+pre,code{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace}
+</style>
+</helmet>
+<div style="width:880px;height:2800px;box-sizing:border-box;padding:48px;background:#0B0B0C;color:#F4F4F2;font-family:'Barlow',sans-serif;display:flex;flex-direction:column;gap:32px">
+
+  <header style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px">
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#FF5B1F">PARA REACT NATIVE · EXPO GO</span>
+      <h1 class="num" style="margin:0;font-size:56px;line-height:0.92;font-weight:800;text-transform:uppercase">Notas de implementación</h1>
+    </div>
+  </header>
+
+  <div style="display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:28px;align-items:start">
+
+    <section style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">apps/mobile/src/theme.ts</span>
+      <pre style="margin:0;padding:18px 18px;border-radius:14px;background:#141416;border:1px solid #2A2A2E;font-size:11.5px;line-height:1.55;color:#E4E4E2;white-space:pre;overflow:hidden">import { Easing } from 'react-native-reanimated';
+
+export const colors = {
+  background: '#0B0B0C',
+  surface: '#141416',
+  surfaceRaised: '#1C1C1F',
+  divider: '#1F1F22',
+  border: '#2A2A2E',
+  borderStrong: '#3A3A3F',
+  textPrimary: '#F4F4F2',
+  textSecondary: '#9A9A9F',
+  textTertiary: '#7C7C82',
+  textDisabled: '#5E5E64',
+  accent: '#FF5B1F',
+  accentPressed: '#E04A12',
+  accentMuted: 'rgba(255,91,31,0.12)',
+  accentBorder: 'rgba(255,91,31,0.45)',
+  onAccent: '#0B0B0C',
+  success: '#3DDC84',
+  successMuted: 'rgba(61,220,132,0.12)',
+  successBorder: 'rgba(61,220,132,0.30)',
+  record: '#FFC83D',
+  recordMuted: 'rgba(255,200,61,0.16)',
+  danger: '#FF4D6A',
+  dangerMuted: 'rgba(255,77,106,0.14)',
+  chartWeight: '#8A8A90',
+  scrim: 'rgba(0,0,0,0.66)',
+} as const;
+
+export const fonts = {
+  display: 'BarlowCondensed_800ExtraBold',
+  displayBold: 'BarlowCondensed_700Bold',
+  displayMedium: 'BarlowCondensed_500Medium',
+  bodyRegular: 'Barlow_400Regular',
+  body: 'Barlow_500Medium',
+  bodySemi: 'Barlow_600SemiBold',
+  bodyBold: 'Barlow_700Bold',
+  bodyHeavy: 'Barlow_800ExtraBold',
+} as const;
+
+const tnum = { fontVariant: ['tabular-nums' as const] };
+const upper = { textTransform: 'uppercase' as const };
+
+export const type = {
+  displayXL: { fontFamily: fonts.display, fontSize: 46, lineHeight: 42, ...upper },
+  displayL: { fontFamily: fonts.display, fontSize: 38, lineHeight: 36, ...upper },
+  displayM: { fontFamily: fonts.displayBold, fontSize: 27, lineHeight: 28, ...upper },
+  displayS: { fontFamily: fonts.displayBold, fontSize: 22, lineHeight: 24, ...upper },
+  numXL: { fontFamily: fonts.displayBold, fontSize: 40, lineHeight: 40, ...tnum },
+  numL: { fontFamily: fonts.displayBold, fontSize: 32, lineHeight: 32, ...tnum },
+  numM: { fontFamily: fonts.displayBold, fontSize: 25, lineHeight: 28, ...tnum },
+  numS: { fontFamily: fonts.displayMedium, fontSize: 17, lineHeight: 20, ...tnum },
+  body: { fontFamily: fonts.body, fontSize: 16, lineHeight: 22 },
+  bodyS: { fontFamily: fonts.bodyRegular, fontSize: 14, lineHeight: 20 },
+  caption: { fontFamily: fonts.bodyRegular, fontSize: 13, lineHeight: 18 },
+  label: { fontFamily: fonts.bodyBold, fontSize: 11, lineHeight: 14,
+           letterSpacing: 1.5, ...upper },
+  button: { fontFamily: fonts.bodyHeavy, fontSize: 18, lineHeight: 22 },
+} as const;
+
+export const space = { xs: 4, sm: 8, md: 12, lg: 16, xl: 20, xxl: 24, xxxl: 32 } as const;
+export const radii = { sm: 8, md: 10, lg: 14, xl: 16, xxl: 20, pill: 999 } as const;
+export const hit = { min: 44, row: 52, rowFocus: 56, cta: 56 } as const;
+
+export const elevation = {
+  floating: {
+    shadowColor: '#000',
+    shadowOpacity: 0.7,
+    shadowRadius: 20,
+    shadowOffset: { width: 0, height: 16 },
+    elevation: 16,
+  },
+} as const;
+
+export const motion = {
+  press: 90,
+  fast: 160,
+  base: 220,
+  slow: 320,
+  draw: 900,
+  easeOut: Easing.bezier(0.22, 1, 0.36, 1),
+  springPop: { damping: 12, stiffness: 300, mass: 0.6 },
+  springSoft: { damping: 18, stiffness: 220 },
+} as const;
+
+export const theme = { colors, fonts, type, space, radii, hit, elevation, motion };
+export type Theme = typeof theme;</pre>
+    </section>
+
+    <div style="display:flex;flex-direction:column;gap:28px">
+      <section style="display:flex;flex-direction:column;gap:10px">
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">FUENTES (GOOGLE FONTS → EXPO-FONT)</span>
+        <div style="padding:16px;border-radius:14px;background:#141416;border:1px solid #2A2A2E;display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <span class="num" style="font-size:30px;font-weight:800;line-height:1">Barlow Condensed</span>
+            <span style="font-size:13px;color:#9A9A9F">500 · 700 · 800 — números, títulos, nombres de ejercicio</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <span style="font-size:24px;font-weight:600;line-height:1.1">Barlow</span>
+            <span style="font-size:13px;color:#9A9A9F">400 · 500 · 600 · 700 · 800 — cuerpo, labels, botones</span>
+          </div>
+          <pre style="margin:0;padding:12px;border-radius:10px;background:#0B0B0C;font-size:11.5px;line-height:1.55;color:#E4E4E2;white-space:pre-wrap">npx expo install expo-font expo-splash-screen \
+  @expo-google-fonts/barlow-condensed \
+  @expo-google-fonts/barlow</pre>
+          <pre style="margin:0;padding:12px;border-radius:10px;background:#0B0B0C;font-size:11.5px;line-height:1.55;color:#E4E4E2;white-space:pre-wrap">const [loaded] = useFonts({
+  BarlowCondensed_500Medium,
+  BarlowCondensed_700Bold,
+  BarlowCondensed_800ExtraBold,
+  Barlow_400Regular, Barlow_500Medium,
+  Barlow_600SemiBold, Barlow_700Bold,
+  Barlow_800ExtraBold,
+});
+// mantené el splash hasta que loaded === true</pre>
+          <span style="font-size:13px;line-height:1.45;color:#C9C9CC">En RN cada peso es una familia distinta: usá <code style="color:#F4F4F2">fontFamily</code>, nunca <code style="color:#F4F4F2">fontWeight</code>. Las cifras tabulares salen de <code style="color:#F4F4F2">fontVariant: ['tabular-nums']</code>. Como respaldo, dale ancho fijo a las celdas de kg y reps para que nada salte al cambiar un número.</span>
+        </div>
+      </section>
+
+      <section style="display:flex;flex-direction:column;gap:10px">
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">DEPENDENCIAS (TODAS EN EXPO GO)</span>
+        <div style="padding:14px 16px;border-radius:14px;background:#141416;border:1px solid #2A2A2E;display:flex;flex-direction:column;gap:8px;font-size:14px;line-height:1.4">
+          <span><code style="color:#FF5B1F">react-native-reanimated</code> — todas las animaciones y layout transitions</span>
+          <span><code style="color:#FF5B1F">react-native-gesture-handler</code> — cursor del gráfico, swipe del descanso</span>
+          <span><code style="color:#FF5B1F">react-native-svg</code> — íconos, anillo de descanso, gráfico, barra vacía</span>
+          <span><code style="color:#FF5B1F">expo-linear-gradient</code> — área del e1RM, card de PR, fade inferior</span>
+          <span><code style="color:#FF5B1F">expo-haptics</code> — feedback de check, PR y fin del descanso</span>
+          <span style="color:#9A9A9F">Sin blur, sin sombras de color ni filtros web. Los degradés son solo verticales y de dos stops.</span>
+        </div>
+      </section>
+
+      <section style="display:flex;flex-direction:column;gap:10px">
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">REGLAS DE USO</span>
+        <div style="padding:14px 16px;border-radius:14px;background:#141416;border:1px solid #2A2A2E;display:flex;flex-direction:column;gap:10px;font-size:14px;line-height:1.45;color:#C9C9CC">
+          <span><b style="color:#3DDC84">Verde</b> solo para lo completado. <b style="color:#FFC83D">Dorado</b> solo para PRs. <b style="color:#FF5B1F">Naranja</b> para la acción principal y el foco: una acción naranja llena por pantalla.</span>
+          <span>Texto siempre oscuro (<code style="color:#F4F4F2">onAccent</code>) sobre naranja, verde, dorado y rojo. El blanco sobre naranja no llega a 4,5:1.</span>
+          <span>Todo objetivo táctil mide ≥ 44 pt; usá <code style="color:#F4F4F2">hitSlop</code> en los íconos de 20 px.</span>
+          <span>Inputs de kg: <code style="color:#F4F4F2">keyboardType="decimal-pad"</code>, aceptan coma y punto. Reps: <code style="color:#F4F4F2">number-pad</code>. Ambos con <code style="color:#F4F4F2">selectTextOnFocus</code>.</span>
+          <span>Si no se cargó nada, el placeholder es lo de la última vez y el ✓ lo confirma tal cual. Cada ✓ persiste al instante.</span>
+          <span>Con <code style="color:#F4F4F2">useReducedMotion()</code>: sin escalas ni resortes, solo fundidos de 150 ms. Los haptics se mantienen.</span>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <section style="display:flex;flex-direction:column;gap:10px">
+    <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">MICROINTERACCIONES · QUÉ SE MUEVE, CUÁNTO DURA, CON QUÉ CURVA</span>
+    <div style="border-radius:14px;border:1px solid #2A2A2E;overflow:hidden">
+      <div style="display:grid;grid-template-columns:150px minmax(0,1fr) 110px 150px;gap:16px;padding:10px 16px;background:#1C1C1F;font-size:11px;font-weight:700;letter-spacing:0.12em;color:#9A9A9F">
+        <span>MOMENTO</span><span>QUÉ SE MUEVE</span><span>DURACIÓN</span><span>CURVA · HAPTIC</span>
+      </div>
+      <div style="display:grid;grid-template-columns:150px minmax(0,1fr) 110px 150px;gap:16px;padding:12px 16px;border-top:1px solid #1F1F22;font-size:13px;line-height:1.45;background:#141416">
+        <span style="font-weight:700;color:#F4F4F2">Tocar ✓ de una serie</span>
+        <span style="color:#C9C9CC">Botón: escala 1 → 0,86 → 1,08 → 1 (el pulgar «hunde» la placa). Fondo de la fila: <span style="color:#3DDC84">success 42 %</span> → 12 % con interpolateColor. El ícono ✓ se dibuja (strokeDashoffset 1 → 0).</span>
+        <span class="num" style="font-size:16px">90 + 230 ms · fila 600 ms</span>
+        <span style="color:#9A9A9F">withTiming 90 + springPop · easeOut · <b style="color:#F4F4F2">notification Success</b></span>
+      </div>
+      <div style="display:grid;grid-template-columns:150px minmax(0,1fr) 110px 150px;gap:16px;padding:12px 16px;border-top:1px solid #1F1F22;font-size:13px;line-height:1.45;background:#141416">
+        <span style="font-weight:700;color:#F4F4F2">Foco avanza</span>
+        <span style="color:#C9C9CC">El marco naranja aparece en la fila siguiente (opacity 0 → 1, translateY −4 → 0). El segmento de progreso pasa de gris a verde y el siguiente a naranja. Si el teclado estaba abierto, el foco pasa al input de kg.</span>
+        <span class="num" style="font-size:16px">200 ms · delay 120</span>
+        <span style="color:#9A9A9F">easeOut</span>
+      </div>
+      <div style="display:grid;grid-template-columns:150px minmax(0,1fr) 110px 150px;gap:16px;padding:12px 16px;border-top:1px solid #1F1F22;font-size:13px;line-height:1.45;background:#141416">
+        <span style="font-weight:700;color:#F4F4F2">Ejercicio terminado</span>
+        <span style="color:#C9C9CC">Pausa de 350 ms para ver la última fila en verde. La card se achica a 56 pt (LinearTransition) mientras las filas se funden. Aparece el título verde con ✓ y el mejor set. El siguiente entra con FadeInDown y la lista hace scrollTo hasta él.</span>
+        <span class="num" style="font-size:16px">280 ms + 320 ms</span>
+        <span style="color:#9A9A9F">easeOut · <b style="color:#F4F4F2">impact Medium</b></span>
+      </div>
+      <div style="display:grid;grid-template-columns:150px minmax(0,1fr) 110px 150px;gap:16px;padding:12px 16px;border-top:1px solid #1F1F22;font-size:13px;line-height:1.45;background:#141416">
+        <span style="font-weight:700;color:#F4F4F2">PR en una serie</span>
+        <span style="color:#C9C9CC">Cuando el e1RM de la serie supera el histórico, el badge dorado «PR» entra junto a «Anterior» con escala 0,4 → 1,15 → 1. Sin confeti: el dorado alcanza.</span>
+        <span class="num" style="font-size:16px">420 ms · delay 150</span>
+        <span style="color:#9A9A9F">springPop · <b style="color:#F4F4F2">impact Heavy</b></span>
+      </div>
+      <div style="display:grid;grid-template-columns:150px minmax(0,1fr) 110px 150px;gap:16px;padding:12px 16px;border-top:1px solid #1F1F22;font-size:13px;line-height:1.45;background:#141416">
+        <span style="font-weight:700;color:#F4F4F2">Descanso</span>
+        <span style="color:#C9C9CC">Entra con SlideInDown y no bloquea. El anillo baja lineal segundo a segundo. Con +15 s el número hace un bump de 1,12. En 0 el anillo pasa a verde, dice «A LA BARRA» y se va solo a los 5 s. Se descarta con ✕ o deslizando hacia abajo (Pan &gt; 40 pt).</span>
+        <span class="num" style="font-size:16px">260 ms in · 200 out</span>
+        <span style="color:#9A9A9F">easeOut · lineal · <b style="color:#F4F4F2">notification Warning</b> en 0</span>
+      </div>
+      <div style="display:grid;grid-template-columns:150px minmax(0,1fr) 110px 150px;gap:16px;padding:12px 16px;border-top:1px solid #1F1F22;font-size:13px;line-height:1.45;background:#141416">
+        <span style="font-weight:700;color:#F4F4F2">Resumen · PR nuevo</span>
+        <span style="color:#C9C9CC">«Tres luces blancas», como los jueces en una competencia: tres discos se encienden en secuencia (de #2A2A2E a blanco con halo). Después suben las filas de PR, escalonadas. Las stats de arriba aparecen con un fundido escalonado.</span>
+        <span class="num" style="font-size:16px">luces 300/480/660 ms · filas 360 ms</span>
+        <span style="color:#9A9A9F">easeOut · <b style="color:#F4F4F2">impact Light × 3 + Success</b></span>
+      </div>
+      <div style="display:grid;grid-template-columns:150px minmax(0,1fr) 110px 150px;gap:16px;padding:12px 16px;border-top:1px solid #1F1F22;font-size:13px;line-height:1.45;background:#141416">
+        <span style="font-weight:700;color:#F4F4F2">Gráfico de progreso</span>
+        <span style="color:#C9C9CC">Al entrar, la línea e1RM se dibuja (strokeDashoffset) y el área funde. Al tocar o arrastrar (Gesture.Pan), el cursor salta al punto más cercano y la lectura de arriba cambia fecha, e1RM y mejor serie.</span>
+        <span class="num" style="font-size:16px">900 ms · área 600 ms · cursor 160 ms</span>
+        <span style="color:#9A9A9F">easeOut · <b style="color:#F4F4F2">selection</b> en cada punto</span>
+      </div>
+      <div style="display:grid;grid-template-columns:150px minmax(0,1fr) 110px 150px;gap:16px;padding:12px 16px;border-top:1px solid #1F1F22;font-size:13px;line-height:1.45;background:#141416">
+        <span style="font-weight:700;color:#F4F4F2">Botones y controles</span>
+        <span style="color:#C9C9CC">Pressable: escala 0,97 + accentPressed. Switch: el knob se desliza con resorte. kg/lb: la píldora blanca se traslada. Chips y check de selección: escala 0,6 → 1.</span>
+        <span class="num" style="font-size:16px">90 · 220 · 220 ms</span>
+        <span style="color:#9A9A9F">springSoft · <b style="color:#F4F4F2">impact Light</b> en switch</span>
+      </div>
+      <div style="display:grid;grid-template-columns:150px minmax(0,1fr) 110px 150px;gap:16px;padding:12px 16px;border-top:1px solid #1F1F22;font-size:13px;line-height:1.45;background:#141416">
+        <span style="font-weight:700;color:#F4F4F2">Menús, diálogos, listas</span>
+        <span style="color:#C9C9CC">El menú de la rutina escala 0,92 → 1 desde arriba a la derecha. El diálogo escala 0,94 → 1 y el scrim funde. Al reordenar días o ejercicios con ↑/↓ se usa LinearTransition. El punto del banner «Continuar» late en loop.</span>
+        <span class="num" style="font-size:16px">180 · 220 · 240 ms · loop 1,6 s</span>
+        <span style="color:#9A9A9F">easeOut</span>
+      </div>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":880,"height":2800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

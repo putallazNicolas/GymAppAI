@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Componentes · Plataforma</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.num{font-family:'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums}
+button{font:inherit;cursor:pointer}
+input{font:inherit;color:inherit;background:none;border:0;outline:none;padding:0;margin:0;width:100%;text-align:center}
+input::placeholder{color:#5E5E64}
+</style>
+</helmet>
+<div style="width:880px;height:1900px;box-sizing:border-box;padding:48px;background:#0B0B0C;color:#F4F4F2;font-family:'Barlow',sans-serif;display:flex;flex-direction:column;gap:32px">
+
+  <header style="display:flex;flex-direction:column;gap:6px">
+    <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#FF5B1F">SISTEMA · PLATAFORMA</span>
+    <h1 class="num" style="margin:0;font-size:56px;line-height:0.92;font-weight:800;text-transform:uppercase">Componentes</h1>
+  </header>
+
+  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:40px 24px;align-items:start">
+
+    <section style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">BOTONES</span>
+      <button style="height:56px;border-radius:14px;border:0;background:#FF5B1F;color:#0B0B0C;font-size:18px;font-weight:800">Primario · Empezar</button>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+        <button style="height:52px;border-radius:14px;border:1.5px solid #3A3A3F;background:transparent;color:#F4F4F2;font-size:16px;font-weight:700">Secundario</button>
+        <button style="height:44px;align-self:center;border-radius:12px;border:0;background:transparent;color:#C9C9CC;font-size:15px;font-weight:600">Ghost</button>
+        <button style="height:44px;border-radius:12px;border:1.5px solid #FF5B1F;background:transparent;color:#FF5B1F;font-size:15px;font-weight:700">Contorno · Finalizar</button>
+        <button style="height:44px;border-radius:12px;border:0;background:#FF4D6A;color:#0B0B0C;font-size:15px;font-weight:800">Peligro · Eliminar</button>
+        <button style="height:52px;border-radius:14px;border:0;background:#E04A12;color:#0B0B0C;font-size:16px;font-weight:800;transform:scale(0.97)">Presionado</button>
+        <button disabled style="height:52px;border-radius:14px;border:0;background:#1C1C1F;color:#5E5E64;font-size:16px;font-weight:800">Deshabilitado</button>
+      </div>
+      <span style="font-size:12px;color:#7C7C82">Presionado: escala 0,97 + accentPressed #E04A12, 90 ms. Texto oscuro sobre naranja (6,9:1).</span>
+    </section>
+
+    <section style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">HEADER</span>
+      <div style="padding:14px 16px;border-radius:14px;background:#0B0B0C;border:1px dashed #2A2A2E;display:flex;flex-direction:column;gap:4px">
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">JUEVES 15 DE OCTUBRE</span>
+        <span class="num" style="font-size:38px;line-height:0.95;font-weight:800;text-transform:uppercase">De tab</span>
+      </div>
+      <div style="padding:14px 16px;border-radius:14px;background:#0B0B0C;border:1px dashed #2A2A2E;display:flex;align-items:flex-end;justify-content:space-between">
+        <div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#FF5B1F">ENTRENANDO</span><span class="num" style="font-size:34px;line-height:0.95;font-weight:800;text-transform:uppercase">Piernas A</span></div>
+        <button style="height:44px;padding:0 18px;border-radius:12px;border:1.5px solid #FF5B1F;background:transparent;color:#FF5B1F;font-size:15px;font-weight:700">Finalizar</button>
+      </div>
+      <div style="height:52px;padding:0 8px;border-radius:14px;background:#0B0B0C;border:1px dashed #2A2A2E;display:flex;align-items:center;justify-content:space-between">
+        <span style="display:flex;align-items:center;gap:2px;color:#FF5B1F;font-size:16px;font-weight:600"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Atrás</span>
+        <span style="font-size:13px;color:#9A9A9F;display:flex;align-items:center;gap:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3DDC84" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Guardado</span>
+      </div>
+    </section>
+
+    <section style="display:flex;flex-direction:column;gap:10px;grid-column:1 / -1">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">FILA DE SERIE · 4 ESTADOS</span>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 24px">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <span style="font-size:12px;color:#9A9A9F">Pendiente · placeholder = lo de la última vez</span>
+          <div style="display:grid;grid-template-columns:24px minmax(0,1fr) 72px 60px 44px;gap:8px;align-items:center;height:52px;padding:0 8px;border-radius:10px;background:#141416">
+            <span class="num" style="font-size:20px;font-weight:700;color:#7C7C82">4</span><span class="num" style="font-size:17px;color:#7C7C82">100 × 8</span>
+            <span class="num" style="height:42px;border-radius:8px;box-shadow:inset 0 0 0 1px #2A2A2E;display:flex;align-items:center;justify-content:center;font-size:25px;font-weight:600;color:#5E5E64">100</span>
+            <span class="num" style="height:42px;border-radius:8px;box-shadow:inset 0 0 0 1px #2A2A2E;display:flex;align-items:center;justify-content:center;font-size:25px;font-weight:600;color:#5E5E64">8</span>
+            <span style="width:44px;height:44px;box-sizing:border-box;border-radius:10px;border:1.5px solid #3A3A3F;color:#5E5E64;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <span style="font-size:12px;color:#9A9A9F">En foco · editando kg</span>
+          <div style="display:grid;grid-template-columns:24px minmax(0,1fr) 72px 60px 44px;gap:8px;align-items:center;height:56px;padding:0 8px;border-radius:10px;background:#1C1C1F;box-shadow:inset 0 0 0 1.5px #FF5B1F">
+            <span class="num" style="font-size:20px;font-weight:700;color:#FF5B1F">3</span><span class="num" style="font-size:17px;color:#9A9A9F">100 × 9</span>
+            <span class="num" style="height:42px;border-radius:8px;background:#0B0B0C;box-shadow:inset 0 0 0 2px #FF5B1F;display:flex;align-items:center;justify-content:center;font-size:25px;font-weight:700">105<span style="width:2px;height:22px;margin-left:2px;background:#FF5B1F"></span></span>
+            <span class="num" style="height:42px;border-radius:8px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;display:flex;align-items:center;justify-content:center;font-size:25px;font-weight:700;color:#5E5E64">9</span>
+            <span style="width:44px;height:44px;box-sizing:border-box;border-radius:10px;border:1.5px solid #FF5B1F;background:rgba(255,91,31,0.10);color:#FF5B1F;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <span style="font-size:12px;color:#9A9A9F">Completada · tocar ✓ de nuevo deshace</span>
+          <div style="display:grid;grid-template-columns:24px minmax(0,1fr) 72px 60px 44px;gap:8px;align-items:center;height:52px;padding:0 8px;border-radius:10px;background:rgba(61,220,132,0.12)">
+            <span class="num" style="font-size:20px;font-weight:700;color:#3DDC84">2</span><span class="num" style="font-size:17px;color:#7C7C82">100 × 10</span>
+            <span class="num" style="font-size:25px;font-weight:700;text-align:center">105</span><span class="num" style="font-size:25px;font-weight:700;text-align:center">9</span>
+            <span style="width:44px;height:44px;border-radius:10px;background:#3DDC84;color:#0B0B0C;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <span style="font-size:12px;color:#9A9A9F">Completada con PR · e1RM supera el histórico</span>
+          <div style="display:grid;grid-template-columns:24px minmax(0,1fr) 72px 60px 44px;gap:8px;align-items:center;height:52px;padding:0 8px;border-radius:10px;background:rgba(61,220,132,0.12)">
+            <span class="num" style="font-size:20px;font-weight:700;color:#3DDC84">1</span>
+            <span style="display:flex;align-items:center;gap:6px"><span class="num" style="font-size:17px;color:#7C7C82">100 × 10</span><span class="num" style="padding:1px 6px;border-radius:5px;background:#FFC83D;color:#0B0B0C;font-size:13px;font-weight:800">PR</span></span>
+            <span class="num" style="font-size:25px;font-weight:700;text-align:center">105</span><span class="num" style="font-size:25px;font-weight:700;text-align:center">10</span>
+            <span style="width:44px;height:44px;border-radius:10px;background:#3DDC84;color:#0B0B0C;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">EJERCICIO · COLAPSADO / SIGUIENTE / SIN EMPEZAR</span>
+      <div style="height:56px;padding:0 14px;border-radius:14px;background:rgba(61,220,132,0.10);border:1px solid rgba(61,220,132,0.30);display:flex;align-items:center;gap:12px">
+        <span style="width:28px;height:28px;border-radius:14px;background:#3DDC84;color:#0B0B0C;display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+        <span class="num" style="flex:1;font-size:22px;font-weight:700;color:#3DDC84;text-transform:uppercase">Sentadilla</span>
+        <span style="font-size:13px;color:#9A9A9F">4/4 · mejor <span class="num" style="font-size:17px;font-weight:700;color:#F4F4F2">140 × 5</span></span>
+      </div>
+      <div style="height:64px;padding:0 14px;border-radius:14px;background:#141416;border:1px solid #2A2A2E;display:flex;align-items:center;gap:12px">
+        <div style="flex:1;display:flex;flex-direction:column"><span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">SIGUIENTE</span><span class="num" style="font-size:22px;font-weight:700;text-transform:uppercase">Prensa 45°</span></div>
+        <span class="num" style="font-size:20px;font-weight:700;color:#9A9A9F">3 × 12</span>
+      </div>
+      <div style="height:56px;padding:0 14px;border-radius:14px;border:1px solid #1F1F22;display:flex;align-items:center;gap:12px">
+        <span class="num" style="flex:1;font-size:21px;font-weight:600;text-transform:uppercase;color:#7C7C82">Camilla femoral</span>
+        <span class="num" style="font-size:19px;font-weight:600;color:#7C7C82">3 × 10-12</span>
+      </div>
+    </section>
+
+    <section style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">BANNER</span>
+      <div style="height:64px;padding:0 8px 0 14px;border-radius:14px;background:rgba(255,91,31,0.12);border:1px solid rgba(255,91,31,0.45);display:flex;align-items:center;gap:12px">
+        <span style="width:10px;height:10px;border-radius:5px;background:#FF5B1F;box-shadow:0 0 0 5px rgba(255,91,31,0.25)"></span>
+        <span style="flex:1;display:flex;flex-direction:column"><span style="font-size:16px;font-weight:700">Continuar entrenamiento</span><span style="font-size:13px;color:#C9C9CC">Torso B · empezado ayer 20:12</span></span>
+        <span style="width:44px;height:44px;border-radius:12px;background:#FF5B1F;color:#0B0B0C;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
+      </div>
+      <div style="padding:12px 14px;border-radius:12px;background:rgba(255,91,31,0.12);border:1px solid rgba(255,91,31,0.45);display:flex;gap:12px;align-items:flex-start">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF5B1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>
+        <span style="font-size:15px;font-weight:700;line-height:1.35">Tus datos se guardan solo en este teléfono. Exportalos seguido.</span>
+      </div>
+    </section>
+
+    <section style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">INPUTS</span>
+      <div style="display:grid;grid-template-columns:132px minmax(0,1fr) minmax(0,1fr);gap:8px">
+        <div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:600;letter-spacing:0.12em;color:#9A9A9F">STEPPER</span>
+          <div style="height:48px;border-radius:10px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;display:grid;grid-template-columns:44px 1fr 44px;align-items:center;text-align:center;color:#C9C9CC"><span style="font-size:22px">−</span><span class="num" style="font-size:26px;font-weight:800;color:#F4F4F2">4</span><span style="font-size:22px;color:#FF5B1F">+</span></div></div>
+        <div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:600;letter-spacing:0.12em;color:#9A9A9F">NUMÉRICO</span>
+          <span class="num" style="height:48px;border-radius:10px;background:#0B0B0C;box-shadow:inset 0 0 0 2px #FF5B1F;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700">142,5</span></div>
+        <div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:600;letter-spacing:0.12em;color:#9A9A9F">TEXTO LIBRE</span>
+          <span class="num" style="height:48px;border-radius:10px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700">AMRAP</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-top:6px">
+        <span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">NOMBRE (TÍTULO EDITABLE)</span>
+        <span class="num" style="padding-bottom:6px;border-bottom:2px solid #FF5B1F;font-size:34px;line-height:1.05;font-weight:800;text-transform:uppercase">Fuerza 4 días</span>
+      </div>
+      <div style="height:48px;padding:0 14px;border-radius:12px;background:#141416;border:1px solid #2A2A2E;display:flex;align-items:center;gap:10px;font-size:16px;color:#7C7C82">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A9A9F" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>Buscar ejercicio
+      </div>
+    </section>
+
+    <section style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">TEMPORIZADOR DE DESCANSO</span>
+      <div style="height:68px;padding:0 8px 0 12px;border-radius:20px;background:#1C1C1F;border:1px solid #2F2F33;box-shadow:0 16px 40px rgba(0,0,0,0.7);display:flex;align-items:center;gap:12px">
+        <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="18" fill="none" stroke="#2F2F33" stroke-width="4"/><circle cx="22" cy="22" r="18" fill="none" stroke="#FF5B1F" stroke-width="4" stroke-linecap="round" stroke-dasharray="113.1" stroke-dashoffset="47" transform="rotate(-90 22 22)"/></svg>
+        <div style="flex:1;display:flex;flex-direction:column"><span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">DESCANSO</span><span class="num" style="font-size:30px;font-weight:700;line-height:1">1:24</span></div>
+        <span style="height:44px;padding:0 14px;border-radius:12px;background:#2A2A2E;display:flex;align-items:center;font-weight:700;font-size:15px">+15 s</span>
+        <span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:#9A9A9F"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></span>
+      </div>
+      <div style="height:68px;padding:0 8px 0 12px;border-radius:20px;background:#1C1C1F;border:1px solid rgba(61,220,132,0.45);display:flex;align-items:center;gap:12px">
+        <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="18" fill="none" stroke="#3DDC84" stroke-width="4"/></svg>
+        <div style="flex:1;display:flex;flex-direction:column"><span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#3DDC84">A LA BARRA</span><span class="num" style="font-size:30px;font-weight:700;line-height:1">0:00</span></div>
+        <span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:#9A9A9F"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></span>
+      </div>
+      <span style="font-size:12px;color:#7C7C82">No bloquea: flota sobre la lista, se descarta con ✕ o deslizando hacia abajo. Al llegar a 0: haptic warning y se cierra solo a los 5 s.</span>
+    </section>
+
+    <section style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">DIÁLOGO DE CONFIRMACIÓN</span>
+      <div style="padding:20px;border-radius:20px;background:#1C1C1F;border:1px solid #2F2F33;display:flex;flex-direction:column;gap:10px">
+        <span style="width:44px;height:44px;border-radius:12px;background:rgba(255,77,106,0.14);color:#FF4D6A;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></span>
+        <span class="num" style="font-size:26px;line-height:1;font-weight:800;text-transform:uppercase">¿Descartar entrenamiento?</span>
+        <span style="font-size:15px;line-height:1.45;color:#C9C9CC">Vas a perder las 6 series que cargaste hoy.</span>
+        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:6px">
+          <button style="height:52px;border-radius:14px;border:1.5px solid #3A3A3F;background:transparent;color:#F4F4F2;font-size:16px;font-weight:700">Cancelar</button>
+          <button style="height:52px;border-radius:14px;border:0;background:#FF4D6A;color:#0B0B0C;font-size:16px;font-weight:800">Descartar</button>
+        </div>
+      </div>
+    </section>
+
+    <section style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">CHIPS · SWITCH · SEGMENTADO</span>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <span style="height:44px;padding:0 14px;border-radius:22px;background:#141416;border:1px solid #2A2A2E;color:#C9C9CC;display:flex;align-items:center;font-size:14px;font-weight:700">Todos</span>
+        <span style="height:44px;padding:0 14px;border-radius:22px;background:#F4F4F2;color:#0B0B0C;display:flex;align-items:center;font-size:14px;font-weight:700">Piernas</span>
+        <span style="height:44px;padding:0 14px;border-radius:22px;background:#141416;border:1px solid #2A2A2E;color:#C9C9CC;display:flex;align-items:center;font-size:14px;font-weight:700">Espalda</span>
+        <span class="num" style="height:28px;align-self:center;padding:0 8px;border-radius:6px;background:#FFC83D;color:#0B0B0C;display:flex;align-items:center;font-size:14px;font-weight:800">PR</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px">
+        <span style="position:relative;width:52px;height:32px;border-radius:16px;background:#FF5B1F"><span style="position:absolute;top:3px;left:23px;width:26px;height:26px;border-radius:13px;background:#F4F4F2"></span></span>
+        <span style="position:relative;width:52px;height:32px;border-radius:16px;background:#3A3A3F"><span style="position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:13px;background:#F4F4F2"></span></span>
+        <span style="flex:1;padding:4px;border-radius:12px;background:#141416;border:1px solid #2A2A2E;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px">
+          <span class="num" style="height:40px;border-radius:9px;background:#F4F4F2;color:#0B0B0C;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800">KG</span>
+          <span class="num" style="height:40px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#9A9A9F">LB</span>
+        </span>
+      </div>
+    </section>
+
+    <section style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">ESTADO VACÍO</span>
+      <div style="padding:20px;border-radius:20px;background:#141416;border:1px solid #2A2A2E;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px">
+        <svg width="220" height="60" viewBox="0 0 320 110" aria-hidden="true">
+          <rect x="44" y="12" width="20" height="86" rx="4" fill="none" stroke="#3A3A3F" stroke-width="2" stroke-dasharray="5 5"/>
+          <rect x="256" y="12" width="20" height="86" rx="4" fill="none" stroke="#3A3A3F" stroke-width="2" stroke-dasharray="5 5"/>
+          <rect x="8" y="49" width="80" height="12" rx="3" fill="#2A2A2E"/><rect x="232" y="49" width="80" height="12" rx="3" fill="#2A2A2E"/>
+          <rect x="86" y="43" width="8" height="24" rx="2" fill="#3A3A3F"/><rect x="226" y="43" width="8" height="24" rx="2" fill="#3A3A3F"/>
+          <rect x="94" y="52" width="132" height="6" rx="3" fill="#5E5E64"/>
+        </svg>
+        <span class="num" style="font-size:24px;font-weight:800;text-transform:uppercase">Título que nombra el vacío</span>
+        <span style="font-size:14px;color:#C9C9CC">Una línea que dice qué hacer y qué vas a ganar.</span>
+        <span style="margin-top:6px;align-self:stretch;height:48px;border-radius:14px;background:#FF5B1F;color:#0B0B0C;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800">Una sola acción</span>
+      </div>
+    </section>
+
+    <section style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">GRÁFICO</span>
+      <div style="padding:12px;border-radius:16px;background:#141416;border:1px solid #2A2A2E">
+        <svg width="356" height="130" viewBox="0 0 356 130" role="img" aria-label="Ejemplo de gráfico de línea con área">
+          <defs><linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF5B1F" stop-opacity="0.32"/><stop offset="1" stop-color="#FF5B1F" stop-opacity="0"/></linearGradient></defs>
+          <path d="M0 20H356M0 55H356M0 90H356" stroke="#1F1F22"/>
+          <path d="M0 120H356" stroke="#3A3A3F"/>
+          <path d="M6 96L56 86L106 70L156 74L206 54L256 40L306 46L350 24L350 120L6 120Z" fill="url(#g2)"/>
+          <path d="M6 112L56 106L106 100L156 96L206 90L256 82L306 76L350 82" fill="none" stroke="#8A8A90" stroke-width="2"/>
+          <path d="M6 96L56 86L106 70L156 74L206 54L256 40L306 46L350 24" fill="none" stroke="#FF5B1F" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+          <circle cx="256" cy="40" r="5" fill="#FFC83D" stroke="#141416" stroke-width="2"/>
+          <path d="M350 14V120" stroke="#5E5E64" stroke-dasharray="3 3"/>
+          <circle cx="350" cy="24" r="6" fill="#FF5B1F" stroke="#141416" stroke-width="3"/>
+        </svg>
+      </div>
+      <span style="font-size:12px;color:#7C7C82">Un solo eje (todo en kg). e1RM: línea accent 2,5 px + área con degradé 32%→0. Mejor peso: gris 2 px con puntos. PR: punto dorado. Tocar/arrastrar mueve el cursor y la lectura de arriba.</span>
+    </section>
+
+    <section style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">TAB BAR</span>
+      <div style="height:84px;box-sizing:border-box;padding-bottom:30px;border-radius:14px;background:#0B0B0C;border:1px solid #1F1F22;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))">
+        <span style="position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#F4F4F2;font-size:11px;font-weight:700"><span style="position:absolute;top:-1px;width:28px;height:2px;background:#FF5B1F"></span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF5B1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>Hoy</span>
+        <span style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#7C7C82;font-size:11px;font-weight:600"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h1M4 12h1M4 18h1"/></svg>Rutinas</span>
+        <span style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#7C7C82;font-size:11px;font-weight:600"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20h18"/><path d="M4 16l5-5 4 3 7-8"/></svg>Progreso</span>
+        <span style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#7C7C82;font-size:11px;font-weight:600"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>Perfil</span>
+      </div>
+      <span style="font-size:12px;color:#7C7C82">Activo: ícono accent + texto primario + barra de 2 px. Íconos de trazo 2 px (lucide-react-native o SVG propio).</span>
+    </section>
+
+    <section style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">CARD</span>
+      <div style="padding:16px;border-radius:16px;background:#141416;border:1px solid #2A2A2E;display:flex;align-items:stretch;gap:0">
+        <div style="flex:1;display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#FF5B1F">LABEL</span><span class="num" style="font-size:26px;font-weight:800;text-transform:uppercase;line-height:1">Título</span><span style="font-size:13px;color:#9A9A9F">Detalle secundario</span></div>
+        <div style="width:64px;border-left:1px solid #2A2A2E;display:flex;flex-direction:column;align-items:center;justify-content:center"><span class="num" style="font-size:34px;font-weight:800;line-height:1">4</span><span style="font-size:10px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">DÍAS</span></div>
+      </div>
+      <span style="font-size:12px;color:#7C7C82">Motivo marcador: el dato clave va a la derecha, separado por un divisor vertical.</span>
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":880,"height":1900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

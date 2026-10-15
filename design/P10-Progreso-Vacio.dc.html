@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Progreso · vacío</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#050505}
+.num{font-family:'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width:393px;height:852px;box-sizing:border-box;padding-top:58px;background:#0B0B0C;color:#F4F4F2;font-family:'Barlow',sans-serif;position:relative;overflow:hidden">
+
+  <div style="display:flex;flex-direction:column;gap:4px;padding:0 16px">
+    <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">SIN SESIONES TODAVÍA</span>
+    <h1 class="num" style="margin:0;font-size:38px;line-height:0.95;font-weight:800;text-transform:uppercase">Progreso</h1>
+  </div>
+
+  <button aria-haspopup="listbox" style="margin:14px 16px 0;width:361px;height:60px;padding:0 12px 0 16px;border-radius:14px;border:1px solid #2A2A2E;background:#141416;color:#F4F4F2;display:flex;align-items:center;gap:10px;text-align:left">
+    <span style="flex:1;display:flex;flex-direction:column">
+      <span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">EJERCICIO</span>
+      <span class="num" style="font-size:24px;font-weight:700;line-height:1.05;text-transform:uppercase">Press banca</span>
+    </span>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF5B1F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+  </button>
+
+  <section style="margin:10px 16px 0;padding:16px 16px 24px;border-radius:16px;background:#141416;border:1px solid #2A2A2E;display:flex;flex-direction:column;align-items:center;text-align:center">
+    <svg width="329" height="170" viewBox="0 0 329 170" role="img" aria-label="Gráfico vacío">
+      <g stroke="#1F1F22" stroke-width="1"><path d="M8 20H321M8 60H321M8 100H321M8 140H321"/></g>
+      <path d="M8 150H321" stroke="#3A3A3F"/>
+      <path d="M20 128C70 120 90 104 130 100S200 78 236 62 300 40 316 30" fill="none" stroke="#3A3A3F" stroke-width="2.5" stroke-dasharray="2 8" stroke-linecap="round"/>
+      <circle cx="316" cy="30" r="9" fill="none" stroke="#FF5B1F" stroke-width="2"/>
+      <circle cx="316" cy="30" r="3.5" fill="#FF5B1F"/>
+      <g fill="#0B0B0C" stroke="#3A3A3F" stroke-width="2"><circle cx="20" cy="128" r="4"/><circle cx="130" cy="100" r="4"/><circle cx="236" cy="62" r="4"/></g>
+    </svg>
+    <h2 class="num" style="margin:14px 0 0;font-size:30px;line-height:1;font-weight:800;text-transform:uppercase">Todavía no hay datos</h2>
+    <p style="margin:10px 0 0;font-size:15px;line-height:1.45;color:#C9C9CC;max-width:290px">Completá una serie de press banca y acá vas a ver tu e1RM y tu mejor peso, semana a semana.</p>
+    <a href="P01-Hoy.dc.html" style="margin-top:20px;align-self:stretch;height:56px;border-radius:14px;background:#FF5B1F;color:#0B0B0C;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800">Ir a entrenar</a>
+  </section>
+
+  <div style="margin:14px 16px 0;padding:14px 16px;border-radius:14px;border:1px solid #1F1F22;display:flex;gap:12px;align-items:flex-start">
+    <span class="num" style="font-size:22px;font-weight:800;color:#FF5B1F;line-height:1">e1RM</span>
+    <span style="font-size:13px;line-height:1.45;color:#9A9A9F">Tu máximo estimado para 1 repetición, calculado con cada serie: kg × (1 + reps / 30).</span>
+  </div>
+
+  <nav aria-label="Secciones" style="position:absolute;left:0;right:0;bottom:0;height:84px;box-sizing:border-box;padding-bottom:30px;background:rgba(11,11,12,0.96);border-top:1px solid #1F1F22;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))">
+    <a href="P02-Hoy-Vacio.dc.html" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#7C7C82;font-size:11px;font-weight:600">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>
+      Hoy
+    </a>
+    <a href="P05-Rutinas.dc.html" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#7C7C82;font-size:11px;font-weight:600">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h1M4 12h1M4 18h1"/></svg>
+      Rutinas
+    </a>
+    <a href="P10-Progreso-Vacio.dc.html" aria-current="page" style="position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#F4F4F2;font-size:11px;font-weight:700">
+      <span style="position:absolute;top:-1px;width:28px;height:2px;border-radius:1px;background:#FF5B1F"></span>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF5B1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20h18"/><path d="M4 16l5-5 4 3 7-8"/></svg>
+      Progreso
+    </a>
+    <a href="P11-Perfil.dc.html" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#7C7C82;font-size:11px;font-weight:600">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
+      Perfil
+    </a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":393,"height":852}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

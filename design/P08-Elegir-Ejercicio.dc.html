@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Elegir ejercicio</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#050505}
+.num{font-family:'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer}
+input{font:inherit;color:inherit;background:none;border:0;outline:none;padding:0;margin:0;width:100%}
+input::placeholder{color:#7C7C82}
+.hs::-webkit-scrollbar{display:none}
+@keyframes tick{0%{transform:scale(0.6)}70%{transform:scale(1.12)}100%{transform:scale(1)}}
+.tick{animation:tick 220ms cubic-bezier(0.34,1.56,0.64,1)}
+</style>
+</helmet>
+<div style="width:393px;height:852px;box-sizing:border-box;padding-top:50px;background:#0B0B0C;color:#F4F4F2;font-family:'Barlow',sans-serif;position:relative;overflow:hidden">
+
+  <div style="height:44px;padding:0 8px;display:flex;align-items:center">
+    <a href="P07-Armar-Dia.dc.html" style="height:44px;padding:0 8px;display:flex;align-items:center;color:#FF5B1F;font-size:16px;font-weight:600">Cancelar</a>
+  </div>
+  <h1 class="num" style="margin:4px 16px 0;font-size:38px;line-height:0.95;font-weight:800;text-transform:uppercase">Elegir ejercicio</h1>
+
+  <label style="margin:14px 16px 0;height:48px;padding:0 14px;border-radius:12px;background:#141416;border:1px solid #2A2A2E;display:flex;align-items:center;gap:10px;font-size:16px">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A9A9F" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <input type="search" value="{{q}}" onChange="{{onQ}}" placeholder="Buscar ejercicio" aria-label="Buscar ejercicio">
+  </label>
+
+  <div class="hs" role="tablist" aria-label="Grupo muscular" style="margin-top:10px;padding:0 16px;display:flex;gap:6px;overflow-x:auto">
+    <sc-for list="{{chips}}" as="c" hint-placeholder-count="7">
+      <button role="tab" aria-selected="{{c.on}}" onClick="{{c.pick}}" style="flex:none;height:44px;padding:0 14px;border-radius:22px;border:1px solid {{c.border}};background:{{c.bg}};color:{{c.fg}};font-size:14px;font-weight:700;transition:background-color 160ms ease-out">{{c.label}}</button>
+    </sc-for>
+  </div>
+
+  <div class="hs" style="position:absolute;top:262px;left:0;right:0;bottom:0;overflow-y:auto;padding:0 16px 120px;box-sizing:border-box">
+    <button style="width:100%;height:60px;margin-bottom:6px;padding:0 12px;border-radius:12px;border:1.5px dashed #3A3A3F;background:transparent;color:#F4F4F2;display:flex;align-items:center;gap:12px;text-align:left">
+      <span style="width:36px;height:36px;border-radius:10px;background:rgba(255,91,31,0.14);color:#FF5B1F;display:flex;align-items:center;justify-content:center;flex:none">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      </span>
+      <span style="display:flex;flex-direction:column">
+        <span style="font-size:16px;font-weight:700">Crear ejercicio</span>
+        <span style="font-size:13px;color:#9A9A9F">¿No está en la lista? Creá uno propio</span>
+      </span>
+    </button>
+
+    <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column">
+      <sc-for list="{{list}}" as="x" hint-placeholder-count="8">
+        <li>
+          <button onClick="{{x.toggle}}" aria-pressed="{{x.sel}}" style="width:100%;min-height:58px;padding:0 6px 0 12px;border:0;border-bottom:1px solid #1A1A1D;border-radius:10px;background:{{x.bg}};color:#F4F4F2;display:flex;align-items:center;gap:12px;text-align:left;transition:background-color 160ms ease-out">
+            <span style="flex:1;display:flex;flex-direction:column;gap:1px">
+              <span style="font-size:16px;font-weight:600">{{x.name}}</span>
+              <span style="font-size:13px;color:#9A9A9F">{{x.sub}}</span>
+            </span>
+            <sc-if value="{{x.inDay}}" hint-placeholder-val="{{false}}">
+              <span style="padding:2px 8px;border-radius:6px;background:#1C1C1F;border:1px solid #2A2A2E;font-size:12px;font-weight:600;color:#9A9A9F">En el día</span>
+            </sc-if>
+            <span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center">
+              <sc-if value="{{x.sel}}" hint-placeholder-val="{{false}}">
+                <span class="tick" style="width:28px;height:28px;border-radius:8px;background:#FF5B1F;color:#0B0B0C;display:flex;align-items:center;justify-content:center">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+                </span>
+              </sc-if>
+              <sc-if value="{{x.unsel}}" hint-placeholder-val="{{true}}">
+                <span style="width:28px;height:28px;box-sizing:border-box;border-radius:8px;border:2px solid #3A3A3F"></span>
+              </sc-if>
+            </span>
+          </button>
+        </li>
+      </sc-for>
+    </ul>
+    <sc-if value="{{empty}}" hint-placeholder-val="{{false}}">
+      <p style="margin:24px 0 0;text-align:center;font-size:15px;color:#9A9A9F">No encontramos “{{q}}”. Probá con otro nombre o creá el ejercicio.</p>
+    </sc-if>
+  </div>
+
+  <div style="position:absolute;left:0;right:0;bottom:0;padding:24px 16px 34px;background:linear-gradient(180deg, rgba(11,11,12,0) 0%, #0B0B0C 34%)">
+    <a href="P07-Armar-Dia.dc.html" aria-disabled="{{none}}" style="height:56px;border-radius:14px;background:{{btnBg}};color:{{btnFg}};display:flex;align-items:center;justify-content:center;gap:8px;font-size:18px;font-weight:800;transition:background-color 180ms ease-out">
+      Agregar <span class="num" style="font-size:22px">({{selCount}})</span>
+    </a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":393,"height":852}}'>
+var DB = [
+  ['Sentadilla trasera', 'Piernas', 'Barra', 1], ['Sentadilla frontal', 'Piernas', 'Barra'], ['Sentadilla búlgara', 'Piernas', 'Mancuernas'],
+  ['Prensa 45°', 'Piernas', 'Máquina', 1], ['Peso muerto rumano', 'Piernas', 'Barra', 1], ['Hip thrust', 'Piernas', 'Barra'],
+  ['Extensión de cuádriceps', 'Piernas', 'Máquina'], ['Camilla femoral', 'Piernas', 'Máquina', 1], ['Gemelos de pie', 'Piernas', 'Máquina'],
+  ['Zancadas caminando', 'Piernas', 'Mancuernas'], ['Peso muerto convencional', 'Espalda', 'Barra'], ['Dominadas', 'Espalda', 'Peso corporal'],
+  ['Remo con barra', 'Espalda', 'Barra'], ['Jalón al pecho', 'Espalda', 'Polea'], ['Press banca', 'Pecho', 'Barra'],
+  ['Press inclinado con mancuernas', 'Pecho', 'Mancuernas'], ['Fondos', 'Pecho', 'Peso corporal'], ['Press militar', 'Hombros', 'Barra'],
+  ['Elevaciones laterales', 'Hombros', 'Mancuernas'], ['Curl con barra', 'Brazos', 'Barra'], ['Press francés', 'Brazos', 'Barra EZ'],
+  ['Plancha', 'Core', 'Peso corporal'], ['Rueda abdominal', 'Core', 'Accesorio']
+];
+var GROUPS = ['Todos', 'Piernas', 'Espalda', 'Pecho', 'Hombros', 'Brazos', 'Core'];
+function norm(s) { return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { q: '', group: 'Piernas', sel: { 'Sentadilla búlgara': true, 'Hip thrust': true, 'Gemelos de pie': true } };
+  }
+  renderVals() {
+    const s = this.state;
+    const q = norm(s.q);
+    const list = DB.filter((r) => (s.group === 'Todos' || r[1] === s.group) && (!q || norm(r[0]).indexOf(q) >= 0)).map((r) => {
+      const on = !!s.sel[r[0]];
+      return {
+        name: r[0], sub: r[1] + ' · ' + r[2], inDay: !!r[3], sel: on, unsel: !on,
+        bg: on ? 'rgba(255,91,31,0.10)' : 'transparent',
+        toggle: () => { const sel = Object.assign({}, s.sel); if (sel[r[0]]) delete sel[r[0]]; else sel[r[0]] = true; this.setState({ sel: sel }); }
+      };
+    });
+    const count = Object.keys(s.sel).length;
+    return {
+      q: s.q,
+      onQ: (e) => this.setState({ q: e.target.value }),
+      chips: GROUPS.map((g) => {
+        const on = g === s.group;
+        return { label: g, on: on, bg: on ? '#F4F4F2' : '#141416', fg: on ? '#0B0B0C' : '#C9C9CC', border: on ? '#F4F4F2' : '#2A2A2E', pick: () => this.setState({ group: g }) };
+      }),
+      list: list,
+      empty: list.length === 0,
+      selCount: count,
+      none: count === 0,
+      btnBg: count ? '#FF5B1F' : '#1C1C1F',
+      btnFg: count ? '#0B0B0C' : '#5E5E64'
+    };
+  }
+}
+</script>
+</body>
+</html>

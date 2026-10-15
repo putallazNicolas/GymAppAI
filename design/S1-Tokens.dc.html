@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Tokens · Plataforma</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.num{font-family:'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums}
+</style>
+</helmet>
+<div style="width:880px;height:1300px;box-sizing:border-box;padding:48px;background:#0B0B0C;color:#F4F4F2;font-family:'Barlow',sans-serif;display:flex;flex-direction:column;gap:36px">
+
+  <header style="display:flex;align-items:flex-end;justify-content:space-between">
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#FF5B1F">SISTEMA · PLATAFORMA</span>
+      <h1 class="num" style="margin:0;font-size:56px;line-height:0.92;font-weight:800;text-transform:uppercase">Tokens</h1>
+    </div>
+    <span style="font-size:14px;color:#9A9A9F;max-width:360px;text-align:right">Tema oscuro por defecto. Verde solo para completado, dorado solo para récords.</span>
+  </header>
+
+  <section style="display:flex;flex-direction:column;gap:12px">
+    <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">COLOR</span>
+    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px">
+      <div style="padding:12px;border-radius:12px;background:#141416;display:flex;flex-direction:column;gap:8px"><span style="height:44px;border-radius:8px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #3A3A3F"></span><span style="font-size:14px;font-weight:700">background</span><span class="num" style="font-size:15px;color:#9A9A9F">#0B0B0C · pantalla</span></div>
+      <div style="padding:12px;border-radius:12px;background:#141416;display:flex;flex-direction:column;gap:8px"><span style="height:44px;border-radius:8px;background:#141416;box-shadow:inset 0 0 0 1px #3A3A3F"></span><span style="font-size:14px;font-weight:700">surface</span><span class="num" style="font-size:15px;color:#9A9A9F">#141416 · cards, filas</span></div>
+      <div style="padding:12px;border-radius:12px;background:#141416;display:flex;flex-direction:column;gap:8px"><span style="height:44px;border-radius:8px;background:#1C1C1F;box-shadow:inset 0 0 0 1px #3A3A3F"></span><span style="font-size:14px;font-weight:700">surfaceRaised</span><span class="num" style="font-size:15px;color:#9A9A9F">#1C1C1F · foco, menús, diálogos</span></div>
+      <div style="padding:12px;border-radius:12px;background:#141416;display:flex;flex-direction:column;gap:8px"><span style="height:44px;border-radius:8px;background:rgba(0,0,0,0.66);box-shadow:inset 0 0 0 1px #3A3A3F"></span><span style="font-size:14px;font-weight:700">scrim</span><span class="num" style="font-size:15px;color:#9A9A9F">rgba(0,0,0,.66)</span></div>
+
+      <div style="padding:12px;border-radius:12px;background:#141416;display:flex;flex-direction:column;gap:8px"><span style="height:44px;border-radius:8px;background:#1F1F22"></span><span style="font-size:14px;font-weight:700">divider</span><span class="num" style="font-size:15px;color:#9A9A9F">#1F1F22 · líneas internas</span></div>
+      <div style="padding:12px;border-radius:12px;background:#141416;display:flex;flex-direction:column;gap:8px"><span style="height:44px;border-radius:8px;background:#2A2A2E"></span><span style="font-size:14px;font-weight:700">border</span><span class="num" style="font-size:15px;color:#9A9A9F">#2A2A2E · bordes, segmentos</span></div>
+      <div style="padding:12px;border-radius:12px;background:#141416;display:flex;flex-direction:column;gap:8px"><span style="height:44px;border-radius:8px;background:#3A3A3F"></span><span style="font-size:14px;font-weight:700">borderStrong</span><span class="num" style="font-size:15px;color:#9A9A9F">#3A3A3F · secundarios, check</span></div>
+      <div style="padding:12px;border-radius:12px;background:#141416;display:flex;flex-direction:column;gap:8px"><span style="height:44px;border-radius:8px;background:#5E5E64"></span><span style="font-size:14px;font-weight:700">textDisabled</span><span class="num" style="font-size:15px;color:#9A9A9F">#5E5E64 · placeholders</span></div>
+
+      <div style="padding:12px;border-radius:12px;background:#141416;display:flex;flex-direction:column;gap:8px"><span style="height:44px;border-radius:8px;background:#F4F4F2"></span><span style="font-size:14px;font-weight:700">textPrimary</span><span class="num" style="font-size:15px;color:#9A9A9F">#F4F4F2 · 17,9:1</span></div>
+      <div style="padding:12px;border-radius:12px;background:#141416;display:flex;flex-direction:column;gap:8px"><span style="height:44px;border-radius:8px;background:#9A9A9F"></span><span style="font-size:14px;font-weight:700">textSecondary</span><span class="num" style="font-size:15px;color:#9A9A9F">#9A9A9F · 7,0:1</span></div>
+      <div style="padding:12px;border-radius:12px;background:#141416;display:flex;flex-direction:column;gap:8px"><span style="height:44px;border-radius:8px;background:#7C7C82"></span><span style="font-size:14px;font-weight:700">textTertiary</span><span class="num" style="font-size:15px;color:#9A9A9F">#7C7C82 · 4,7:1 · labels</span></div>
+      <div style="padding:12px;border-radius:12px;background:#141416;display:flex;flex-direction:column;gap:8px"><span style="height:44px;border-radius:8px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #3A3A3F;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700"><span style="padding:3px 10px;border-radius:6px;background:#FF5B1F;color:#0B0B0C">Aa</span></span><span style="font-size:14px;font-weight:700">onAccent</span><span class="num" style="font-size:15px;color:#9A9A9F">#0B0B0C · texto sobre acento</span></div>
+
+      <div style="padding:12px;border-radius:12px;background:#141416;display:flex;flex-direction:column;gap:8px"><span style="height:44px;border-radius:8px;background:#FF5B1F"></span><span style="font-size:14px;font-weight:700">accent · naranja señal</span><span class="num" style="font-size:15px;color:#9A9A9F">#FF5B1F · acción, foco</span></div>
+      <div style="padding:12px;border-radius:12px;background:#141416;display:flex;flex-direction:column;gap:8px"><span style="height:44px;border-radius:8px;background:#3DDC84"></span><span style="font-size:14px;font-weight:700">success</span><span class="num" style="font-size:15px;color:#9A9A9F">#3DDC84 · solo completado</span></div>
+      <div style="padding:12px;border-radius:12px;background:#141416;display:flex;flex-direction:column;gap:8px"><span style="height:44px;border-radius:8px;background:#FFC83D"></span><span style="font-size:14px;font-weight:700">record</span><span class="num" style="font-size:15px;color:#9A9A9F">#FFC83D · solo PRs</span></div>
+      <div style="padding:12px;border-radius:12px;background:#141416;display:flex;flex-direction:column;gap:8px"><span style="height:44px;border-radius:8px;background:#FF4D6A"></span><span style="font-size:14px;font-weight:700">danger</span><span class="num" style="font-size:15px;color:#9A9A9F">#FF4D6A · eliminar, siempre con ícono</span></div>
+    </div>
+    <span style="font-size:13px;color:#9A9A9F">Versiones suaves (fondos de fila y banners): accentMuted <span class="num" style="color:#F4F4F2">rgba(255,91,31,.12)</span> · successMuted <span class="num" style="color:#F4F4F2">rgba(61,220,132,.12)</span> · recordMuted <span class="num" style="color:#F4F4F2">rgba(255,200,61,.16)</span> · dangerMuted <span class="num" style="color:#F4F4F2">rgba(255,77,106,.14)</span></span>
+  </section>
+
+  <section style="display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:32px">
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">TIPOGRAFÍA</span>
+      <div style="display:flex;align-items:baseline;gap:16px;border-bottom:1px solid #1F1F22;padding-bottom:8px"><span class="num" style="font-size:46px;line-height:0.92;font-weight:800;text-transform:uppercase;flex:1">Piernas A</span><span style="font-size:12px;color:#9A9A9F;width:170px">displayXL · BC 800 · 46/42 · mayús.</span></div>
+      <div style="display:flex;align-items:baseline;gap:16px;border-bottom:1px solid #1F1F22;padding-bottom:8px"><span class="num" style="font-size:38px;line-height:0.95;font-weight:800;text-transform:uppercase;flex:1">Rutinas</span><span style="font-size:12px;color:#9A9A9F;width:170px">displayL · BC 800 · 38/36</span></div>
+      <div style="display:flex;align-items:baseline;gap:16px;border-bottom:1px solid #1F1F22;padding-bottom:8px"><span class="num" style="font-size:27px;line-height:1.02;font-weight:700;text-transform:uppercase;flex:1">Peso muerto rumano</span><span style="font-size:12px;color:#9A9A9F;width:170px">displayM · BC 700 · 27/28</span></div>
+      <div style="display:flex;align-items:baseline;gap:16px;border-bottom:1px solid #1F1F22;padding-bottom:8px"><span class="num" style="font-size:40px;line-height:1;font-weight:700;flex:1">14.640 · 1:07:42</span><span style="font-size:12px;color:#9A9A9F;width:170px">numXL · BC 700 · 40 · tnum</span></div>
+      <div style="display:flex;align-items:baseline;gap:16px;border-bottom:1px solid #1F1F22;padding-bottom:8px"><span class="num" style="font-size:32px;line-height:1;font-weight:700;flex:1">42:17 · 6/14</span><span style="font-size:12px;color:#9A9A9F;width:170px">numL · BC 700 · 32 · tnum</span></div>
+      <div style="display:flex;align-items:baseline;gap:16px;border-bottom:1px solid #1F1F22;padding-bottom:8px"><span class="num" style="font-size:25px;line-height:1;font-weight:700;flex:1">105 · 10 · 142,5</span><span style="font-size:12px;color:#9A9A9F;width:170px">numM · BC 700 · 25 · fila de serie</span></div>
+      <div style="display:flex;align-items:baseline;gap:16px;border-bottom:1px solid #1F1F22;padding-bottom:8px"><span class="num" style="font-size:17px;line-height:1.2;font-weight:500;color:#9A9A9F;flex:1">100 × 10</span><span style="font-size:12px;color:#9A9A9F;width:170px">numS · BC 500 · 17 · anterior</span></div>
+      <div style="display:flex;align-items:baseline;gap:16px;border-bottom:1px solid #1F1F22;padding-bottom:8px"><span style="font-size:16px;line-height:22px;font-weight:500;flex:1">Elegí un ejercicio para empezar.</span><span style="font-size:12px;color:#9A9A9F;width:170px">body · Barlow 500 · 16/22</span></div>
+      <div style="display:flex;align-items:baseline;gap:16px;border-bottom:1px solid #1F1F22;padding-bottom:8px"><span style="font-size:13px;line-height:18px;color:#9A9A9F;flex:1">Descanso 2:00 · Barra, agarre prono</span><span style="font-size:12px;color:#9A9A9F;width:170px">caption · Barlow 400 · 13/18</span></div>
+      <div style="display:flex;align-items:baseline;gap:16px;border-bottom:1px solid #1F1F22;padding-bottom:8px"><span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F;flex:1">ENTRENAMIENTO DE HOY</span><span style="font-size:12px;color:#9A9A9F;width:170px">label · Barlow 700 · 11–12 · +14% tracking</span></div>
+      <div style="display:flex;align-items:baseline;gap:16px"><span style="font-size:18px;font-weight:800;flex:1">Empezar</span><span style="font-size:12px;color:#9A9A9F;width:170px">button · Barlow 700–800 · 15–18</span></div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:28px">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">ESPACIADO · BASE 4</span>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;align-items:center;gap:10px"><span class="num" style="width:40px;font-size:15px;color:#9A9A9F">xs 4</span><span style="width:4px;height:12px;background:#FF5B1F;border-radius:2px"></span></div>
+          <div style="display:flex;align-items:center;gap:10px"><span class="num" style="width:40px;font-size:15px;color:#9A9A9F">sm 8</span><span style="width:8px;height:12px;background:#FF5B1F;border-radius:2px"></span></div>
+          <div style="display:flex;align-items:center;gap:10px"><span class="num" style="width:40px;font-size:15px;color:#9A9A9F">md 12</span><span style="width:12px;height:12px;background:#FF5B1F;border-radius:2px"></span></div>
+          <div style="display:flex;align-items:center;gap:10px"><span class="num" style="width:40px;font-size:15px;color:#9A9A9F">lg 16</span><span style="width:16px;height:12px;background:#FF5B1F;border-radius:2px"></span><span style="font-size:12px;color:#7C7C82">margen lateral</span></div>
+          <div style="display:flex;align-items:center;gap:10px"><span class="num" style="width:40px;font-size:15px;color:#9A9A9F">xl 20</span><span style="width:20px;height:12px;background:#FF5B1F;border-radius:2px"></span></div>
+          <div style="display:flex;align-items:center;gap:10px"><span class="num" style="width:40px;font-size:15px;color:#9A9A9F">2xl 24</span><span style="width:24px;height:12px;background:#FF5B1F;border-radius:2px"></span></div>
+          <div style="display:flex;align-items:center;gap:10px"><span class="num" style="width:40px;font-size:15px;color:#9A9A9F">3xl 32</span><span style="width:32px;height:12px;background:#FF5B1F;border-radius:2px"></span></div>
+        </div>
+        <span style="font-size:12px;color:#7C7C82">Táctil mínimo 44 pt · fila de serie 52 pt (56 en foco) · CTA 56 pt</span>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">RADIOS</span>
+        <div style="display:flex;gap:10px;align-items:flex-end">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:48px;height:48px;border-radius:8px;border:1.5px solid #3A3A3F"></span><span class="num" style="font-size:14px;color:#9A9A9F">sm 8</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:48px;height:48px;border-radius:10px;border:1.5px solid #3A3A3F"></span><span class="num" style="font-size:14px;color:#9A9A9F">md 10</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:48px;height:48px;border-radius:14px;border:1.5px solid #3A3A3F"></span><span class="num" style="font-size:14px;color:#9A9A9F">lg 14</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:48px;height:48px;border-radius:16px;border:1.5px solid #3A3A3F"></span><span class="num" style="font-size:14px;color:#9A9A9F">xl 16</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:48px;height:48px;border-radius:20px;border:1.5px solid #3A3A3F"></span><span class="num" style="font-size:14px;color:#9A9A9F">2xl 20</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:48px;height:48px;border-radius:24px;border:1.5px solid #3A3A3F"></span><span class="num" style="font-size:14px;color:#9A9A9F">pill</span></div>
+        </div>
+        <span style="font-size:12px;color:#7C7C82">sm inputs · md filas y check · lg botones y cards · xl card de ejercicio · 2xl diálogos y descanso</span>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">ELEVACIÓN</span>
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">
+          <div style="height:72px;border-radius:14px;background:#141416;border:1px solid #2A2A2E;display:flex;flex-direction:column;justify-content:center;padding:0 12px"><span style="font-size:13px;font-weight:700">e0</span><span style="font-size:11px;color:#9A9A9F">surface + border</span></div>
+          <div style="height:72px;border-radius:14px;background:#1C1C1F;border:1px solid #2F2F33;display:flex;flex-direction:column;justify-content:center;padding:0 12px"><span style="font-size:13px;font-weight:700">e1</span><span style="font-size:11px;color:#9A9A9F">raised + #2F2F33</span></div>
+          <div style="height:72px;border-radius:14px;background:#1C1C1F;border:1px solid #2F2F33;box-shadow:0 16px 40px rgba(0,0,0,0.9);display:flex;flex-direction:column;justify-content:center;padding:0 12px"><span style="font-size:13px;font-weight:700">e2 flotante</span><span style="font-size:11px;color:#9A9A9F">0 16 40 · 70%</span></div>
+        </div>
+        <span style="font-size:12px;color:#7C7C82">En oscuro la jerarquía la marca la superficie; la sombra solo en flotantes (descanso, menú, diálogo).</span>
+      </div>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":880,"height":1300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

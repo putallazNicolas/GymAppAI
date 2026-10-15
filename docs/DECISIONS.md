@@ -74,3 +74,4 @@ Formato: fecha — decisión — motivo.
 - 2026-10-15 — (R4, choque) Perfil usa el aviso completo de SCREENS 4.9 ("…Si borrás la app, se pierden. Exportalos seguido."), P11 lo acorta. — Texto requerido por el dueño.
 - 2026-10-15 — (R4) Switch de temporizador de descanso bajo una sección "DESCANSO" agregada en Perfil; "Última exportación" guardada en un archivo local (best effort). — P11 no tenía ese ajuste.
 - 2026-10-15 — (Cierre) Fila de PR de peso en el Resumen muestra la serie más pesada (antes mostraba la mejor por e1RM); duración < 1 h como "m:ss". — Encontrado en la prueba web.
+- 2026-10-15 — (Dueño) Al tocar ✓ se cierra el teclado y aparece la barra de descanso; el avance de foco pasa a ser visual (sin abrir el teclado). Descanso por defecto 2:00 si el ejercicio no tiene `restSeconds`. SCREENS 4.2 actualizado. — Pedido del dueño tras probar en el iPhone: el teclado tapaba el timer y sin descanso cargado no aparecía.

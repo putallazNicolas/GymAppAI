@@ -14,3 +14,4 @@ Formato: fecha — decisión — motivo.
 - 2026-10-15 — Seed de ejercicios se entrega en B1 (no B4), B4 queda para export/import + seed en SQLite. — El front necesita el catálogo para F2.
 - 2026-10-15 — Orden de back: B1 (memoria) → B3 (servicios) → B2 (SQLite) → B4. — Los servicios se escriben contra interfaces; así F3 tiene servicios reales antes.
 - 2026-10-15 — Un PR de un primer día ("PR") solo se reporta si existía historial previo del ejercicio. — Evita que la primera sesión llene el resumen de PRs.
+- 2026-10-15 — Subagentes lanzados con `isolation: "remote"` (modelo sonnet); PRs se revisan/mergean con las herramientas GitHub MCP. — Disponible en la sesión.

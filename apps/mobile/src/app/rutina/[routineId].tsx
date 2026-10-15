@@ -92,6 +92,7 @@ export default function RoutineScreen() {
   return (
     <Shell>
       <ScrollView
+        automaticallyAdjustKeyboardInsets
         contentContainerStyle={styles.content}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
@@ -106,6 +107,7 @@ export default function RoutineScreen() {
         <View style={styles.switchRow}>
           <Text variant="label">Rutina activa</Text>
           <Switch
+            accessibilityLabel="Rutina activa"
             value={routine.isActive}
             onValueChange={toggleActive}
             trackColor={{ true: colors.success, false: colors.border }}

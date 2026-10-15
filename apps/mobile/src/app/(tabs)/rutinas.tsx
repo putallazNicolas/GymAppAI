@@ -112,6 +112,7 @@ export default function RutinasScreen() {
                 ) : null}
                 <Button
                   title="⋯"
+                  accessibilityLabel={`Menú de ${item.name}`}
                   variant="ghost"
                   fullWidth={false}
                   onPress={() => setMenuFor(item)}

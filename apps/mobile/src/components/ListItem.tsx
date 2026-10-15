@@ -37,6 +37,7 @@ export function ListItem({ title, subtitle, trailing, onPress, chevron = true }:
   return (
     <Pressable
       accessibilityRole="button"
+      accessibilityLabel={subtitle ? `${title}, ${subtitle}` : title}
       onPress={onPress}
       style={({ pressed }) => [styles.row, pressed && styles.pressed]}
     >

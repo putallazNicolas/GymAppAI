@@ -66,6 +66,8 @@ export function ExerciseBlock({
     <View style={styles.header}>
       <Pressable
         accessibilityRole="button"
+        accessibilityLabel={`${name}, ${exercise.skipped ? 'saltado' : `${done} de ${sets.length} series`}`}
+        accessibilityHint={expanded ? 'Tocá para contraer' : 'Tocá para abrir'}
         accessibilityState={{ expanded }}
         onPress={onToggleExpand}
         style={styles.headerMain}

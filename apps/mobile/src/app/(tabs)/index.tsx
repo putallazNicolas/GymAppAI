@@ -15,6 +15,7 @@ import { useRepositories, useServices } from '../../data/DataProvider';
 import { useFocusAsync } from '../../data/useFocusAsync';
 import { useSettings } from '../../data/useSettings';
 import { attempt } from '../../lib/errors';
+import { useNow } from '../../lib/useNow';
 import { formatDate, formatDuration, formatVolume } from '../../lib/format';
 import { colors, radii, spacing } from '../../theme';
 
@@ -41,7 +42,8 @@ export default function HoyScreen() {
     return { inProgress, routineCount: routines.length, active, suggested, recent };
   });
 
-  const now = new Date();
+  const nowMs = useNow();
+  const now = new Date(nowMs);
 
   async function createFirstRoutine() {
     const routine = await attempt(() => repos.routines.create({ name: 'Mi rutina' }));
@@ -54,6 +56,8 @@ export default function HoyScreen() {
     if (workout)
       router.push({ pathname: '/entrenando/[workoutId]', params: { workoutId: workout.id } });
   }
+
+  const elapsedSeconds = (startedAt: string) => (nowMs - Date.parse(startedAt)) / 1000;
 
   let body;
   if (loading && !data) body = <LoadingState />;
@@ -76,6 +80,7 @@ export default function HoyScreen() {
         {inProgress ? (
           <Pressable
             accessibilityRole="button"
+            accessibilityLabel={`Continuar entrenamiento, ${inProgress.dayNameSnapshot}, ${formatDuration(elapsedSeconds(inProgress.startedAt))}`}
             onPress={() =>
               router.push({
                 pathname: '/entrenando/[workoutId]',
@@ -89,7 +94,8 @@ export default function HoyScreen() {
                 Continuar entrenamiento
               </Text>
               <Text variant="caption" color="onSuccess">
-                {inProgress.dayNameSnapshot}
+                {inProgress.dayNameSnapshot} ·{' '}
+                {formatDuration(elapsedSeconds(inProgress.startedAt))}
               </Text>
             </View>
             <Text variant="title" color="onSuccess">

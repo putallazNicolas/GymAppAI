@@ -37,3 +37,19 @@ Formato: fecha — decisión — motivo.
 - 2026-10-15 — (B3) `getPreviousPerformance` saltea sesiones sin series completadas. — "Anterior" debe mostrar algo útil.
 - 2026-10-15 — (Integración) Repos SQLite envueltos en una cola que serializa las llamadas (`serializeRepositories`). — `withTransactionAsync` de expo-sqlite no es exclusivo y la UI dispara escrituras superpuestas (blur + ✓).
 - 2026-10-15 — (Integración) `expo-sqlite` instalado con `npm install -w` (versión de `bundledNativeModules.json`, ~57.0.4) porque `npx expo install` no tiene red acá. — Restricción del entorno.
+- 2026-10-15 — (B2) Versión de esquema con `PRAGMA user_version`; cada migración en su transacción; `foreign_keys = ON` en cada arranque; se rechaza una DB más nueva que el código. — Simple y robusto.
+- 2026-10-15 — (B2) Columnas camelCase iguales a las propiedades; booleanos 0/1; opcionales NULL; pesos REAL. — Mapeo directo con las entidades.
+- 2026-10-15 — (B2) Tests de SQLite en Node con `sql.js` (WASM, devDependency). — Sin binarios nativos.
+- 2026-10-15 — (B2) Búsqueda sin acentos y orden en español se hacen en JS (reglas compartidas). — SQLite no tiene collation es-AR.
+- 2026-10-15 — (B4) Import valida cada fila (tipos, enums, fechas, enteros, ids duplicados, referencias) antes de escribir nada; errores indican tabla y fila. — Nunca dejar datos a medias.
+- 2026-10-15 — (B4) Referencias `routineId`/`dayId` colgadas en entrenamientos se descartan; cualquier otra referencia colgada es error. — Igual que al borrar una rutina.
+- 2026-10-15 — (B4) Si el archivo no trae los ejercicios del catálogo, se re-agregan al importar. — El catálogo siempre disponible.
+- 2026-10-15 — (B4) Migraciones de formato de export paso a paso (`EXPORT_MIGRATIONS`, vacío: solo existe v1). — Preparado para cambios futuros.
+- 2026-10-15 — (F3) ✓ con reps vacías usa el número planificado ("8-10" → 8); AMRAP queda vacío. — Un toque cuando se hizo lo planificado.
+- 2026-10-15 — (F3) Al completar una serie, la siguiente vacía hereda el peso. — "Kg precargado con la serie previa".
+- 2026-10-15 — (F3) Un solo ejercicio expandido a la vez; "Quitar serie" quita la última (oculto con 1 serie); "Saltar" ↔ "Reactivar". — Spec 4.2.
+- 2026-10-15 — (F3) Finalizar no tiene "descartar"; Entrenando sin gesto de volver (se retoma desde el banner de Hoy). — No perder entrenamientos por accidente.
+- 2026-10-15 — (F4) Gráficos con `react-native-svg` 15.15.4 (versión de Expo Go SDK 57); export con `expo-file-system` (API `File`/`Paths`) + `expo-sharing`; import con `expo-document-picker` aceptando cualquier tipo. — Android etiqueta mal los .json.
+- 2026-10-15 — (F4) Switch "Temporizador de descanso" en Perfil. — El setting ya existía en el contrato.
+- 2026-10-15 — (F5) Selector de Progreso: "con historial" según los últimos 100 entrenamientos finalizados. — Evitar ~68 consultas por foco.
+- 2026-10-15 — (F5) Entrenando guarda los valores pendientes (`flushAll`) al finalizar, al cambiar de ejercicio y al ir a segundo plano. — No perder lo tipeado.

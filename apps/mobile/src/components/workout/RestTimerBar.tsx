@@ -1,8 +1,10 @@
 import { StyleSheet, View } from 'react-native';
+import Svg, { Circle } from 'react-native-svg';
 
-import { colors, radii, spacing } from '../../theme';
 import { formatDuration } from '../../lib/format';
-import { Button } from '../Button';
+import { colors, elevation, hit, radii, space, stroke } from '../../theme';
+import { Icon } from '../icons';
+import { PressableScale } from '../PressableScale';
 import { Text } from '../Text';
 
 interface RestTimerBarProps {
@@ -11,38 +13,75 @@ interface RestTimerBarProps {
   onDismiss: () => void;
 }
 
-/** Non-blocking rest countdown shown after completing a set. */
+const RING = 44;
+const RING_STROKE = 4;
+const RING_R = (RING - RING_STROKE) / 2;
+const RING_LEN = 2 * Math.PI * RING_R;
+
+/** Non-blocking rest countdown shown after completing a set (floating e2 card with a ring). */
 export function RestTimerBar({ remainingSeconds, totalSeconds, onDismiss }: RestTimerBarProps) {
   const ratio = totalSeconds > 0 ? Math.min(1, Math.max(0, remainingSeconds / totalSeconds)) : 0;
+  const done = remainingSeconds <= 0;
+  const tint = done ? colors.success : colors.accent;
   return (
-    <View style={styles.bar} accessibilityLiveRegion="polite">
-      <View style={styles.row}>
-        <Text variant="label">Descanso {formatDuration(remainingSeconds)}</Text>
-        <Button title="Omitir" variant="ghost" fullWidth={false} onPress={onDismiss} />
+    <View style={[styles.bar, done && styles.barDone]} accessibilityLiveRegion="polite">
+      <Svg width={RING} height={RING} accessibilityElementsHidden>
+        <Circle
+          cx={RING / 2}
+          cy={RING / 2}
+          r={RING_R}
+          fill="none"
+          stroke={colors.borderRaised}
+          strokeWidth={RING_STROKE}
+        />
+        <Circle
+          cx={RING / 2}
+          cy={RING / 2}
+          r={RING_R}
+          fill="none"
+          stroke={tint}
+          strokeWidth={RING_STROKE}
+          strokeLinecap="round"
+          strokeDasharray={[RING_LEN, RING_LEN]}
+          strokeDashoffset={RING_LEN * (1 - (done ? 1 : ratio))}
+          transform={`rotate(-90 ${RING / 2} ${RING / 2})`}
+        />
+      </Svg>
+      <View style={styles.texts}>
+        <Text variant="label" color={done ? 'success' : 'textSecondary'}>
+          {done ? 'A la barra' : 'Descanso'}
+        </Text>
+        <Text variant="numL">{formatDuration(remainingSeconds)}</Text>
       </View>
-      <View style={styles.track}>
-        <View style={[styles.fill, { width: `${ratio * 100}%` }]} />
-      </View>
+      <PressableScale
+        accessibilityRole="button"
+        accessibilityLabel="Omitir descanso"
+        onPress={onDismiss}
+        style={styles.close}
+      >
+        <Icon name="close" size={20} color="textSecondary" strokeWidth={2.4} />
+      </PressableScale>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   bar: {
-    backgroundColor: colors.surfaceElevated,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing.sm,
-    paddingBottom: spacing.md,
-    gap: spacing.xs,
+    minHeight: 68,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.md,
+    marginHorizontal: space.lg,
+    marginBottom: space.sm,
+    paddingLeft: space.md,
+    paddingRight: space.sm,
+    borderRadius: radii.xxl,
+    backgroundColor: colors.surfaceRaised,
+    borderWidth: stroke.hairline,
+    borderColor: colors.borderRaised,
+    ...elevation.floating,
   },
-  row: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  track: {
-    height: 6,
-    borderRadius: radii.pill,
-    backgroundColor: colors.border,
-    overflow: 'hidden',
-  },
-  fill: { height: '100%', backgroundColor: colors.primary },
+  barDone: { borderColor: colors.successBorderStrong },
+  texts: { flex: 1 },
+  close: { width: hit.min, height: hit.min, alignItems: 'center', justifyContent: 'center' },
 });

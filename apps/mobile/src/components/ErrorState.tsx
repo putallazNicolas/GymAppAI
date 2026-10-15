@@ -1,9 +1,9 @@
 import { StyleSheet, View } from 'react-native';
 
-import { spacing } from '../theme';
+import { space } from '../theme';
 
 import { Button } from './Button';
-import { Icon } from './Icon';
+import { Icon } from './icons';
 import { Text } from './Text';
 
 interface ErrorStateProps {
@@ -17,11 +17,9 @@ export function ErrorState({
 }: ErrorStateProps) {
   return (
     <View style={styles.root}>
-      <Icon name="warning" size={48} color="warning" />
+      <Icon name="warning" size={48} color="danger" />
       <Text style={styles.center}>{message}</Text>
-      {onRetry ? (
-        <Button title="Reintentar" onPress={onRetry} variant="secondary" size="lg" />
-      ) : null}
+      {onRetry ? <Button title="Reintentar" onPress={onRetry} variant="secondary" /> : null}
     </View>
   );
 }
@@ -31,8 +29,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: spacing.lg,
-    padding: spacing.xl,
+    gap: space.lg,
+    padding: space.xl,
   },
   center: { textAlign: 'center' },
 });

@@ -17,7 +17,7 @@ import { useRepositories } from '../../../data/DataProvider';
 import { useFocusAsync } from '../../../data/useFocusAsync';
 import { attempt } from '../../../lib/errors';
 import { moveId } from '../../../lib/reorder';
-import { spacing } from '../../../theme';
+import { space } from '../../../theme';
 
 export default function DayScreen() {
   const { dayId } = useLocalSearchParams<{ dayId: string }>();
@@ -93,7 +93,7 @@ export default function DayScreen() {
           onBlur={saveName}
           returnKeyType="done"
         />
-        <Text variant="title">Ejercicios</Text>
+        <Text variant="displayS">Ejercicios</Text>
         {day.exercises.length === 0 ? (
           <Text variant="caption">Todavía no hay ejercicios. Agregá el primero.</Text>
         ) : null}
@@ -129,5 +129,5 @@ function Shell({ children }: { children: React.ReactNode }) {
 }
 
 const styles = StyleSheet.create({
-  content: { gap: spacing.lg, paddingVertical: spacing.lg },
+  content: { gap: space.lg, paddingVertical: space.lg },
 });

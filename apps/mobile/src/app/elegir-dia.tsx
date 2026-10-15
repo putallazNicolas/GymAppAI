@@ -5,7 +5,7 @@ import { EmptyState, ErrorState, ListItem, LoadingState, ScreenContainer } from 
 import { useRepositories, useServices } from '../data/DataProvider';
 import { useAsync } from '../data/useAsync';
 import { attempt } from '../lib/errors';
-import { spacing } from '../theme';
+import { space } from '../theme';
 
 export default function PickDayScreen() {
   const repos = useRepositories();
@@ -50,5 +50,5 @@ export default function PickDayScreen() {
 }
 
 const styles = StyleSheet.create({
-  list: { paddingVertical: spacing.md },
+  list: { paddingVertical: space.md },
 });

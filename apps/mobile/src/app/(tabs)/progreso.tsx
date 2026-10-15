@@ -27,7 +27,7 @@ import {
   formatVolume,
   kgToUnit,
 } from '../../lib/format';
-import { colors, spacing } from '../../theme';
+import { colors, space } from '../../theme';
 
 /** How many recent finished workouts are scanned to find exercises with history. */
 const HISTORY_WORKOUT_LIMIT = 100;
@@ -84,7 +84,7 @@ export default function ProgresoScreen() {
   if (data.withHistoryCount === 0)
     return (
       <ScreenContainer>
-        <Text variant="heading">Progreso</Text>
+        <Text variant="displayM">Progreso</Text>
         <EmptyState
           icon="progress"
           title="Todavía no hay datos"
@@ -97,10 +97,10 @@ export default function ProgresoScreen() {
 
   return (
     <ScreenContainer>
-      <Text variant="heading">Progreso</Text>
+      <Text variant="displayM">Progreso</Text>
       <ScrollView contentContainerStyle={styles.content}>
         <Card>
-          <Text variant="title">Entrenamientos por semana</Text>
+          <Text variant="displayS">Entrenamientos por semana</Text>
           <BarList
             items={data.weekly.map((w) => ({
               label: formatShortDate(w.weekStart),
@@ -110,9 +110,9 @@ export default function ProgresoScreen() {
           />
         </Card>
         <Card>
-          <Text variant="title">Volumen semanal</Text>
+          <Text variant="displayS">Volumen semanal</Text>
           <BarList
-            color={colors.success}
+            color={colors.accent}
             items={data.weekly.map((w) => ({
               label: formatShortDate(w.weekStart),
               value: w.volumeKg,
@@ -122,7 +122,7 @@ export default function ProgresoScreen() {
           <Text variant="caption">Semanas desde el lunes, en miles de {unit}.</Text>
         </Card>
 
-        <Text variant="title">Por ejercicio</Text>
+        <Text variant="displayS">Por ejercicio</Text>
         <Button
           title={selected ? selected.name : 'Elegir ejercicio'}
           variant="secondary"
@@ -149,18 +149,18 @@ export default function ProgresoScreen() {
                 series={[
                   {
                     label: 'Mejor peso',
-                    color: colors.primary,
+                    color: colors.accent,
                     values: points.map((p) => kgToUnit(p.bestWeightKg, unit)),
                   },
                   {
                     label: 'e1RM',
-                    color: colors.success,
+                    color: colors.chartWeight,
                     values: points.map((p) => kgToUnit(p.bestE1rmKg, unit)),
                   },
                 ]}
               />
             </Card>
-            <Text variant="title">Historial</Text>
+            <Text variant="displayS">Historial</Text>
             {[...points].reverse().map((p) => (
               <ListItem
                 key={p.workoutId}
@@ -245,8 +245,8 @@ function ExercisePicker({
 }
 
 const styles = StyleSheet.create({
-  content: { gap: spacing.lg, paddingVertical: spacing.lg },
+  content: { gap: space.lg, paddingVertical: space.lg },
   modal: { flex: 1, backgroundColor: colors.background },
-  modalTop: { padding: spacing.lg, gap: spacing.sm },
-  modalList: { paddingHorizontal: spacing.lg, paddingBottom: spacing.xl },
+  modalTop: { padding: space.lg, gap: space.sm },
+  modalList: { paddingHorizontal: space.lg, paddingBottom: space.xl },
 });

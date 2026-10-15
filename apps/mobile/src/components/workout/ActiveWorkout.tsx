@@ -14,7 +14,7 @@ import { useRepositories, useServices } from '../../data/DataProvider';
 import { attempt } from '../../lib/errors';
 import { formatDuration, inputToKg, inputToReps, weightToInput } from '../../lib/format';
 import { useNow } from '../../lib/useNow';
-import { colors, spacing } from '../../theme';
+import { colors, space } from '../../theme';
 import { ActionMenu } from '../ActionMenu';
 import { Button } from '../Button';
 import { confirm } from '../ConfirmDialog';
@@ -273,10 +273,10 @@ export function ActiveWorkout({
     <ScreenContainer edges={['top', 'left', 'right', 'bottom']} padded={false}>
       <View style={styles.header}>
         <View style={styles.headerText}>
-          <Text variant="title" numberOfLines={1}>
+          <Text variant="displayS" numberOfLines={1}>
             {workout.dayNameSnapshot}
           </Text>
-          <Text variant="label" color="primary">
+          <Text variant="bodyStrong" color="accent">
             {formatDuration(elapsed)}
           </Text>
         </View>
@@ -351,13 +351,13 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.md,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
+    gap: space.md,
+    paddingHorizontal: space.lg,
+    paddingVertical: space.md,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
     backgroundColor: colors.surface,
   },
   headerText: { flex: 1 },
-  content: { padding: spacing.lg, gap: spacing.md, paddingBottom: spacing.xxxl },
+  content: { padding: space.lg, gap: space.md, paddingBottom: space.xxxl },
 });

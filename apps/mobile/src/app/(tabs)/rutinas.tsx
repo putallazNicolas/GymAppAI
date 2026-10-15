@@ -17,7 +17,7 @@ import {
 import { useRepositories } from '../../data/DataProvider';
 import { useFocusAsync } from '../../data/useFocusAsync';
 import { attempt } from '../../lib/errors';
-import { colors, radii, spacing } from '../../theme';
+import { colors, radii, space } from '../../theme';
 
 export default function RutinasScreen() {
   const repos = useRepositories();
@@ -105,7 +105,8 @@ export default function RutinasScreen() {
               <View style={styles.trailing}>
                 {item.isActive ? (
                   <View style={styles.badge}>
-                    <Text variant="caption" color="onSuccess">
+                    <View style={styles.badgeDot} />
+                    <Text variant="label" color="accent">
                       Activa
                     </Text>
                   </View>
@@ -128,7 +129,7 @@ export default function RutinasScreen() {
 
   return (
     <ScreenContainer>
-      <Text variant="heading">Mis rutinas</Text>
+      <Text variant="displayM">Mis rutinas</Text>
       <View style={styles.body}>{body}</View>
       {data && data.length > 0 ? (
         <Button title="Nueva rutina" size="lg" onPress={createRoutine} style={styles.cta} />
@@ -145,14 +146,19 @@ export default function RutinasScreen() {
 
 const styles = StyleSheet.create({
   body: { flex: 1 },
-  list: { paddingBottom: spacing.lg },
-  cta: { marginVertical: spacing.md },
-  trailing: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  list: { paddingBottom: space.lg },
+  cta: { marginVertical: space.md },
+  trailing: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
   badge: {
-    backgroundColor: colors.success,
-    borderRadius: radii.pill,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.xs + 2,
   },
-  menuBtn: { paddingHorizontal: spacing.md },
+  badgeDot: {
+    width: 7,
+    height: 7,
+    borderRadius: radii.pill,
+    backgroundColor: colors.accent,
+  },
+  menuBtn: { paddingHorizontal: space.md },
 });

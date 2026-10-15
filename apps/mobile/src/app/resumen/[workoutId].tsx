@@ -18,12 +18,12 @@ import { useAsync } from '../../data/useAsync';
 import { useSettings } from '../../data/useSettings';
 import { attempt } from '../../lib/errors';
 import { formatDate, formatDuration, formatVolume, formatWeight } from '../../lib/format';
-import { colors, radii, spacing } from '../../theme';
+import { colors, radii, space } from '../../theme';
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <View style={styles.stat}>
-      <Text variant="title">{value}</Text>
+      <Text variant="displayS">{value}</Text>
       <Text variant="caption">{label}</Text>
     </View>
   );
@@ -83,7 +83,7 @@ export default function SummaryScreen() {
         keyboardDismissMode="on-drag"
       >
         <View>
-          <Text variant="heading">{data.workout.dayNameSnapshot}</Text>
+          <Text variant="displayM">{data.workout.dayNameSnapshot}</Text>
           <Text variant="caption">{formatDate(data.workout.startedAt)}</Text>
         </View>
 
@@ -99,13 +99,13 @@ export default function SummaryScreen() {
         </Card>
 
         {data.personalRecords.length > 0 ? (
-          <Card completed>
-            <Text variant="title" color="success">
+          <Card>
+            <Text variant="displayS" color="record">
               ¡Nuevos récords!
             </Text>
             {data.personalRecords.map((pr) => (
               <View key={`${pr.exerciseId}-${pr.type}`}>
-                <Text variant="label">{pr.exerciseName}</Text>
+                <Text variant="bodyStrong">{pr.exerciseName}</Text>
                 <Text variant="caption">
                   {prLabel(pr)}: {formatWeight(pr.valueKg, unit)}
                   {pr.previousKg !== undefined
@@ -117,11 +117,11 @@ export default function SummaryScreen() {
           </Card>
         ) : null}
 
-        <Text variant="title">Ejercicios</Text>
+        <Text variant="displayS">Ejercicios</Text>
         {data.exercises.map((e) => (
           <View key={e.workoutExerciseId} style={styles.exercise}>
             <View style={styles.exerciseText}>
-              <Text variant="label" color={e.skipped ? 'textMuted' : 'text'}>
+              <Text variant="bodyStrong" color={e.skipped ? 'textSecondary' : 'textPrimary'}>
                 {e.exerciseName}
               </Text>
               <Text variant="caption">
@@ -129,7 +129,7 @@ export default function SummaryScreen() {
               </Text>
             </View>
             {e.bestSet ? (
-              <Text variant="label" color="success">
+              <Text variant="bodyStrong">
                 {formatWeight(e.bestSet.weightKg, unit)} × {e.bestSet.reps}
               </Text>
             ) : null}
@@ -151,18 +151,18 @@ export default function SummaryScreen() {
 }
 
 const styles = StyleSheet.create({
-  content: { gap: spacing.lg, paddingVertical: spacing.lg },
-  stats: { flexDirection: 'row', gap: spacing.lg },
-  stat: { flex: 1, gap: spacing.xs },
+  content: { gap: space.lg, paddingVertical: space.lg },
+  stats: { flexDirection: 'row', gap: space.lg },
+  stat: { flex: 1, gap: space.xs },
   exercise: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.md,
-    paddingVertical: spacing.sm,
+    gap: space.md,
+    paddingVertical: space.sm,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.border,
     borderRadius: radii.sm,
   },
   exerciseText: { flex: 1 },
-  notes: { minHeight: 96, textAlignVertical: 'top', paddingTop: spacing.md },
+  notes: { minHeight: 96, textAlignVertical: 'top', paddingTop: space.md },
 });

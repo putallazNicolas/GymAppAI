@@ -1,7 +1,8 @@
 import { useRouter } from 'expo-router';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 import {
+  Banner,
   Button,
   Card,
   EmptyState,
@@ -17,7 +18,7 @@ import { useSettings } from '../../data/useSettings';
 import { attempt } from '../../lib/errors';
 import { useNow } from '../../lib/useNow';
 import { formatDate, formatDuration, formatVolume } from '../../lib/format';
-import { colors, radii, spacing } from '../../theme';
+import { space } from '../../theme';
 
 function greeting(hour: number): string {
   if (hour < 6) return 'Buenas noches';
@@ -78,36 +79,22 @@ export default function HoyScreen() {
     body = (
       <ScrollView contentContainerStyle={styles.content}>
         {inProgress ? (
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={`Continuar entrenamiento, ${inProgress.dayNameSnapshot}, ${formatDuration(elapsedSeconds(inProgress.startedAt))}`}
+          <Banner
+            title="Continuar entrenamiento"
+            subtitle={`${inProgress.dayNameSnapshot} · ${formatDuration(elapsedSeconds(inProgress.startedAt))}`}
             onPress={() =>
               router.push({
                 pathname: '/entrenando/[workoutId]',
                 params: { workoutId: inProgress.id },
               })
             }
-            style={styles.banner}
-          >
-            <View style={styles.bannerText}>
-              <Text variant="label" color="onSuccess">
-                Continuar entrenamiento
-              </Text>
-              <Text variant="caption" color="onSuccess">
-                {inProgress.dayNameSnapshot} ·{' '}
-                {formatDuration(elapsedSeconds(inProgress.startedAt))}
-              </Text>
-            </View>
-            <Text variant="title" color="onSuccess">
-              ›
-            </Text>
-          </Pressable>
+          />
         ) : null}
 
         {suggested ? (
           <Card>
             <Text variant="caption">Entrenamiento de hoy</Text>
-            <Text variant="title">{suggested.day.name}</Text>
+            <Text variant="displayS">{suggested.day.name}</Text>
             <Text variant="caption">{suggested.routine.name}</Text>
             <View style={styles.exerciseList}>
               {suggested.exercises.slice(0, 5).map((e, i) => (
@@ -138,7 +125,7 @@ export default function HoyScreen() {
           </Card>
         ) : data.routineCount > 0 ? (
           <Card>
-            <Text variant="title">
+            <Text variant="displayS">
               {active ? 'Tu rutina activa no tiene días' : 'No tenés una rutina activa'}
             </Text>
             <Text variant="caption">
@@ -161,7 +148,7 @@ export default function HoyScreen() {
           </Card>
         ) : null}
 
-        <Text variant="title">Últimos entrenamientos</Text>
+        <Text variant="displayS">Últimos entrenamientos</Text>
         {recent.length === 0 ? (
           <Text variant="caption">Cuando termines tu primer entrenamiento va a aparecer acá.</Text>
         ) : (
@@ -186,23 +173,14 @@ export default function HoyScreen() {
   return (
     <ScreenContainer>
       <Text variant="caption">{formatDate(now)}</Text>
-      <Text variant="heading">{greeting(now.getHours())}</Text>
+      <Text variant="displayM">{greeting(now.getHours())}</Text>
       <View style={styles.body}>{body}</View>
     </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  body: { flex: 1, marginTop: spacing.md },
-  content: { gap: spacing.lg, paddingBottom: spacing.xl },
-  banner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    minHeight: 64,
-    padding: spacing.lg,
-    borderRadius: radii.lg,
-    backgroundColor: colors.success,
-  },
-  bannerText: { flex: 1 },
-  exerciseList: { gap: spacing.xs },
+  body: { flex: 1, marginTop: space.md },
+  content: { gap: space.lg, paddingBottom: space.xl },
+  exerciseList: { gap: space.xs },
 });

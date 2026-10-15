@@ -1,6 +1,10 @@
 import { DarkTheme, Stack, ThemeProvider } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
+import type { Repositories } from '@gym/core';
+import { useCallback, useEffect, useState } from 'react';
+import { View } from 'react-native';
+
+import { ErrorState, LoadingState } from '../components';
 
 import { DataProvider } from '../data/DataProvider';
 import { createRepositories } from '../data/createRepositories';
@@ -22,7 +26,44 @@ const navigationTheme = {
 };
 
 export default function RootLayout() {
-  const [repositories] = useState(createRepositories);
+  const [repositories, setRepositories] = useState<Repositories | null>(null);
+  const [failed, setFailed] = useState(false);
+  const [attempt, setAttempt] = useState(0);
+
+  useEffect(() => {
+    let cancelled = false;
+    createRepositories().then(
+      (repos) => {
+        if (!cancelled) setRepositories(repos);
+      },
+      (error: unknown) => {
+        console.error('Failed to open the database', error);
+        if (!cancelled) setFailed(true);
+      },
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [attempt]);
+
+  const retry = useCallback(() => {
+    setFailed(false);
+    setAttempt((n) => n + 1);
+  }, []);
+
+  if (!repositories) {
+    return (
+      <View style={{ flex: 1, backgroundColor: colors.background }}>
+        <StatusBar style="light" />
+        {failed ? (
+          <ErrorState message="No pudimos abrir tus datos." onRetry={retry} />
+        ) : (
+          <LoadingState />
+        )}
+      </View>
+    );
+  }
+
   return (
     <DataProvider repositories={repositories}>
       <ThemeProvider value={navigationTheme}>

@@ -1,14 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { EmptyState, ScreenContainer, Text } from '../../components';
 
 export default function PerfilScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Perfil</Text>
-    </View>
+    <ScreenContainer>
+      <Text variant="heading">Perfil</Text>
+      <EmptyState icon="profile" title="Perfil" message="Esta pantalla llega pronto." />
+    </ScreenContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  text: { color: '#FFFFFF', fontSize: 20 },
-});

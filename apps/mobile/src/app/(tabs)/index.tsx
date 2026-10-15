@@ -1,14 +1,16 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { EmptyState, ScreenContainer, Text } from '../../components';
+import { formatDate } from '../../lib/format';
 
 export default function HoyScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Hoy</Text>
-    </View>
+    <ScreenContainer>
+      <Text variant="caption">{formatDate(new Date())}</Text>
+      <Text variant="heading">Hoy</Text>
+      <EmptyState
+        icon="today"
+        title="Todavía no hay rutinas"
+        message="Armá tu primera rutina para empezar a entrenar."
+      />
+    </ScreenContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  text: { color: '#FFFFFF', fontSize: 20 },
-});

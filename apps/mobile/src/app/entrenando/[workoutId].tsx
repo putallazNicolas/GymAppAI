@@ -24,7 +24,22 @@ export default function WorkoutScreen() {
           [id, await services.getPreviousPerformance(id, { excludeWorkoutId: workoutId })] as const,
       ),
     );
-    return { workout, settings, names, previous: Object.fromEntries(prevEntries) };
+    // Historical best e1RM per exercise (finished workouts only): the bar for the live PR badge.
+    const bestEntries = await Promise.all(
+      ids.map(async (id) => {
+        const points = await services.getExerciseProgress(id);
+        return [id, points.reduce((max, p) => Math.max(max, p.bestE1rmKg), 0)] as const;
+      }),
+    );
+    const routine = workout.routineId ? await repos.routines.getById(workout.routineId) : null;
+    return {
+      workout,
+      settings,
+      names,
+      previous: Object.fromEntries(prevEntries),
+      bests: Object.fromEntries(bestEntries),
+      routineName: routine?.name,
+    };
   }, [workoutId]);
 
   if (loading && data === undefined)
@@ -53,6 +68,8 @@ export default function WorkoutScreen() {
       initial={data.workout}
       names={data.names}
       previous={data.previous}
+      bests={data.bests}
+      routineName={data.routineName}
       unit={data.settings.unit}
       restTimerEnabled={data.settings.restTimerEnabled}
     />

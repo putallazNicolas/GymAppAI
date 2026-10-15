@@ -34,9 +34,13 @@ export const type = {
   displayName: { fontFamily: fonts.displayBold, fontSize: 24, lineHeight: 26, ...upper },
   /** kg / lb segmented pill labels, 22. */
   unitPill: { fontFamily: fonts.display, fontSize: 22, lineHeight: 24, ...tnum },
+  numD: { fontFamily: fonts.display, fontSize: 28, lineHeight: 28, ...tnum },
+  numMd: { fontFamily: fonts.displayBold, fontSize: 20, lineHeight: 22, ...tnum },
   badge: { fontFamily: fonts.display, fontSize: 13, lineHeight: 16, ...tnum },
   body: { fontFamily: fonts.body, fontSize: 16, lineHeight: 22 },
   bodyStrong: { fontFamily: fonts.bodyBold, fontSize: 16, lineHeight: 22 },
+  bodyM: { fontFamily: fonts.body, fontSize: 15, lineHeight: 20 },
+  bodyMSemi: { fontFamily: fonts.bodySemi, fontSize: 15, lineHeight: 20 },
   bodyS: { fontFamily: fonts.bodyRegular, fontSize: 14, lineHeight: 20 },
   caption: { fontFamily: fonts.bodyRegular, fontSize: 13, lineHeight: 18 },
   label: {

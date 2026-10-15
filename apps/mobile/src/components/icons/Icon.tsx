@@ -31,6 +31,7 @@ const ICONS = {
       <Path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6" />
     </>
   ),
+  play: <Path d="M7 4.5v15l13-7.5z" />,
   check: <Path d="M5 12.5l4.5 4.5L19 7.5" />,
   add: <Path d="M12 5v14M5 12h14" />,
   minus: <Path d="M5 12h14" />,
@@ -114,7 +115,7 @@ export function Icon({ name, size = 24, color = 'textPrimary', strokeWidth }: Ic
       width={size}
       height={size}
       viewBox="0 0 24 24"
-      fill="none"
+      fill={name === 'play' ? tint : 'none'}
       stroke={tint}
       strokeWidth={sw}
       strokeLinecap="round"

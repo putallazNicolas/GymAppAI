@@ -29,15 +29,15 @@ interface WeeklySummaryProps {
 
 const BAR_AREA = 126;
 const BAR_MAX = 96;
-const LABEL_SPAN = 3;
+const LABEL_MIN = 0;
 
 /** Volume in thousands: "47,9 t" (tonnes) in kg, "105,6 k" in lb. */
 function thousands(volumeKg: number, unit: WeightUnit): string {
-  return `${formatNumber(kgToUnit(volumeKg, unit) / 1000)} ${unit === 'kg' ? 't' : 'k'}`;
+  return `${formatNumber(kgToUnit(volumeKg, unit) / 1000)}\u00A0${unit === 'kg' ? 't' : 'k'}`;
 }
 
 function Bar({ height, color, grow }: { height: number; color: string; grow: { value: number } }) {
-  const style = useAnimatedStyle(() => ({ height: Math.max(2, height * grow.value) }));
+  const style = useAnimatedStyle(() => ({ height: height * grow.value }));
   return <Animated.View style={[styles.bar, { backgroundColor: color }, style]} />;
 }
 
@@ -60,7 +60,7 @@ export function WeeklySummary({ weeks, unit, routineDays }: WeeklySummaryProps) 
   const done = current?.workouts ?? 0;
   const thisWeek =
     routineDays && routineDays > 0
-      ? `esta semana · ${done} de ${routineDays} días`
+      ? `esta semana · ${done} de ${routineDays} ${routineDays === 1 ? 'día' : 'días'}`
       : `esta semana · ${done} ${done === 1 ? 'entrenamiento' : 'entrenamientos'}`;
   const volume = kgToUnit(current?.volumeKg ?? 0, unit);
 
@@ -90,8 +90,7 @@ export function WeeklySummary({ weeks, unit, routineDays }: WeeklySummaryProps) 
                 <Text
                   variant="numXS"
                   color={isCurrent ? 'textPrimary' : 'textBody'}
-                  numberOfLines={1}
-                  style={styles.value}
+                  style={styles.label}
                 >
                   {thousands(w.volumeKg, unit)}
                 </Text>
@@ -118,8 +117,7 @@ export function WeeklySummary({ weeks, unit, routineDays }: WeeklySummaryProps) 
               <Text
                 variant="numAxis"
                 color={i === lastIdx ? 'textPrimary' : 'textTertiary'}
-                numberOfLines={1}
-                style={[styles.axisLabel, i === lastIdx && styles.axisCurrent]}
+                style={styles.label}
               >
                 {w.label}
               </Text>
@@ -168,7 +166,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   col: { flex: 1, alignItems: 'center', gap: space.xs },
-  value: { width: LABEL_SPAN * 24, textAlign: 'center' },
+  label: { textAlign: 'center', minWidth: LABEL_MIN },
   bar: { width: '100%', borderTopLeftRadius: space.xs, borderTopRightRadius: space.xs },
   axis: {
     flexDirection: 'row',
@@ -177,8 +175,6 @@ const styles = StyleSheet.create({
     borderTopColor: colors.borderStrong,
     paddingTop: 6,
   },
-  axisLabel: { width: LABEL_SPAN * 24, textAlign: 'center' },
-  axisCurrent: {},
   counts: { flexDirection: 'row', gap: 4, paddingTop: 6 },
   count: { textAlign: 'center' },
 });

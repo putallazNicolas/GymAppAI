@@ -9,27 +9,41 @@ import { useKeepAwake } from 'expo-keep-awake';
 import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { AppState, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { useRepositories, useServices } from '../../data/DataProvider';
 import { attempt } from '../../lib/errors';
-import { formatDuration, inputToKg, inputToReps, weightToInput } from '../../lib/format';
+import { inputToKg, inputToReps, weightToInput } from '../../lib/format';
+import { haptics } from '../../lib/haptics';
 import { useNow } from '../../lib/useNow';
-import { colors, space } from '../../theme';
+import { firstPendingId, prSetIds, workoutTotals } from '../../lib/workoutStats';
+import { colors, radii, space, stroke } from '../../theme';
 import { ActionMenu } from '../ActionMenu';
 import { Button } from '../Button';
 import { confirm } from '../ConfirmDialog';
 import { ScreenContainer } from '../ScreenContainer';
+import { ScreenHeader } from '../ScreenHeader';
 import { Text } from '../Text';
-import { ExerciseBlock, type SetInput } from './ExerciseBlock';
+import { ExerciseBlock, type ExerciseMode, type SetInput } from './ExerciseBlock';
 import { RestTimerBar } from './RestTimerBar';
+import { ProgressSegments, WorkoutStats } from './WorkoutProgress';
 
 interface ActiveWorkoutProps {
   initial: WorkoutDetail;
   names: Record<string, string>;
   previous: Record<string, PreviousPerformance | null>;
+  /** Historical best e1RM (kg) per exercise id, from finished workouts (for the live PR badge). */
+  bests: Record<string, number>;
+  routineName?: string;
   unit: WeightUnit;
   restTimerEnabled: boolean;
 }
+
+/** Pause so the last row is seen turning green before the exercise folds (design/S3). */
+const COLLAPSE_PAUSE_MS = 350;
+/** Waits for the fold/unfold layout animation before scrolling to the next exercise. */
+const SCROLL_DELAY_MS = 380;
+const ADD_REST_SECONDS = 15;
 
 function buildInputs(workout: WorkoutDetail, unit: WeightUnit): Record<string, SetInput> {
   const out: Record<string, SetInput> = {};
@@ -42,22 +56,26 @@ function buildInputs(workout: WorkoutDetail, unit: WeightUnit): Record<string, S
   return out;
 }
 
-function firstPendingId(workout: WorkoutDetail, afterIndex = -1): string | null {
-  const list = workout.exercises;
-  const pick = (from: number, to: number) => {
-    for (let i = from; i < to; i++) {
-      const e = list[i];
-      if (e && !e.skipped && e.sets.some((s) => !s.completed)) return e.id;
-    }
-    return null;
+function restFrom(seconds: number): { endsAt: number; total: number } {
+  return { endsAt: Date.now() + seconds * 1000, total: seconds };
+}
+
+function patchSetIn(w: WorkoutDetail, setId: string, patch: Partial<WorkoutSet>): WorkoutDetail {
+  return {
+    ...w,
+    exercises: w.exercises.map((e) => ({
+      ...e,
+      sets: e.sets.map((s) => (s.id === setId ? { ...s, ...patch } : s)),
+    })),
   };
-  return pick(afterIndex + 1, list.length) ?? pick(0, afterIndex + 1);
 }
 
 export function ActiveWorkout({
   initial,
   names,
   previous,
+  bests,
+  routineName,
   unit,
   restTimerEnabled,
 }: ActiveWorkoutProps) {
@@ -67,15 +85,63 @@ export function ActiveWorkout({
   const router = useRouter();
   const now = useNow();
 
-  const [workout, setWorkout] = useState(initial);
-  const [inputs, setInputs] = useState(() => buildInputs(initial, unit));
-  const [expandedId, setExpandedId] = useState<string | null>(() => firstPendingId(initial));
+  // The latest state also lives in refs: several ✓ taps can land before React re-renders or
+  // before the previous save resolves, so every handler reads the refs, never a stale render.
+  const [seed] = useState(() => ({
+    inputs: buildInputs(initial, unit),
+    expanded: firstPendingId(initial),
+  }));
+  const workoutRef = useRef(initial);
+  const inputsRef = useRef(seed.inputs);
+  const expandedRef = useRef<string | null>(seed.expanded);
+  const [workout, setWorkoutState] = useState(initial);
+  const [inputs, setInputsState] = useState(seed.inputs);
+  const [expandedId, setExpandedState] = useState<string | null>(seed.expanded);
   const [rest, setRest] = useState<{ endsAt: number; total: number } | null>(null);
   const [menuId, setMenuId] = useState<string | null>(null);
   const [finishing, setFinishing] = useState(false);
 
   const inputRefs = useRef(new Map<string, TextInput>());
   const pendingFocus = useRef<string | null>(null);
+  const scrollRef = useRef<ScrollView>(null);
+  const blockY = useRef(new Map<string, number>());
+  const collapseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  /** Saves run one after another, in tap order. */
+  const queue = useRef<Promise<unknown>>(Promise.resolve());
+
+  function mutateWorkout(fn: (w: WorkoutDetail) => WorkoutDetail) {
+    workoutRef.current = fn(workoutRef.current);
+    setWorkoutState(workoutRef.current);
+  }
+  function mutateInputs(setId: string, patch: Partial<SetInput>) {
+    inputsRef.current = {
+      ...inputsRef.current,
+      [setId]: { kg: '', reps: '', ...inputsRef.current[setId], ...patch },
+    };
+    setInputsState(inputsRef.current);
+  }
+  function setExpanded(id: string | null) {
+    expandedRef.current = id;
+    setExpandedState(id);
+  }
+  function patchSet(setId: string, patch: Partial<WorkoutSet>) {
+    mutateWorkout((w) => patchSetIn(w, setId, patch));
+  }
+  function patchExercise(id: string, fn: (e: WorkoutExerciseDetail) => WorkoutExerciseDetail) {
+    mutateWorkout((w) => ({ ...w, exercises: w.exercises.map((e) => (e.id === id ? fn(e) : e)) }));
+  }
+  function enqueue<T>(job: () => Promise<T>): Promise<T> {
+    const run = queue.current.then(job, job);
+    queue.current = run.catch(() => undefined);
+    return run;
+  }
+
+  useEffect(
+    () => () => {
+      if (collapseTimer.current) clearTimeout(collapseTimer.current);
+    },
+    [],
+  );
 
   function registerRef(key: string, el: TextInput | null) {
     if (!el) {
@@ -94,40 +160,31 @@ export function ActiveWorkout({
     else pendingFocus.current = key;
   }
 
-  function patchSet(setId: string, patch: Partial<WorkoutSet>) {
-    setWorkout((w) => ({
-      ...w,
-      exercises: w.exercises.map((e) => ({
-        ...e,
-        sets: e.sets.map((s) => (s.id === setId ? { ...s, ...patch } : s)),
-      })),
-    }));
-  }
-  function patchExercise(id: string, fn: (e: WorkoutExerciseDetail) => WorkoutExerciseDetail) {
-    setWorkout((w) => ({ ...w, exercises: w.exercises.map((e) => (e.id === id ? fn(e) : e)) }));
-  }
-  function setInput(setId: string, patch: Partial<SetInput>) {
-    setInputs((m) => ({ ...m, [setId]: { kg: '', reps: '', ...m[setId], ...patch } }));
-  }
-
   /** Persist the typed kg/reps of a set (called on blur). */
-  async function persist(setId: string) {
-    const input = inputs[setId];
-    if (!input) return;
+  function persist(setId: string) {
+    const input = inputsRef.current[setId];
+    if (!input) return Promise.resolve();
     const weightKg = inputToKg(input.kg, unit);
     const reps = inputToReps(input.reps);
-    const updated = await attempt(() =>
-      repos.workouts.updateSet(setId, { weightKg: weightKg ?? null, reps: reps ?? null }),
-    );
-    if (updated) patchSet(setId, { weightKg: updated.weightKg, reps: updated.reps });
+    return enqueue(async () => {
+      const updated = await attempt(() =>
+        repos.workouts.updateSet(setId, { weightKg: weightKg ?? null, reps: reps ?? null }),
+      );
+      // A completed set keeps its optimistic values until completeSet resolves.
+      const stillPending = workoutRef.current.exercises.some((e) =>
+        e.sets.some((s) => s.id === setId && !s.completed),
+      );
+      if (updated && stillPending)
+        patchSet(setId, { weightKg: updated.weightKg, reps: updated.reps });
+    });
   }
 
   /** Saves every set whose typed values differ from what is stored (nothing is lost on exit). */
   async function flushAll() {
     const writes: Promise<unknown>[] = [];
-    for (const ex of workout.exercises)
+    for (const ex of workoutRef.current.exercises)
       for (const s of ex.sets) {
-        const input = inputs[s.id];
+        const input = inputsRef.current[s.id];
         if (!input) continue;
         const weightKg = inputToKg(input.kg, unit);
         const reps = inputToReps(input.reps);
@@ -148,24 +205,52 @@ export function ActiveWorkout({
       if (state !== 'active') void flushAll();
     });
     return () => sub.remove();
-    // flushAll closes over the latest workout/inputs; re-subscribe when they change.
+    // flushAll only reads refs and stable props.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [workout, inputs]);
+  }, []);
 
-  async function toggleComplete(setId: string) {
-    const exIndex = workout.exercises.findIndex((e) => e.sets.some((s) => s.id === setId));
-    const ex = workout.exercises[exIndex];
+  /** Folds the finished exercise and opens the next one (after a short pause). */
+  function scheduleCollapse(exerciseId: string) {
+    if (collapseTimer.current) clearTimeout(collapseTimer.current);
+    haptics.medium();
+    collapseTimer.current = setTimeout(() => {
+      collapseTimer.current = null;
+      const w = workoutRef.current;
+      const idx = w.exercises.findIndex((e) => e.id === exerciseId);
+      const ex = w.exercises[idx];
+      // Something was undone, or the person opened another exercise meanwhile: leave it.
+      if (!ex || expandedRef.current !== exerciseId || ex.sets.some((s) => !s.completed)) return;
+      const nextId = firstPendingId(w, idx);
+      setExpanded(nextId);
+      if (!nextId) return;
+      const firstSet = w.exercises.find((e) => e.id === nextId)?.sets.find((s) => !s.completed);
+      if (firstSet) focusKey(`${firstSet.id}:kg`);
+      setTimeout(() => {
+        const y = blockY.current.get(nextId);
+        if (y !== undefined)
+          scrollRef.current?.scrollTo({ y: Math.max(0, y - space.md), animated: true });
+      }, SCROLL_DELAY_MS);
+    }, COLLAPSE_PAUSE_MS);
+  }
+
+  function toggleComplete(setId: string) {
+    const w = workoutRef.current;
+    const exIndex = w.exercises.findIndex((e) => e.sets.some((s) => s.id === setId));
+    const ex = w.exercises[exIndex];
     const setIdx = ex?.sets.findIndex((s) => s.id === setId) ?? -1;
     const set = ex?.sets[setIdx];
     if (!ex || !set) return;
 
     if (set.completed) {
-      const updated = await attempt(() => services.uncompleteSet(setId));
-      if (updated) patchSet(setId, { completed: false, completedAt: undefined });
+      patchSet(setId, { completed: false, completedAt: undefined });
+      void enqueue(async () => {
+        const updated = await attempt(() => services.uncompleteSet(setId));
+        if (!updated) patchSet(setId, { completed: true, completedAt: set.completedAt });
+      });
       return;
     }
 
-    const input = inputs[setId] ?? { kg: '', reps: '' };
+    const input = inputsRef.current[setId] ?? { kg: '', reps: '' };
     const weightKg = inputToKg(input.kg, unit);
     let reps = inputToReps(input.reps);
     if (reps === undefined) {
@@ -173,79 +258,77 @@ export function ActiveWorkout({
       const planned = parseInt(ex.plannedReps, 10);
       if (Number.isFinite(planned)) reps = planned;
     }
-    const updated = await attempt(() => services.completeSet(setId, { weightKg, reps }));
-    if (!updated) return;
-    patchSet(setId, updated);
-    setInput(setId, { reps: updated.reps === undefined ? '' : String(updated.reps) });
+
+    // Optimistic: the set is completed right now, before anything is saved.
+    const completedAt = new Date().toISOString();
+    patchSet(setId, { weightKg, reps, completed: true, completedAt });
+    mutateInputs(setId, { reps: reps === undefined ? '' : String(reps) });
 
     // Carry the weight over to the next empty set so it is prefilled.
     const next = ex.sets[setIdx + 1];
-    if (next && !next.completed && weightKg !== undefined && !(inputs[next.id]?.kg ?? '')) {
-      setInput(next.id, { kg: weightToInput(weightKg, unit) });
-      void attempt(() => repos.workouts.updateSet(next.id, { weightKg }));
+    if (next && !next.completed && weightKg !== undefined && !inputsRef.current[next.id]?.kg) {
+      mutateInputs(next.id, { kg: weightToInput(weightKg, unit) });
       patchSet(next.id, { weightKg });
+      void enqueue(() => attempt(() => repos.workouts.updateSet(next.id, { weightKg })));
     }
+
+    // Live PR: heavier e1RM than anything in the exercise's history.
+    const after = workoutRef.current.exercises[exIndex];
+    if (after && prSetIds(after, bests[ex.exerciseId] ?? 0).has(setId)) haptics.heavy();
 
     if (restTimerEnabled && ex.restSeconds) {
-      setRest({ endsAt: Date.now() + ex.restSeconds * 1000, total: ex.restSeconds });
+      setRest(restFrom(ex.restSeconds));
     }
 
-    const nextPending = ex.sets.find((s) => s.id !== setId && !s.completed);
-    if (!nextPending) {
-      // Exercise finished: collapse and open the following one.
-      const after: WorkoutDetail = {
-        ...workout,
-        exercises: workout.exercises.map((e) =>
-          e.id === ex.id ? { ...e, sets: e.sets.map((s) => ({ ...s, completed: true })) } : e,
-        ),
-      };
-      const nextId = firstPendingId(after, exIndex);
-      setExpandedId(nextId);
-      const nextEx = after.exercises.find((e) => e.id === nextId);
-      const firstSet = nextEx?.sets.find((s) => !s.completed);
-      if (firstSet) focusKey(`${firstSet.id}:kg`);
-    } else {
-      focusKey(`${nextPending.id}:kg`);
-    }
+    const nextPending = after?.sets.find((s) => !s.completed);
+    if (!nextPending) scheduleCollapse(ex.id);
+    else focusKey(`${nextPending.id}:kg`);
+
+    void enqueue(async () => {
+      const updated = await attempt(() => services.completeSet(setId, { weightKg, reps }));
+      if (updated) patchSet(setId, { weightKg: updated.weightKg, reps: updated.reps });
+      else patchSet(setId, { completed: false, completedAt: undefined });
+    });
   }
 
   async function addSet(ex: WorkoutExerciseDetail) {
-    const created = await attempt(() => repos.workouts.addSet(ex.id));
+    const created = await enqueue(() => attempt(() => repos.workouts.addSet(ex.id)));
     if (!created) return;
     patchExercise(ex.id, (e) => ({ ...e, sets: [...e.sets, created] }));
-    setInput(created.id, { kg: weightToInput(created.weightKg, unit), reps: '' });
-    setExpandedId(ex.id);
+    mutateInputs(created.id, { kg: weightToInput(created.weightKg, unit), reps: '' });
+    setExpanded(ex.id);
   }
 
   async function removeLastSet(ex: WorkoutExerciseDetail) {
-    const last = ex.sets[ex.sets.length - 1];
-    if (!last || ex.sets.length <= 1) return;
-    const ok = await attempt(async () => {
-      await repos.workouts.removeSet(last.id);
-      return true;
-    });
+    const current = workoutRef.current.exercises.find((e) => e.id === ex.id);
+    const last = current?.sets[current.sets.length - 1];
+    if (!current || !last || current.sets.length <= 1) return;
+    const ok = await enqueue(() =>
+      attempt(async () => {
+        await repos.workouts.removeSet(last.id);
+        return true;
+      }),
+    );
     if (ok) patchExercise(ex.id, (e) => ({ ...e, sets: e.sets.filter((s) => s.id !== last.id) }));
   }
 
   async function toggleSkip(ex: WorkoutExerciseDetail) {
     const skipped = !ex.skipped;
-    const updated = await attempt(() => repos.workouts.updateWorkoutExercise(ex.id, { skipped }));
+    const updated = await enqueue(() =>
+      attempt(() => repos.workouts.updateWorkoutExercise(ex.id, { skipped })),
+    );
     if (!updated) return;
     patchExercise(ex.id, (e) => ({ ...e, skipped }));
-    if (skipped && expandedId === ex.id) {
-      const idx = workout.exercises.findIndex((e) => e.id === ex.id);
-      const after: WorkoutDetail = {
-        ...workout,
-        exercises: workout.exercises.map((e) => (e.id === ex.id ? { ...e, skipped } : e)),
-      };
-      setExpandedId(firstPendingId(after, idx));
+    if (skipped && expandedRef.current === ex.id) {
+      const idx = workoutRef.current.exercises.findIndex((e) => e.id === ex.id);
+      setExpanded(firstPendingId(workoutRef.current, idx));
     } else if (!skipped) {
-      setExpandedId(ex.id);
+      setExpanded(ex.id);
     }
   }
 
   async function finish() {
-    const pending = workout.exercises
+    const pending = workoutRef.current.exercises
       .filter((e) => !e.skipped)
       .reduce((n, e) => n + e.sets.filter((s) => !s.completed).length, 0);
     if (pending > 0) {
@@ -259,68 +342,129 @@ export function ActiveWorkout({
     }
     setFinishing(true);
     await flushAll();
-    const done = await attempt(() => services.finishWorkout(workout.id));
+    await queue.current;
+    const done = await attempt(() => services.finishWorkout(workoutRef.current.id));
     setFinishing(false);
     if (done)
-      router.replace({ pathname: '/resumen/[workoutId]', params: { workoutId: workout.id } });
+      router.replace({
+        pathname: '/resumen/[workoutId]',
+        params: { workoutId: workoutRef.current.id },
+      });
+  }
+
+  function addRest() {
+    if (!rest) return;
+    const endsAt = Math.max(Date.now(), rest.endsAt) + ADD_REST_SECONDS * 1000;
+    setRest({ endsAt, total: Math.max(rest.total, Math.ceil((endsAt - Date.now()) / 1000)) });
   }
 
   const elapsed = (now - Date.parse(workout.startedAt)) / 1000;
-  const restRemaining = rest ? Math.ceil((rest.endsAt - now) / 1000) : 0;
   const menuExercise = workout.exercises.find((e) => e.id === menuId);
+  const totals = workoutTotals(workout);
+
+  // Mode of every exercise: the open one, finished ones, the next pending one and the rest.
+  const openIndex = workout.exercises.findIndex((e) => e.id === expandedId && !e.skipped);
+  const collapsedPending = workout.exercises
+    .map((e, i) => ({ e, i }))
+    .filter(({ e, i }) => !e.skipped && i !== openIndex && e.sets.some((s) => !s.completed));
+  const nextId = (collapsedPending.find(({ i }) => i > openIndex) ?? collapsedPending[0])?.e.id;
+  const openExercise = openIndex >= 0 ? workout.exercises[openIndex] : undefined;
+  const focusSetId = openExercise?.sets.find((s) => !s.completed)?.id ?? null;
+  const allDone =
+    totals.totalSets > 0 &&
+    totals.doneSets === totals.totalSets &&
+    expandedId === null &&
+    !finishing;
+
+  function modeOf(e: WorkoutExerciseDetail): ExerciseMode {
+    if (e.skipped) return 'skipped';
+    if (e.id === expandedId) return 'expanded';
+    if (!e.sets.some((s) => !s.completed) && e.sets.length > 0) return 'done';
+    return e.id === nextId ? 'next' : 'later';
+  }
 
   return (
-    <ScreenContainer edges={['top', 'left', 'right', 'bottom']} padded={false}>
-      <View style={styles.header}>
-        <View style={styles.headerText}>
-          <Text variant="displayS" numberOfLines={1}>
-            {workout.dayNameSnapshot}
-          </Text>
-          <Text variant="bodyStrong" color="accent">
-            {formatDuration(elapsed)}
-          </Text>
-        </View>
-        <Button
-          title="Finalizar"
-          fullWidth={false}
-          loading={finishing}
-          onPress={finish}
-          variant="secondary"
+    <ScreenContainer edges={['top', 'left', 'right', 'bottom']}>
+      <ScreenHeader
+        accent
+        label={routineName ? `Entrenando · ${routineName}` : 'Entrenando'}
+        title={workout.dayNameSnapshot}
+        right={
+          <Button
+            title="Finalizar"
+            variant="outline"
+            size="sm"
+            fullWidth={false}
+            loading={finishing}
+            onPress={finish}
+          />
+        }
+      />
+      <View style={styles.strip}>
+        <WorkoutStats
+          elapsedSeconds={elapsed}
+          doneSets={totals.doneSets}
+          totalSets={totals.totalSets}
+          volumeKg={totals.volumeKg}
+          unit={unit}
         />
+        <ProgressSegments workout={workout} focusSetId={focusSetId} />
       </View>
       <ScrollView
+        ref={scrollRef}
         automaticallyAdjustKeyboardInsets
         contentContainerStyle={styles.content}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
+        showsVerticalScrollIndicator={false}
       >
-        {workout.exercises.map((e) => (
+        {workout.exercises.map((e, i) => (
           <ExerciseBlock
             key={e.id}
             exercise={e}
             name={names[e.exerciseId] ?? 'Ejercicio'}
-            expanded={expandedId === e.id}
+            position={i}
+            count={workout.exercises.length}
+            mode={modeOf(e)}
             previous={previous[e.exerciseId]}
             unit={unit}
             inputs={inputs}
+            prSets={prSetIds(e, bests[e.exerciseId] ?? 0)}
+            focusSetId={e.id === expandedId ? focusSetId : null}
             onToggleExpand={() => {
               void flushAll();
-              setExpandedId(expandedId === e.id ? null : e.id);
+              setExpanded(expandedRef.current === e.id ? null : e.id);
             }}
             onOpenMenu={() => setMenuId(e.id)}
-            onChangeKg={(id, t) => setInput(id, { kg: t })}
-            onChangeReps={(id, t) => setInput(id, { reps: t })}
+            onChangeKg={(id, t) => mutateInputs(id, { kg: t })}
+            onChangeReps={(id, t) => mutateInputs(id, { reps: t })}
             onBlurSet={persist}
             onToggleComplete={toggleComplete}
             registerRef={registerRef}
             focusKey={focusKey}
+            onBlockLayout={(y) => blockY.current.set(e.id, y)}
           />
         ))}
+        {allDone ? (
+          <Animated.View entering={FadeInDown.duration(320)} style={styles.allDone}>
+            <Text variant="label" color="success">
+              Todas las series completas
+            </Text>
+            <Text variant="displayM">Buen laburo</Text>
+            <Button
+              title="Finalizar y ver resumen"
+              size="lg"
+              onPress={finish}
+              style={styles.allDoneButton}
+            />
+          </Animated.View>
+        ) : null}
       </ScrollView>
-      {rest && restRemaining > 0 ? (
+      {rest ? (
         <RestTimerBar
-          remainingSeconds={restRemaining}
+          endsAt={rest.endsAt}
           totalSeconds={rest.total}
+          onAddTime={addRest}
           onDismiss={() => setRest(null)}
         />
       ) : null}
@@ -348,16 +492,18 @@ export function ActiveWorkout({
 }
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
+  strip: { gap: space.sm + 2, paddingBottom: space.md },
+  content: { gap: space.sm, paddingBottom: 130 },
+  allDone: {
+    marginTop: space.sm,
     alignItems: 'center',
-    gap: space.md,
-    paddingHorizontal: space.lg,
-    paddingVertical: space.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    gap: space.xs + 2,
+    padding: space.lg,
+    paddingTop: space.xl,
+    borderRadius: radii.xl,
     backgroundColor: colors.surface,
+    borderWidth: stroke.hairline,
+    borderColor: colors.successBorder,
   },
-  headerText: { flex: 1 },
-  content: { padding: space.lg, gap: space.md, paddingBottom: space.xxxl },
+  allDoneButton: { marginTop: space.md },
 });

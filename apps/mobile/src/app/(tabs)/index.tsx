@@ -1,3 +1,4 @@
+import type { WeightUnit, WorkoutListItem } from '@gym/core';
 import { useRouter } from 'expo-router';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
@@ -5,20 +6,30 @@ import {
   Banner,
   Button,
   Card,
-  EmptyState,
   ErrorState,
-  ListItem,
   LoadingState,
+  PressableScale,
   ScreenContainer,
+  ScreenHeader,
   Text,
 } from '../../components';
+import { HomeEmpty } from '../../components/home/HomeEmpty';
+import { TodayCard } from '../../components/home/TodayCard';
 import { useRepositories, useServices } from '../../data/DataProvider';
 import { useFocusAsync } from '../../data/useFocusAsync';
 import { useSettings } from '../../data/useSettings';
 import { attempt } from '../../lib/errors';
+import {
+  formatDate,
+  formatDayMonthShort,
+  formatDurationHuman,
+  formatNumber,
+  formatStartedAt,
+  formatWeekdayShort,
+  kgToUnit,
+} from '../../lib/format';
 import { useNow } from '../../lib/useNow';
-import { formatDate, formatDuration, formatVolume } from '../../lib/format';
-import { space } from '../../theme';
+import { colors, radii, space, stroke } from '../../theme';
 
 function greeting(hour: number): string {
   if (hour < 6) return 'Buenas noches';
@@ -27,20 +38,67 @@ function greeting(hour: number): string {
   return 'Buenas noches';
 }
 
+function RecentRow({
+  item,
+  unit,
+  onPress,
+}: {
+  item: WorkoutListItem;
+  unit: WeightUnit;
+  onPress: () => void;
+}) {
+  const started = new Date(item.workout.startedAt);
+  const weekday = formatWeekdayShort(started);
+  return (
+    <PressableScale
+      accessibilityRole="button"
+      accessibilityLabel={`${item.workout.dayNameSnapshot}, ${formatDate(started)}, ${formatDurationHuman(item.durationSeconds)}`}
+      onPress={onPress}
+      style={styles.recent}
+    >
+      <View style={styles.dateBlock}>
+        <Text variant="numM">{started.getDate()}</Text>
+        <Text variant="label">{weekday}</Text>
+      </View>
+      <View style={styles.recentText}>
+        <Text variant="bodyMSemi" numberOfLines={1}>
+          {item.workout.dayNameSnapshot}
+        </Text>
+        <Text variant="caption">{formatDurationHuman(item.durationSeconds)}</Text>
+      </View>
+      <Text variant="numMd">
+        {formatNumber(kgToUnit(item.volumeKg, unit), 0)}
+        <Text variant="caption"> {unit}</Text>
+      </Text>
+    </PressableScale>
+  );
+}
+
 export default function HoyScreen() {
   const repos = useRepositories();
   const services = useServices();
   const router = useRouter();
   const settings = useSettings();
   const { data, loading, error, reload } = useFocusAsync(async () => {
-    const [inProgress, routines, active, suggested, recent] = await Promise.all([
+    const [inProgress, routines, active, suggested, recent, finished] = await Promise.all([
       repos.workouts.getInProgress(),
       repos.routines.list(),
       repos.routines.getActive(),
       services.getSuggestedNextDay(),
       services.getRecentWorkouts(3),
+      repos.workouts.listFinished({ limit: 100 }),
     ]);
-    return { inProgress, routineCount: routines.length, active, suggested, recent };
+    const inProgressDetail = inProgress ? await repos.workouts.getById(inProgress.id) : null;
+    const lastSameDay = suggested ? finished.find((w) => w.dayId === suggested.day.id) : undefined;
+    return {
+      inProgress,
+      inProgressDetail,
+      routineCount: routines.length,
+      active,
+      suggested,
+      recent,
+      lastSameDay,
+    };
   });
 
   const nowMs = useNow();
@@ -58,30 +116,49 @@ export default function HoyScreen() {
       router.push({ pathname: '/entrenando/[workoutId]', params: { workoutId: workout.id } });
   }
 
-  const elapsedSeconds = (startedAt: string) => (nowMs - Date.parse(startedAt)) / 1000;
+  const isEmpty = data !== undefined && data.routineCount === 0 && !data.inProgress;
 
   let body;
   if (loading && !data) body = <LoadingState />;
   else if (error && !data)
     body = <ErrorState message="No pudimos cargar tu día." onRetry={reload} />;
-  else if (data && data.routineCount === 0 && !data.inProgress)
+  else if (data && isEmpty)
     body = (
-      <EmptyState
-        icon="routines"
-        title="Todavía no tenés rutinas"
-        message="Armá tu primera rutina y empezá a registrar tus entrenamientos."
-        actionLabel="Armá tu primera rutina"
-        onAction={createFirstRoutine}
-      />
+      <HomeEmpty onCreateRoutine={createFirstRoutine} onImport={() => router.push('/perfil')} />
     );
   else if (data) {
-    const { inProgress, active, suggested, recent } = data;
+    const { inProgress, inProgressDetail, active, suggested, recent, lastSameDay } = data;
+    const finishedCount = inProgressDetail
+      ? inProgressDetail.exercises.filter(
+          (e) => e.sets.length > 0 && e.sets.every((s) => s.completed),
+        ).length
+      : 0;
+    const bannerSubtitle = inProgress
+      ? [
+          inProgress.dayNameSnapshot,
+          `empezado ${formatStartedAt(inProgress.startedAt, now)}`,
+          inProgressDetail
+            ? `${finishedCount} de ${inProgressDetail.exercises.length} ejercicios`
+            : undefined,
+        ]
+          .filter(Boolean)
+          .join(' · ')
+      : undefined;
+    const plannedByIndex = suggested?.day.exercises ?? [];
+    const todayExercises = suggested
+      ? suggested.exercises.map((e, i) => ({
+          name: e.name,
+          sets: plannedByIndex[i]?.sets ?? 0,
+          reps: plannedByIndex[i]?.reps ?? '',
+        }))
+      : [];
+
     body = (
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         {inProgress ? (
           <Banner
             title="Continuar entrenamiento"
-            subtitle={`${inProgress.dayNameSnapshot} · ${formatDuration(elapsedSeconds(inProgress.startedAt))}`}
+            subtitle={bannerSubtitle}
             onPress={() =>
               router.push({
                 pathname: '/entrenando/[workoutId]',
@@ -92,43 +169,22 @@ export default function HoyScreen() {
         ) : null}
 
         {suggested ? (
-          <Card>
-            <Text variant="caption">Entrenamiento de hoy</Text>
-            <Text variant="displayS">{suggested.day.name}</Text>
-            <Text variant="caption">{suggested.routine.name}</Text>
-            <View style={styles.exerciseList}>
-              {suggested.exercises.slice(0, 5).map((e, i) => (
-                <Text key={`${e.id}-${i}`}>{e.name}</Text>
-              ))}
-              {suggested.exercises.length > 5 ? (
-                <Text variant="caption">y {suggested.exercises.length - 5} más</Text>
-              ) : null}
-              {suggested.exercises.length === 0 ? (
-                <Text variant="caption">Este día todavía no tiene ejercicios.</Text>
-              ) : null}
-            </View>
-            <Button
-              title="Empezar"
-              size="lg"
-              disabled={suggested.exercises.length === 0 || inProgress !== null}
-              onPress={() => start(suggested.day.id)}
-            />
-            <Button
-              title="Elegir otro día"
-              variant="ghost"
-              disabled={inProgress !== null}
-              onPress={() => router.push('/elegir-dia')}
-            />
-            {inProgress ? (
-              <Text variant="caption">Terminá el entrenamiento en curso para empezar otro.</Text>
-            ) : null}
-          </Card>
+          <TodayCard
+            caption={`Día ${suggested.day.order + 1} de ${active?.days.length ?? 1} · ${suggested.routine.name}`}
+            dayName={suggested.day.name}
+            exercises={todayExercises}
+            totalSets={todayExercises.reduce((n, e) => n + e.sets, 0)}
+            lastTime={lastSameDay ? formatDayMonthShort(lastSameDay.startedAt) : undefined}
+            blocked={inProgress !== null}
+            onStart={() => start(suggested.day.id)}
+            onPickDay={() => router.push('/elegir-dia')}
+          />
         ) : data.routineCount > 0 ? (
           <Card>
-            <Text variant="displayS">
+            <Text variant="displayM">
               {active ? 'Tu rutina activa no tiene días' : 'No tenés una rutina activa'}
             </Text>
-            <Text variant="caption">
+            <Text variant="bodyS">
               {active
                 ? 'Agregale días y ejercicios para poder entrenar.'
                 : 'Elegí una rutina y marcala como activa para ver tu entrenamiento de hoy.'}
@@ -148,39 +204,69 @@ export default function HoyScreen() {
           </Card>
         ) : null}
 
-        <Text variant="displayS">Últimos entrenamientos</Text>
-        {recent.length === 0 ? (
-          <Text variant="caption">Cuando termines tu primer entrenamiento va a aparecer acá.</Text>
-        ) : (
-          recent.map((r) => (
-            <ListItem
-              key={r.workout.id}
-              title={r.workout.dayNameSnapshot}
-              subtitle={`${formatDate(r.workout.startedAt)} · ${formatDuration(r.durationSeconds)} · ${formatVolume(r.volumeKg, settings.unit)}`}
-              onPress={() =>
-                router.push({
-                  pathname: '/resumen/[workoutId]',
-                  params: { workoutId: r.workout.id },
-                })
-              }
-            />
-          ))
-        )}
+        <View style={styles.section}>
+          <Text variant="label" style={styles.sectionLabel}>
+            Últimos entrenamientos
+          </Text>
+          {recent.length === 0 ? (
+            <Text variant="caption">
+              Cuando termines tu primer entrenamiento va a aparecer acá.
+            </Text>
+          ) : (
+            <View style={styles.recentList}>
+              {recent.map((r) => (
+                <RecentRow
+                  key={r.workout.id}
+                  item={r}
+                  unit={settings.unit}
+                  onPress={() =>
+                    router.push({
+                      pathname: '/resumen/[workoutId]',
+                      params: { workoutId: r.workout.id },
+                    })
+                  }
+                />
+              ))}
+            </View>
+          )}
+        </View>
       </ScrollView>
     );
   }
 
   return (
     <ScreenContainer>
-      <Text variant="caption">{formatDate(now)}</Text>
-      <Text variant="displayM">{greeting(now.getHours())}</Text>
+      <ScreenHeader
+        label={formatDate(now)}
+        title={isEmpty ? 'Bienvenido' : greeting(now.getHours())}
+      />
       <View style={styles.body}>{body}</View>
     </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  body: { flex: 1, marginTop: space.md },
-  content: { gap: space.lg, paddingBottom: space.xl },
-  exerciseList: { gap: space.xs },
+  body: { flex: 1 },
+  content: { gap: space.md, paddingBottom: space.xl },
+  section: { marginTop: space.sm, gap: space.sm },
+  sectionLabel: { paddingTop: space.xs },
+  recentList: { gap: space.xs + 2 },
+  recent: {
+    minHeight: 58,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.md,
+    paddingRight: space.md + 2,
+    borderRadius: radii.lg - 2,
+    backgroundColor: colors.surface,
+  },
+  dateBlock: {
+    width: 52,
+    alignSelf: 'stretch',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRightWidth: stroke.hairline,
+    borderRightColor: colors.divider,
+  },
+  recentText: { flex: 1 },
 });

@@ -52,6 +52,8 @@ const FLASH_MS = 600;
 const PR_START = 0.4;
 const PR_OVERSHOOT = 1.15;
 const PR_DELAY = 150;
+const FRAME_DELAY = 120;
+const FRAME_SHIFT = -4;
 
 function PrBadge() {
   const reduced = useReducedMotion();
@@ -106,6 +108,22 @@ export function SetRow({
   const draw = useSharedValue(0);
   const wasCompleted = useRef(completed);
 
+  // Focus frame (S3 "Foco avanza"): fades in and slides down 4pt, 200 ms after a 120 ms delay.
+  const frame = useSharedValue(isFocus ? 1 : 0);
+  useEffect(() => {
+    if (reduced) {
+      frame.value = withTiming(isFocus ? 1 : 0, { duration: motion.reduced });
+      return;
+    }
+    frame.value = isFocus
+      ? withDelay(FRAME_DELAY, withTiming(1, { duration: motion.base, easing: motion.easeOut }))
+      : 0;
+  }, [isFocus, reduced, frame]);
+  const frameAnimated = useAnimatedStyle(() => ({
+    opacity: frame.value,
+    transform: [{ translateY: (1 - frame.value) * FRAME_SHIFT }],
+  }));
+
   useEffect(() => {
     if (wasCompleted.current === completed) return;
     wasCompleted.current = completed;
@@ -148,13 +166,9 @@ export function SetRow({
 
   return (
     <Animated.View
-      style={[
-        styles.row,
-        { minHeight: isFocus ? hit.rowFocus : hit.row },
-        isFocus && styles.rowFocus,
-        rowAnimated,
-      ]}
+      style={[styles.row, { minHeight: isFocus ? hit.rowFocus : hit.row }, rowAnimated]}
     >
+      <Animated.View pointerEvents="none" style={[styles.frame, frameAnimated]} />
       <Text
         variant="numM"
         style={styles.index}
@@ -245,7 +259,16 @@ const styles = StyleSheet.create({
     borderWidth: stroke.regular,
     borderColor: colors.transparent,
   },
-  rowFocus: { borderColor: colors.accent },
+  frame: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderRadius: radii.md,
+    borderWidth: stroke.regular,
+    borderColor: colors.accent,
+  },
   index: { width: 24, textAlign: 'center' },
   previousWrap: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: space.sm - 2 },
   input: {

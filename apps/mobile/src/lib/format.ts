@@ -90,3 +90,68 @@ export function formatShortDate(input: Date | string): string {
   const d = typeof input === 'string' ? new Date(input) : input;
   return `${d.getDate()}/${d.getMonth() + 1}`;
 }
+
+const WEEKDAYS_SHORT = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
+const MONTHS_SHORT = [
+  'ene',
+  'feb',
+  'mar',
+  'abr',
+  'may',
+  'jun',
+  'jul',
+  'ago',
+  'sep',
+  'oct',
+  'nov',
+  'dic',
+];
+
+function toDate(input: Date | string): Date {
+  return typeof input === 'string' ? new Date(input) : input;
+}
+
+/** "jue" (local time). */
+export function formatWeekdayShort(input: Date | string): string {
+  return WEEKDAYS_SHORT[toDate(input).getDay()] ?? '';
+}
+
+/** "jue 8 oct" (local time). */
+export function formatDayMonthShort(input: Date | string): string {
+  const d = toDate(input);
+  return `${WEEKDAYS_SHORT[d.getDay()]} ${d.getDate()} ${MONTHS_SHORT[d.getMonth()]}`;
+}
+
+/** "19:02" (local time, 24 h). */
+export function formatTime(input: Date | string): string {
+  const d = toDate(input);
+  return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+/** "empezado" moment: "hoy 19:02", "ayer 20:12" or "jue 8 oct 20:12". */
+export function formatStartedAt(input: Date | string, now: Date = new Date()): string {
+  const d = toDate(input);
+  const startOfDay = (x: Date) => new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime();
+  const days = Math.round((startOfDay(now) - startOfDay(d)) / 86_400_000);
+  if (days === 0) return `hoy ${formatTime(d)}`;
+  if (days === 1) return `ayer ${formatTime(d)}`;
+  return `${formatDayMonthShort(d)} ${formatTime(d)}`;
+}
+
+/** "1 h 12 min", "58 min" or "45 s" for list rows. */
+export function formatDurationHuman(totalSeconds: number): string {
+  const s = Math.max(0, Math.floor(totalSeconds));
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  if (h > 0) return `${h} h ${pad(m)} min`;
+  if (m > 0) return `${m} min`;
+  return `${s} s`;
+}
+
+/** m:ss without a leading zero on the minutes ("2:00", "0:45"); h:mm:ss from one hour on. */
+export function formatClock(totalSeconds: number): string {
+  const s = Math.max(0, Math.floor(totalSeconds));
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  return h > 0 ? `${h}:${pad(m)}:${pad(s % 60)}` : `${m}:${pad(s % 60)}`;
+}

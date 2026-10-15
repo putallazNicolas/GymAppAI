@@ -14,3 +14,5 @@ export { TextField } from './TextField';
 export { ActionMenu, type ActionMenuItem } from './ActionMenu';
 export { IconButton } from './IconButton';
 export { PlannedExerciseCard } from './PlannedExerciseCard';
+export { LineChart, type ChartSeries } from './LineChart';
+export { BarList, type BarItem } from './BarList';

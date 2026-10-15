@@ -77,6 +77,7 @@ export default function SummaryScreen() {
   return (
     <ScreenContainer edges={['bottom', 'left', 'right']}>
       <ScrollView
+        automaticallyAdjustKeyboardInsets
         contentContainerStyle={styles.content}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"

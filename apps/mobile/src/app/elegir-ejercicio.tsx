@@ -97,6 +97,7 @@ export default function PickExerciseScreen() {
           return (
             <Pressable
               accessibilityRole="checkbox"
+              accessibilityLabel={`${item.name}, ${MUSCLE_GROUP_LABELS[item.muscleGroup]}`}
               accessibilityState={{ checked: on }}
               onPress={() => toggle(item.id)}
               style={[styles.row, on && styles.rowOn]}

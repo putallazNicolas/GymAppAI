@@ -29,6 +29,9 @@ import {
 } from '../../lib/format';
 import { colors, spacing } from '../../theme';
 
+/** How many recent finished workouts are scanned to find exercises with history. */
+const HISTORY_WORKOUT_LIMIT = 100;
+
 export default function ProgresoScreen() {
   const repos = useRepositories();
   const services = useServices();
@@ -42,14 +45,15 @@ export default function ProgresoScreen() {
       repos.exercises.list(),
       services.getWeeklyStats(8),
     ]);
-    const flags = await Promise.all(
-      exercises.map(async (e) => {
-        const h = await repos.workouts.getExerciseHistory(e.id, { limit: 1 });
-        return h.length > 0;
-      }),
-    );
-    const withHistory = exercises.filter((_, i) => flags[i]);
-    const others = exercises.filter((_, i) => !flags[i]);
+    // One pass over the most recent finished workouts instead of one history query per exercise.
+    const finished = await repos.workouts.listFinished({ limit: HISTORY_WORKOUT_LIMIT });
+    const details = await Promise.all(finished.map((w) => repos.workouts.getById(w.id)));
+    const withIds = new Set<string>();
+    for (const d of details)
+      for (const e of d?.exercises ?? [])
+        if (e.sets.some((s) => s.completed)) withIds.add(e.exerciseId);
+    const withHistory = exercises.filter((e) => withIds.has(e.id));
+    const others = exercises.filter((e) => !withIds.has(e.id));
     return { ordered: [...withHistory, ...others], withHistoryCount: withHistory.length, weekly };
   });
 

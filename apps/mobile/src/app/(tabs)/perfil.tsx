@@ -135,6 +135,7 @@ export default function PerfilScreen() {
               Temporizador de descanso
             </Text>
             <Switch
+              accessibilityLabel="Temporizador de descanso"
               value={settings.restTimerEnabled}
               onValueChange={(v) => update({ restTimerEnabled: v })}
               trackColor={{ true: colors.success, false: colors.border }}

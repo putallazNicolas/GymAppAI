@@ -81,6 +81,7 @@ export default function DayScreen() {
   return (
     <Shell>
       <ScrollView
+        automaticallyAdjustKeyboardInsets
         contentContainerStyle={styles.content}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"

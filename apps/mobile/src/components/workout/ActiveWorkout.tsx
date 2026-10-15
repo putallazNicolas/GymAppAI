@@ -7,8 +7,8 @@ import type {
 } from '@gym/core';
 import { useKeepAwake } from 'expo-keep-awake';
 import { useRouter } from 'expo-router';
-import { useRef, useState } from 'react';
-import { ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { AppState, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 
 import { useRepositories, useServices } from '../../data/DataProvider';
 import { attempt } from '../../lib/errors';
@@ -122,6 +122,36 @@ export function ActiveWorkout({
     if (updated) patchSet(setId, { weightKg: updated.weightKg, reps: updated.reps });
   }
 
+  /** Saves every set whose typed values differ from what is stored (nothing is lost on exit). */
+  async function flushAll() {
+    const writes: Promise<unknown>[] = [];
+    for (const ex of workout.exercises)
+      for (const s of ex.sets) {
+        const input = inputs[s.id];
+        if (!input) continue;
+        const weightKg = inputToKg(input.kg, unit);
+        const reps = inputToReps(input.reps);
+        const sameWeight =
+          weightKg === s.weightKg ||
+          (weightKg !== undefined &&
+            s.weightKg !== undefined &&
+            Math.abs(weightKg - s.weightKg) < 0.001);
+        if (sameWeight && reps === s.reps) continue;
+        writes.push(persist(s.id));
+      }
+    await Promise.all(writes);
+  }
+
+  // Persist pending edits when the app goes to the background.
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', (state) => {
+      if (state !== 'active') void flushAll();
+    });
+    return () => sub.remove();
+    // flushAll closes over the latest workout/inputs; re-subscribe when they change.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [workout, inputs]);
+
   async function toggleComplete(setId: string) {
     const exIndex = workout.exercises.findIndex((e) => e.sets.some((s) => s.id === setId));
     const ex = workout.exercises[exIndex];
@@ -228,6 +258,7 @@ export function ActiveWorkout({
       if (!ok) return;
     }
     setFinishing(true);
+    await flushAll();
     const done = await attempt(() => services.finishWorkout(workout.id));
     setFinishing(false);
     if (done)
@@ -258,6 +289,7 @@ export function ActiveWorkout({
         />
       </View>
       <ScrollView
+        automaticallyAdjustKeyboardInsets
         contentContainerStyle={styles.content}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
@@ -271,7 +303,10 @@ export function ActiveWorkout({
             previous={previous[e.exerciseId]}
             unit={unit}
             inputs={inputs}
-            onToggleExpand={() => setExpandedId(expandedId === e.id ? null : e.id)}
+            onToggleExpand={() => {
+              void flushAll();
+              setExpandedId(expandedId === e.id ? null : e.id);
+            }}
             onOpenMenu={() => setMenuId(e.id)}
             onChangeKg={(id, t) => setInput(id, { kg: t })}
             onChangeReps={(id, t) => setInput(id, { reps: t })}

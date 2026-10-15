@@ -21,6 +21,8 @@ interface ButtonProps {
   loading?: boolean;
   disabled?: boolean;
   fullWidth?: boolean;
+  /** Spoken label when the visible title is not descriptive (e.g. "⋯"). */
+  accessibilityLabel?: string;
   style?: StyleProp<ViewStyle>;
 }
 
@@ -46,12 +48,14 @@ export function Button({
   loading = false,
   disabled = false,
   fullWidth = true,
+  accessibilityLabel,
   style,
 }: ButtonProps) {
   const inactive = disabled || loading;
   return (
     <Pressable
       accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel ?? title}
       accessibilityState={{ disabled: inactive, busy: loading }}
       onPress={onPress}
       disabled={inactive}
@@ -86,6 +90,7 @@ const styles = StyleSheet.create({
   base: {
     alignItems: 'center',
     justifyContent: 'center',
+    minWidth: touch.min,
     borderRadius: radii.md,
     paddingHorizontal: spacing.xl,
   },

@@ -38,13 +38,15 @@ tabs. **Resumen** aparece al finalizar el entrenamiento.
     placeholder.
   - Teclado numérico: `decimal-pad` para kg y `number-pad` para reps.
 - Botón de check compacto por fila. **NO** va un botón grande de "Cargar serie".
-- Al tocar ✓: la fila queda verde, se guarda al instante y el foco avanza automáticamente a la siguiente
-  serie.
+- Al tocar ✓: la fila queda verde, se guarda al instante, **se cierra el teclado** y el foco avanza
+  automáticamente a la siguiente serie **de forma visual** (marco naranja, sin abrir el teclado; tocar el
+  campo lo abre). _(Decisión del dueño, 2026-10-15.)_
 - Cuando se completan todas las series, el ejercicio colapsa a un título verde con ✓ y se expande el
   siguiente. Tocar un ejercicio colapsado lo vuelve a abrir para editarlo.
 - Menú por ejercicio: agregar serie, quitar serie y saltar ejercicio.
-- **(propuesta)** Si el ejercicio tiene `restSeconds`, después del ✓ aparece un temporizador de descanso no
-  bloqueante (barra con cuenta regresiva que se puede descartar).
+- Después de **cada** ✓ aparece abajo la barra de descanso no bloqueante (como en `design/P03`): cuenta
+  regresiva de `restSeconds` del ejercicio o **2:00 por defecto** si no tiene, "+15 s", descartable.
+  Se puede apagar en Perfil ("Temporizador de descanso"). _(Decisión del dueño, 2026-10-15.)_
 - Pantalla siempre encendida mientras se entrena (`expo-keep-awake`).
 - Finalizar: si quedan series sin completar, se confirma con un diálogo. Después va al Resumen.
 

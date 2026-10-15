@@ -8,7 +8,7 @@ import {
   Chip,
   EmptyState,
   ErrorState,
-  Icon,
+  SelectCheck,
   LoadingState,
   ScreenContainer,
   Text,
@@ -109,7 +109,7 @@ export default function PickExerciseScreen() {
                   {item.equipment ? ` · ${EQUIPMENT_LABELS[item.equipment]}` : ''}
                 </Text>
               </View>
-              {on ? <Icon name="check" size={22} color="success" /> : null}
+              <SelectCheck selected={on} />
             </Pressable>
           );
         }}
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.border,
     borderRadius: radii.md,
   },
-  rowOn: { backgroundColor: colors.successMuted },
+  rowOn: { backgroundColor: colors.accentMuted },
   rowText: { flex: 1, gap: space.xs },
   cta: { marginVertical: space.md },
 });

@@ -1,7 +1,8 @@
 import { useRouter } from 'expo-router';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 import {
+  Banner,
   Button,
   Card,
   EmptyState,
@@ -17,7 +18,7 @@ import { useSettings } from '../../data/useSettings';
 import { attempt } from '../../lib/errors';
 import { useNow } from '../../lib/useNow';
 import { formatDate, formatDuration, formatVolume } from '../../lib/format';
-import { colors, radii, space } from '../../theme';
+import { space } from '../../theme';
 
 function greeting(hour: number): string {
   if (hour < 6) return 'Buenas noches';
@@ -78,30 +79,16 @@ export default function HoyScreen() {
     body = (
       <ScrollView contentContainerStyle={styles.content}>
         {inProgress ? (
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={`Continuar entrenamiento, ${inProgress.dayNameSnapshot}, ${formatDuration(elapsedSeconds(inProgress.startedAt))}`}
+          <Banner
+            title="Continuar entrenamiento"
+            subtitle={`${inProgress.dayNameSnapshot} · ${formatDuration(elapsedSeconds(inProgress.startedAt))}`}
             onPress={() =>
               router.push({
                 pathname: '/entrenando/[workoutId]',
                 params: { workoutId: inProgress.id },
               })
             }
-            style={styles.banner}
-          >
-            <View style={styles.bannerText}>
-              <Text variant="bodyStrong" color="onAccent">
-                Continuar entrenamiento
-              </Text>
-              <Text variant="caption" color="onAccent">
-                {inProgress.dayNameSnapshot} ·{' '}
-                {formatDuration(elapsedSeconds(inProgress.startedAt))}
-              </Text>
-            </View>
-            <Text variant="displayS" color="onAccent">
-              ›
-            </Text>
-          </Pressable>
+          />
         ) : null}
 
         {suggested ? (
@@ -195,14 +182,5 @@ export default function HoyScreen() {
 const styles = StyleSheet.create({
   body: { flex: 1, marginTop: space.md },
   content: { gap: space.lg, paddingBottom: space.xl },
-  banner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    minHeight: 64,
-    padding: space.lg,
-    borderRadius: radii.lg,
-    backgroundColor: colors.success,
-  },
-  bannerText: { flex: 1 },
   exerciseList: { gap: space.xs },
 });

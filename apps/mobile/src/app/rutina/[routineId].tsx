@@ -110,7 +110,8 @@ export default function RoutineScreen() {
             accessibilityLabel="Rutina activa"
             value={routine.isActive}
             onValueChange={toggleActive}
-            trackColor={{ true: colors.success, false: colors.border }}
+            trackColor={{ true: colors.accent, false: colors.borderStrong }}
+            thumbColor={colors.textPrimary}
           />
         </View>
         <Text variant="displayS">Días</Text>

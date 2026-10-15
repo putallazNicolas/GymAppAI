@@ -99,8 +99,8 @@ export default function SummaryScreen() {
         </Card>
 
         {data.personalRecords.length > 0 ? (
-          <Card completed>
-            <Text variant="displayS" color="success">
+          <Card>
+            <Text variant="displayS" color="record">
               ¡Nuevos récords!
             </Text>
             {data.personalRecords.map((pr) => (
@@ -129,7 +129,7 @@ export default function SummaryScreen() {
               </Text>
             </View>
             {e.bestSet ? (
-              <Text variant="bodyStrong" color="success">
+              <Text variant="bodyStrong">
                 {formatWeight(e.bestSet.weightKg, unit)} × {e.bestSet.reps}
               </Text>
             ) : null}

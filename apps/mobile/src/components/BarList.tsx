@@ -11,7 +11,17 @@ export interface BarItem {
 }
 
 /** Compact vertical bar chart built with plain Views. */
-export function BarList({ items, color = colors.accent }: { items: BarItem[]; color?: string }) {
+export function BarList({
+  items,
+  color = colors.accent,
+  pastColor = colors.borderStrong,
+}: {
+  items: BarItem[];
+  /** Color of the current (last) bar. */
+  color?: string;
+  /** Color of the earlier bars. */
+  pastColor?: string;
+}) {
   const max = Math.max(1, ...items.map((i) => i.value));
   return (
     <View style={styles.row}>
@@ -24,7 +34,10 @@ export function BarList({ items, color = colors.accent }: { items: BarItem[]; co
             <View
               style={[
                 styles.bar,
-                { height: `${(item.value / max) * 100}%`, backgroundColor: color },
+                {
+                  height: `${(item.value / max) * 100}%`,
+                  backgroundColor: idx === items.length - 1 ? color : pastColor,
+                },
               ]}
             />
           </View>

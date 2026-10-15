@@ -138,7 +138,8 @@ export default function PerfilScreen() {
               accessibilityLabel="Temporizador de descanso"
               value={settings.restTimerEnabled}
               onValueChange={(v) => update({ restTimerEnabled: v })}
-              trackColor={{ true: colors.success, false: colors.border }}
+              trackColor={{ true: colors.accent, false: colors.borderStrong }}
+              thumbColor={colors.textPrimary}
             />
           </View>
         </Card>

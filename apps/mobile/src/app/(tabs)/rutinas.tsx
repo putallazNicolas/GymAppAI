@@ -105,7 +105,8 @@ export default function RutinasScreen() {
               <View style={styles.trailing}>
                 {item.isActive ? (
                   <View style={styles.badge}>
-                    <Text variant="caption" color="onAccent">
+                    <View style={styles.badgeDot} />
+                    <Text variant="label" color="accent">
                       Activa
                     </Text>
                   </View>
@@ -149,10 +150,15 @@ const styles = StyleSheet.create({
   cta: { marginVertical: space.md },
   trailing: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
   badge: {
-    backgroundColor: colors.success,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.xs + 2,
+  },
+  badgeDot: {
+    width: 7,
+    height: 7,
     borderRadius: radii.pill,
-    paddingHorizontal: space.md,
-    paddingVertical: space.xs,
+    backgroundColor: colors.accent,
   },
   menuBtn: { paddingHorizontal: space.md },
 });

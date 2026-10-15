@@ -112,7 +112,7 @@ export default function ProgresoScreen() {
         <Card>
           <Text variant="displayS">Volumen semanal</Text>
           <BarList
-            color={colors.success}
+            color={colors.accent}
             items={data.weekly.map((w) => ({
               label: formatShortDate(w.weekStart),
               value: w.volumeKg,
@@ -154,7 +154,7 @@ export default function ProgresoScreen() {
                   },
                   {
                     label: 'e1RM',
-                    color: colors.success,
+                    color: colors.chartWeight,
                     values: points.map((p) => kgToUnit(p.bestE1rmKg, unit)),
                   },
                 ]}

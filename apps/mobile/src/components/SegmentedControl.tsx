@@ -99,8 +99,14 @@ export function SegmentedControl<T extends string>({
           key={o.value}
           accessibilityRole={isUnit ? 'radio' : 'button'}
           accessibilityLabel={o.accessibilityLabel ?? o.label}
-          accessibilityState={isUnit ? { checked: o.value === value } : { selected: o.value === value }}
-          hitSlop={isUnit ? undefined : { top: (hit.min - RANGE_SEG_H) / 2, bottom: (hit.min - RANGE_SEG_H) / 2 }}
+          accessibilityState={
+            isUnit ? { checked: o.value === value } : { selected: o.value === value }
+          }
+          hitSlop={
+            isUnit
+              ? undefined
+              : { top: (hit.min - RANGE_SEG_H) / 2, bottom: (hit.min - RANGE_SEG_H) / 2 }
+          }
           scaleTo={1}
           onPress={() => {
             if (o.value === value) return;

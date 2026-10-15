@@ -4,29 +4,72 @@ import * as DocumentPicker from 'expo-document-picker';
 import { File, Paths } from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { useState } from 'react';
-import { Alert, ScrollView, StyleSheet, Switch, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 
 import {
   Button,
-  Card,
-  Chip,
   ErrorState,
+  Icon,
   LoadingState,
   ScreenContainer,
+  ScreenHeader,
+  SegmentedControl,
+  Switch,
   Text,
   confirm,
 } from '../../components';
 import { useRepositories, useServices } from '../../data/DataProvider';
+import { useAsync } from '../../data/useAsync';
 import { useFocusAsync } from '../../data/useFocusAsync';
 import { attempt } from '../../lib/errors';
-import { colors, radii, space, hit } from '../../theme';
+import { formatDayMonth, formatMonthYear, formatNumber, kgToUnit } from '../../lib/format';
+import { haptics } from '../../lib/haptics';
+import { colors, hit, radii, space, stroke } from '../../theme';
 
 const UNITS: WeightUnit[] = ['kg', 'lb'];
+const LAST_EXPORT_FILE = 'last-export.txt';
+
+/** When the data was last exported; kept in a tiny local file (no settings contract field for it). */
+async function readLastExport(): Promise<Date | undefined> {
+  try {
+    const file = new File(Paths.document, LAST_EXPORT_FILE);
+    if (!file.exists) return undefined;
+    const d = new Date((await file.text()).trim());
+    return Number.isNaN(d.getTime()) ? undefined : d;
+  } catch {
+    return undefined;
+  }
+}
+
+function writeLastExport(date: Date): void {
+  try {
+    const file = new File(Paths.document, LAST_EXPORT_FILE);
+    file.create({ overwrite: true });
+    file.write(date.toISOString());
+  } catch {
+    // Best effort: the hint just won't show.
+  }
+}
 
 export default function PerfilScreen() {
   const repos = useRepositories();
   const services = useServices();
   const { data, loading, error, reload } = useFocusAsync(() => repos.settings.get());
+  const stats = useAsync(async () => {
+    const [items, last] = await Promise.all([services.getRecentWorkouts(100000), readLastExport()]);
+    const oldest = items[items.length - 1];
+    return {
+      lastExport: last,
+      totals: {
+        workouts: items.length,
+        sets: items.reduce((n, i) => n + i.completedSets, 0),
+        since: oldest ? formatMonthYear(oldest.workout.startedAt) : undefined,
+      },
+    };
+  }, [data]);
+  const totals = stats.data?.totals;
+  const [exportedAt, setExportedAt] = useState<Date | undefined>(undefined);
+  const lastExport = exportedAt ?? stats.data?.lastExport;
   const [exporting, setExporting] = useState(false);
   const [importing, setImporting] = useState(false);
   const version = Constants.expoConfig?.version ?? '0.0.0';
@@ -66,6 +109,9 @@ export default function PerfilScreen() {
         dialogTitle: 'Exportar datos',
         UTI: 'public.json',
       });
+      const now = new Date();
+      writeLastExport(now);
+      setExportedAt(now);
     } catch (e) {
       Alert.alert('No se pudo exportar', e instanceof Error ? e.message : 'Probá de nuevo.');
     } finally {
@@ -110,78 +156,168 @@ export default function PerfilScreen() {
     }
   }
 
+  const example =
+    settings.unit === 'kg' ? '140 kg × 5' : `${formatNumber(kgToUnit(140, 'lb'))} lb × 5`;
+
   return (
     <ScreenContainer>
-      <Text variant="displayM">Perfil</Text>
-      <ScrollView contentContainerStyle={styles.content}>
-        <Card>
-          <Text variant="displayS">Unidad de peso</Text>
-          <View style={styles.units}>
-            {UNITS.map((u) => (
-              <Chip
-                key={u}
-                label={u}
-                selected={settings.unit === u}
-                onPress={() => update({ unit: u })}
-              />
-            ))}
-          </View>
-          <Text variant="caption">Internamente se guarda todo en kg.</Text>
-        </Card>
+      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        <ScreenHeader label="Ajustes y datos" title="Perfil" />
 
-        <Card>
-          <View style={styles.switchRow}>
-            <Text variant="bodyStrong" style={styles.switchLabel}>
-              Temporizador de descanso
-            </Text>
-            <Switch
-              accessibilityLabel="Temporizador de descanso"
-              value={settings.restTimerEnabled}
-              onValueChange={(v) => update({ restTimerEnabled: v })}
-              trackColor={{ true: colors.accent, false: colors.borderStrong }}
-              thumbColor={colors.textPrimary}
-            />
-          </View>
-        </Card>
+        <View style={styles.stats}>
+          <StatCell label="ENTRENOS" value={String(totals?.workouts ?? 0)} />
+          <StatCell label="SERIES" value={formatNumber(totals?.sets ?? 0, 0)} divider />
+          <StatCell label="DESDE" value={totals?.since ?? '—'} divider />
+        </View>
 
-        <View style={styles.warning} accessibilityRole="alert">
-          <Text color="accent" variant="bodyStrong">
-            Tus datos se guardan solo en este teléfono. Si borrás la app, se pierden. Exportalos
-            seguido.
+        <Text variant="label" style={styles.section}>
+          UNIDAD DE PESO
+        </Text>
+        <SegmentedControl
+          variant="unit"
+          accessibilityLabel="Unidad de peso"
+          options={UNITS.map((u) => ({ value: u, label: u }))}
+          value={settings.unit}
+          onChange={(u) => update({ unit: u })}
+        />
+        <Text variant="caption" style={styles.example}>
+          {'Ejemplo: '}
+          <Text variant="numRead">{example}</Text>
+          {' · tus datos se guardan siempre en kg'}
+        </Text>
+
+        <Text variant="label" style={styles.section}>
+          DESCANSO
+        </Text>
+        <View style={styles.switchCard}>
+          <Text variant="bodyStrong" style={styles.switchLabel}>
+            Temporizador de descanso
+          </Text>
+          <Switch
+            accessibilityLabel="Temporizador de descanso"
+            value={settings.restTimerEnabled}
+            onValueChange={(v) => {
+              haptics.light();
+              update({ restTimerEnabled: v });
+            }}
+          />
+        </View>
+
+        <Text variant="label" style={styles.section}>
+          TUS DATOS
+        </Text>
+        <View style={styles.dataCard}>
+          <View style={styles.notice} accessibilityRole="alert">
+            <Icon name="phone" size={22} color="accent" />
+            <View style={styles.noticeTexts}>
+              <Text variant="bodyMSemi">
+                Tus datos se guardan solo en este teléfono. Si borrás la app, se pierden. Exportalos
+                seguido.
+              </Text>
+              {lastExport ? (
+                <Text variant="caption" color="textBody">
+                  {`Última exportación: ${sinceText(lastExport)}`}
+                </Text>
+              ) : null}
+            </View>
+          </View>
+          <Button
+            title="Exportar datos"
+            size="lg"
+            icon="upload"
+            loading={exporting}
+            onPress={exportData}
+          />
+          <Button
+            title="Importar datos"
+            variant="secondary"
+            icon="download"
+            loading={importing}
+            onPress={importData}
+          />
+          <Text variant="caption" color="textTertiary" style={styles.center}>
+            Se exporta un archivo .json con rutinas, entrenamientos y ejercicios.
           </Text>
         </View>
 
-        <Button title="Exportar datos" size="lg" loading={exporting} onPress={exportData} />
-        <Button
-          title="Importar datos"
-          variant="secondary"
-          loading={importing}
-          onPress={importData}
-        />
-
-        <Text variant="caption" style={styles.version}>
-          Versión {version}
-        </Text>
+        <View style={styles.version}>
+          <Text variant="numS" color="textTertiary">
+            GYM APP
+          </Text>
+          <Text variant="caption" color="textTertiary">
+            Versión {version}
+          </Text>
+        </View>
       </ScrollView>
     </ScreenContainer>
   );
 }
 
+function StatCell({ label, value, divider }: { label: string; value: string; divider?: boolean }) {
+  return (
+    <View style={[styles.statCell, divider && styles.statDivider]}>
+      <Text variant="label">{label}</Text>
+      <Text variant="numL" numberOfLines={1}>
+        {value}
+      </Text>
+    </View>
+  );
+}
+
+/** "hace 13 días (2 oct)". */
+function sinceText(date: Date): string {
+  const startOfDay = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+  const days = Math.round((startOfDay(new Date()) - startOfDay(date)) / 86_400_000);
+  const when = days <= 0 ? 'hoy' : days === 1 ? 'ayer' : `hace ${days} días`;
+  return `${when} (${formatDayMonth(date)})`;
+}
+
 const styles = StyleSheet.create({
-  content: { gap: space.lg, paddingVertical: space.lg },
-  units: { flexDirection: 'row', gap: space.sm },
-  switchRow: {
+  content: { paddingBottom: space.xxl },
+  center: { textAlign: 'center' },
+  stats: {
+    flexDirection: 'row',
+    backgroundColor: colors.surface,
+    borderWidth: stroke.hairline,
+    borderColor: colors.border,
+    borderRadius: radii.lg,
+    overflow: 'hidden',
+  },
+  statCell: { flex: 1, paddingHorizontal: space.md, paddingVertical: 10, gap: 3 },
+  statDivider: { borderLeftWidth: stroke.hairline, borderLeftColor: colors.border },
+  section: { marginTop: 22, marginBottom: space.sm },
+  example: { marginTop: space.sm },
+  switchCard: {
+    minHeight: hit.row,
+    paddingLeft: space.lg,
+    paddingRight: space.xs,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    minHeight: hit.min,
+    borderRadius: radii.lg,
+    backgroundColor: colors.surface,
+    borderWidth: stroke.hairline,
+    borderColor: colors.border,
   },
   switchLabel: { flex: 1 },
-  warning: {
+  dataCard: {
     padding: space.lg,
-    borderRadius: radii.md,
-    borderWidth: 1,
-    borderColor: colors.accentBorder,
+    gap: space.md,
+    borderRadius: radii.xl,
+    backgroundColor: colors.surface,
+    borderWidth: stroke.hairline,
+    borderColor: colors.border,
   },
-  version: { textAlign: 'center' },
+  notice: {
+    paddingVertical: space.md,
+    paddingHorizontal: 14,
+    borderRadius: radii.lg,
+    backgroundColor: colors.accentMuted,
+    borderWidth: stroke.hairline,
+    borderColor: colors.accentBorder,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: space.md,
+  },
+  noticeTexts: { flex: 1, gap: 3 },
+  version: { marginTop: space.xxl, alignItems: 'center', gap: 2 },
 });

@@ -36,15 +36,7 @@ function thousands(volumeKg: number, unit: WeightUnit): string {
   return `${formatNumber(kgToUnit(volumeKg, unit) / 1000)} ${unit === 'kg' ? 't' : 'k'}`;
 }
 
-function Bar({
-  height,
-  color,
-  grow,
-}: {
-  height: number;
-  color: string;
-  grow: { value: number };
-}) {
+function Bar({ height, color, grow }: { height: number; color: string; grow: { value: number } }) {
   const style = useAnimatedStyle(() => ({ height: Math.max(2, height * grow.value) }));
   return <Animated.View style={[styles.bar, { backgroundColor: color }, style]} />;
 }
@@ -56,7 +48,10 @@ export function WeeklySummary({ weeks, unit, routineDays }: WeeklySummaryProps) 
   useEffect(() => {
     grow.value = reduced
       ? 1
-      : withTiming(1, { duration: motion.slow + motion.fast + motion.press, easing: motion.easeOut });
+      : withTiming(1, {
+          duration: motion.slow + motion.fast + motion.press,
+          easing: motion.easeOut,
+        });
   }, [reduced, grow]);
 
   const current = weeks[weeks.length - 1];
@@ -103,7 +98,13 @@ export function WeeklySummary({ weeks, unit, routineDays }: WeeklySummaryProps) 
               ) : null}
               <Bar
                 height={(w.volumeKg / max) * BAR_MAX}
-                color={isCurrent ? colors.accent : i === lastIdx - 1 ? colors.textDisabled : colors.borderStrong}
+                color={
+                  isCurrent
+                    ? colors.accent
+                    : i === lastIdx - 1
+                      ? colors.textDisabled
+                      : colors.borderStrong
+                }
                 grow={grow}
               />
             </View>

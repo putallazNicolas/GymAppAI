@@ -70,7 +70,6 @@ export function ProgressChart({ points, unit, summary }: ProgressChartProps) {
   const [width, setWidth] = useState(0);
   const n = points.length;
   const [sel, setSel] = useState(Math.max(0, n - 1));
-  const selRef = useRef(sel);
 
   const geo = useMemo(() => {
     const plotW = Math.max(0, width - PAD.left - PAD.right);
@@ -142,12 +141,11 @@ export function ProgressChart({ points, unit, summary }: ProgressChartProps) {
   const select = useCallback(
     (i: number) => {
       const next = Math.max(0, Math.min(i, n - 1));
-      if (next === selRef.current) return;
-      selRef.current = next;
+      if (next === sel) return;
       setSel(next);
       haptics.selection();
     },
-    [n],
+    [n, sel],
   );
 
   const pickAt = useCallback(
@@ -208,7 +206,7 @@ export function ProgressChart({ points, unit, summary }: ProgressChartProps) {
           }}
           accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
           onAccessibilityAction={(e) =>
-            select(selRef.current + (e.nativeEvent.actionName === 'increment' ? 1 : -1))
+            select(sel + (e.nativeEvent.actionName === 'increment' ? 1 : -1))
           }
         >
           {width > 0 && n > 0 ? (

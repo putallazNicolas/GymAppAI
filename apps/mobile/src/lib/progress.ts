@@ -22,7 +22,8 @@ function heaviest(sets: WorkoutSet[]): { weightKg: number; reps: number } {
   for (const s of sets) {
     const w = s.weightKg ?? 0;
     const r = s.reps ?? 0;
-    if (w > best.weightKg || (w === best.weightKg && r > best.reps)) best = { weightKg: w, reps: r };
+    if (w > best.weightKg || (w === best.weightKg && r > best.reps))
+      best = { weightKg: w, reps: r };
   }
   return best;
 }

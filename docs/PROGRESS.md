@@ -66,7 +66,40 @@ Están todas en `docs/DECISIONS.md`. Las más relevantes para el producto:
 - Color primario azul; verde reservado para "completado".
 - Catálogo de ejercicios no editable; solo los propios se editan/borran.
 
-### PRs
+### Rediseño (dirección "A · Plataforma" de Claude Design)
+
+**Estado:** todas las pantallas siguen el diseño: Hoy (P01/P02), Entrenando (P03), Resumen (P04),
+Mis rutinas (P05), Armar rutina (P06), Armar día (P07), Elegir ejercicio (P08), Progreso (P09/P10) y
+Perfil (P11), con los tokens de S1/S3, fuentes Barlow / Barlow Condensed, componentes de S2 y las
+microinteracciones de S3 (reanimated + haptics, con fallback de movimiento reducido). El diseño está
+copiado en `design/` y ESLint impide colores, tamaños y radios sueltos fuera de `src/theme/`.
+
+**Cómo se verificó:** además de typecheck/lint/tests/bundle iOS, cada milestone se recorrió en el
+navegador (build web de react-native-web) con Playwright en un viewport de iPhone 14 Pro (393×852),
+comparando capturas con las artboards. `tools/web-preview/` tiene el servidor y un smoke test del flujo
+completo. Para correrlo: `cd apps/mobile && npx expo export --platform web --output-dir ../../dist-web`,
+`node tools/web-preview/serve.js "$PWD/dist-web" 8081` y `node tools/web-preview/smoke.cjs ./shots`.
+La web es solo para probar: lo real es Expo Go en el iPhone.
+
+**Choques diseño ↔ flujo (ganó `SCREENS.md`):**
+
+- Placeholder de reps en Entrenando = reps planificadas (P03 usaba las de la última vez).
+- Sin "SEMANA 1/4" en Hoy (periodización fuera de V1).
+- Borrar día/ejercicio pide confirmación (el mockup no).
+- Perfil muestra el aviso completo de datos locales (P11 lo acortaba).
+
+**Bug encontrado probando en el navegador y corregido:** tocar ✓ rápido en varias series dejaba el
+ejercicio sin colapsar (R2). También se corrigieron en el cierre la serie mostrada en el PR de peso del
+Resumen y el formato de duración.
+
+**No replicable en React Native (y qué se hizo):**
+
+- Hover del gráfico (web) → cursor con arrastre (Gesture.Pan) y acciones de accesibilidad ajustables.
+- `transform-origin` del menú → se emula con traslación.
+- Halo de las "tres luces" y anillos del cursor → sombra (en Android no brilla) / círculos anidados.
+- `text-transform: uppercase` en los campos de nombre puede no aplicarse en iOS nativo: el texto se
+  guarda como se escribe.
+- Las animaciones y gestos solo se vieron en web: **conviene mirarlos en el iPhone.**
 
 | #                                                          | Milestone                            | Estado |
 | ---------------------------------------------------------- | ------------------------------------ | ------ |
@@ -84,4 +117,11 @@ Están todas en `docs/DECISIONS.md`. Las más relevantes para el producto:
 | [#11](https://github.com/putallazNicolas/GymAppAI/pull/11) | F4 Progreso y Perfil                 | ✅     |
 | [#12](https://github.com/putallazNicolas/GymAppAI/pull/12) | Test e2e del flujo completo          | ✅     |
 | [#13](https://github.com/putallazNicolas/GymAppAI/pull/13) | F5 pulido y accesibilidad            | ✅     |
-| (este)                                                     | Reporte final y decisiones           | ✅     |
+| [#14](https://github.com/putallazNicolas/GymAppAI/pull/14) | Reporte final y decisiones           | ✅     |
+| [#15](https://github.com/putallazNicolas/GymAppAI/pull/15) | Importar diseño a `design/`          | ✅     |
+| [#16](https://github.com/putallazNicolas/GymAppAI/pull/16) | R1 tokens, fuentes y componentes     | ✅     |
+| [#17](https://github.com/putallazNicolas/GymAppAI/pull/17) | Vista web + smoke test Playwright    | ✅     |
+| [#18](https://github.com/putallazNicolas/GymAppAI/pull/18) | R3 rutinas, día, elegir ejercicio    | ✅     |
+| [#19](https://github.com/putallazNicolas/GymAppAI/pull/19) | R2 Hoy, Entrenando, Resumen          | ✅     |
+| [#20](https://github.com/putallazNicolas/GymAppAI/pull/20) | R4 Progreso y Perfil                 | ✅     |
+| (este)                                                     | Cierre del rediseño                  | ✅     |

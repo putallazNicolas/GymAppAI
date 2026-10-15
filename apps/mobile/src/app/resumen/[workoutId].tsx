@@ -1,4 +1,4 @@
-import type { PersonalRecord, WeightUnit, WorkoutSummary } from '@gym/core';
+import type { PersonalRecord, WeightUnit, WorkoutDetail, WorkoutSummary } from '@gym/core';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
@@ -21,7 +21,7 @@ import { useSettings } from '../../data/useSettings';
 import { attempt } from '../../lib/errors';
 import {
   formatDate,
-  formatDuration,
+  formatClock,
   formatNumber,
   formatTime,
   formatWeight,
@@ -66,7 +66,7 @@ function Stat({
 
 /** "1:07:42" -> "1:07" + a quieter ":42". */
 function DurationValue({ seconds }: { seconds: number }) {
-  const text = formatDuration(seconds);
+  const text = formatClock(seconds);
   const cut = text.lastIndexOf(':');
   return (
     <Text variant="numXL">
@@ -85,8 +85,26 @@ interface PrRow {
   bestSet?: { weightKg: number; reps: number };
 }
 
+type SummaryData = WorkoutSummary & {
+  /** Heaviest completed set per exercise (ties: more reps), for weight records. */
+  heaviest: Map<string, { weightKg: number; reps: number }>;
+};
+
+function heaviestSets(detail: WorkoutDetail | null): SummaryData['heaviest'] {
+  const out: SummaryData['heaviest'] = new Map();
+  for (const e of detail?.exercises ?? []) {
+    for (const s of e.sets) {
+      if (!s.completed || s.weightKg === undefined || s.reps === undefined || s.reps < 1) continue;
+      const cur = out.get(e.exerciseId);
+      if (!cur || s.weightKg > cur.weightKg || (s.weightKg === cur.weightKg && s.reps > cur.reps))
+        out.set(e.exerciseId, { weightKg: s.weightKg, reps: s.reps });
+    }
+  }
+  return out;
+}
+
 /** One row per exercise: the e1RM record when there is one, else the weight record. */
-function prRows(summary: WorkoutSummary): PrRow[] {
+function prRows(summary: SummaryData): PrRow[] {
   const byExercise = new Map<string, PersonalRecord>();
   for (const pr of summary.personalRecords) {
     const current = byExercise.get(pr.exerciseId);
@@ -97,7 +115,11 @@ function prRows(summary: WorkoutSummary): PrRow[] {
     exerciseId: record.exerciseId,
     exerciseName: record.exerciseName,
     record,
-    bestSet: summary.exercises.find((e) => e.exerciseId === record.exerciseId)?.bestSet,
+    // A weight record shows the set that set it; an e1RM record, the best set by e1RM.
+    bestSet:
+      record.type === 'weight'
+        ? summary.heaviest.get(record.exerciseId)
+        : summary.exercises.find((e) => e.exerciseId === record.exerciseId)?.bestSet,
   }));
 }
 
@@ -152,10 +174,13 @@ export default function SummaryScreen() {
   const services = useServices();
   const router = useRouter();
   const settings = useSettings();
-  const { data, loading, error, reload } = useAsync(
-    () => services.getWorkoutSummary(workoutId),
-    [workoutId],
-  );
+  const { data, loading, error, reload } = useAsync(async (): Promise<SummaryData> => {
+    const [summary, detail] = await Promise.all([
+      services.getWorkoutSummary(workoutId),
+      repos.workouts.getById(workoutId),
+    ]);
+    return { ...summary, heaviest: heaviestSets(detail) };
+  }, [workoutId]);
   const [notes, setNotes] = useState<string | undefined>(undefined);
   const [saving, setSaving] = useState(false);
 

@@ -35,3 +35,5 @@ Formato: fecha — decisión — motivo.
 - 2026-10-15 — (B3) Volumen, mejor serie y e1RM solo cuentan series completadas con peso y reps ≥ 1. — Evitar e1RM de series vacías.
 - 2026-10-15 — (B3) Semanas de lunes a domingo en hora local, según `startedAt`. — Convención en Argentina.
 - 2026-10-15 — (B3) `getPreviousPerformance` saltea sesiones sin series completadas. — "Anterior" debe mostrar algo útil.
+- 2026-10-15 — (Integración) Repos SQLite envueltos en una cola que serializa las llamadas (`serializeRepositories`). — `withTransactionAsync` de expo-sqlite no es exclusivo y la UI dispara escrituras superpuestas (blur + ✓).
+- 2026-10-15 — (Integración) `expo-sqlite` instalado con `npm install -w` (versión de `bundledNativeModules.json`, ~57.0.4) porque `npx expo install` no tiene red acá. — Restricción del entorno.

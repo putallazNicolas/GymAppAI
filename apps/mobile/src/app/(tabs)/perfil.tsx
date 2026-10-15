@@ -1,4 +1,4 @@
-import { DEFAULT_SETTINGS, type WeightUnit } from '@gym/core';
+import { DEFAULT_SETTINGS, exportFileName, type WeightUnit } from '@gym/core';
 import Constants from 'expo-constants';
 import * as DocumentPicker from 'expo-document-picker';
 import { File, Paths } from 'expo-file-system';
@@ -18,7 +18,6 @@ import {
 } from '../../components';
 import { useRepositories, useServices } from '../../data/DataProvider';
 import { useFocusAsync } from '../../data/useFocusAsync';
-import { backupFileName } from '../../lib/backup';
 import { attempt } from '../../lib/errors';
 import { colors, radii, spacing, touch } from '../../theme';
 
@@ -55,7 +54,7 @@ export default function PerfilScreen() {
     setExporting(true);
     try {
       const payload = await services.exportAllData({ appVersion: version });
-      const file = new File(Paths.cache, backupFileName());
+      const file = new File(Paths.cache, exportFileName(new Date()));
       file.create({ overwrite: true });
       file.write(JSON.stringify(payload));
       if (!(await Sharing.isAvailableAsync())) {

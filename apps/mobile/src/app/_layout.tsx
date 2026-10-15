@@ -56,10 +56,7 @@ export default function RootLayout() {
               animation: 'fade',
             }}
           />
-          <Stack.Screen
-            name="resumen/[workoutId]"
-            options={{ title: 'Resumen', gestureEnabled: false, headerBackVisible: false }}
-          />
+          <Stack.Screen name="resumen/[workoutId]" options={{ title: 'Resumen' }} />
         </Stack>
       </ThemeProvider>
     </DataProvider>

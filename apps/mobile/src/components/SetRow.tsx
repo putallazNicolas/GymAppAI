@@ -23,6 +23,9 @@ interface SetRowProps {
   /** Called when the keyboard "next" key is pressed on the kg input. */
   onSubmitKg?: () => void;
   onSubmitReps?: () => void;
+  /** Fired when an input loses focus: persist edited values here. */
+  onBlurKg?: () => void;
+  onBlurReps?: () => void;
 }
 
 /** `# | Anterior | Kg | Reps | ✓` row (SCREENS.md 4.2). Turns green when completed. */
@@ -40,6 +43,8 @@ export function SetRow({
   repsInputRef,
   onSubmitKg,
   onSubmitReps,
+  onBlurKg,
+  onBlurReps,
 }: SetRowProps) {
   return (
     <View style={[styles.row, completed && styles.rowCompleted]}>
@@ -62,6 +67,7 @@ export function SetRow({
         returnKeyType="next"
         submitBehavior="submit"
         onSubmitEditing={onSubmitKg}
+        onBlur={onBlurKg}
       />
       <TextInput
         ref={repsInputRef}
@@ -74,6 +80,7 @@ export function SetRow({
         selectTextOnFocus
         accessibilityLabel={`Repeticiones, serie ${index}`}
         onSubmitEditing={onSubmitReps}
+        onBlur={onBlurReps}
       />
       <Pressable
         accessibilityRole="checkbox"

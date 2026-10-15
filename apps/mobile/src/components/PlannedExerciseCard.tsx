@@ -9,7 +9,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-import { colors, hit, motion, radii, space, stroke, type } from '../theme';
+import { colors, hit, inputHeight, inputType, motion, radii, space, stroke, type } from '../theme';
 
 import { Icon } from './icons';
 import { IconButton } from './IconButton';
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
   },
   stepOff: { opacity: 0.3 },
   box: {
-    ...type.numM,
+    ...inputType.numMInput,
     height: 48,
     paddingHorizontal: space.sm + 2,
     paddingVertical: 0,
@@ -301,9 +301,10 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
   },
   notesInput: {
-    ...type.bodyS,
+    ...inputType.bodySInput,
     flex: 1,
-    paddingVertical: 0,
+    height: inputHeight.bodyS,
+    padding: 0,
     color: colors.textBody,
   },
 });

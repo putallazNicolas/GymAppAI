@@ -139,12 +139,12 @@ export default function RoutineScreen() {
         </View>
 
         <View style={styles.sectionHead}>
-          <Text variant="label">
-            Días{'  '}
+          <View style={styles.inlineRow}>
+            <Text variant="label">Días</Text>
             <Text variant="numS" color="textPrimary">
               {routine.days.length}
             </Text>
-          </Text>
+          </View>
           <Text variant="caption" color="textTertiary">
             Se entrenan en este orden
           </Text>
@@ -239,6 +239,7 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
   },
   activeTexts: { flex: 1, gap: 2 },
+  inlineRow: { flexDirection: 'row', alignItems: 'baseline', gap: space.sm },
   sectionHead: {
     flexDirection: 'row',
     alignItems: 'baseline',

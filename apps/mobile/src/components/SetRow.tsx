@@ -12,7 +12,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { haptics } from '../lib/haptics';
-import { colors, hit, motion, radii, space, stroke, type } from '../theme';
+import { colors, hit, inputType, motion, radii, space, stroke } from '../theme';
 
 import { AnimatedCheck } from './icons';
 import { PressableScale } from './PressableScale';
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
   index: { width: 24, textAlign: 'center' },
   previousWrap: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: space.sm - 2 },
   input: {
-    ...type.numM,
+    ...inputType.numMInput,
     width: 72,
     height: 42,
     padding: 0,

@@ -60,4 +60,18 @@ export const type = {
   tab: { fontFamily: fonts.bodyBold, fontSize: 11, lineHeight: 14 },
 } as const;
 
+/**
+ * TextInput variants: same font, size and case as the display/body tokens but NO lineHeight.
+ * On iOS a single-line TextInput with lineHeight < fontSize (or tight, while editing) clips
+ * glyphs that rise above the line box (accents on capitals). Pair with `inputHeight`.
+ */
+const { lineHeight: _dl, ...displayLInput } = type.displayL;
+const { lineHeight: _nm, ...numMInput } = type.numM;
+const { lineHeight: _bd, ...bodyInput } = type.body;
+const { lineHeight: _bs, ...bodySInput } = type.bodyS;
+export const inputType = { displayLInput, numMInput, bodyInput, bodySInput } as const;
+
+/** Explicit input heights that fit the glyphs (about fontSize x 1.3). */
+export const inputHeight = { displayL: 50, numM: 34, body: 24, bodyS: 20 } as const;
+
 export type TypeToken = keyof typeof type;

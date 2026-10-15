@@ -21,7 +21,7 @@ import { useRepositories } from '../data/DataProvider';
 import { useAsync } from '../data/useAsync';
 import { attempt } from '../lib/errors';
 import { haptics } from '../lib/haptics';
-import { colors, hit, radii, space, stroke, type } from '../theme';
+import { colors, hit, inputHeight, inputType, radii, space, stroke } from '../theme';
 
 export default function PickExerciseScreen() {
   const { dayId } = useLocalSearchParams<{ dayId?: string }>();
@@ -228,7 +228,13 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
   },
   searchFocused: { borderColor: colors.accent },
-  searchInput: { ...type.body, flex: 1, paddingVertical: 0, color: colors.textPrimary },
+  searchInput: {
+    ...inputType.bodyInput,
+    flex: 1,
+    height: inputHeight.body,
+    padding: 0,
+    color: colors.textPrimary,
+  },
   chipsScroll: { flexGrow: 0, marginTop: space.sm + 2, marginHorizontal: -space.lg },
   chips: { gap: space.sm - 2, paddingHorizontal: space.lg },
   list: { flex: 1, marginHorizontal: -space.lg, paddingHorizontal: space.lg, marginTop: space.sm },

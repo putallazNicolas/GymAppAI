@@ -120,18 +120,20 @@ export default function DayScreen() {
         />
 
         <View style={styles.sectionHead}>
-          <Text variant="label">
-            Ejercicios{'  '}
+          <View style={styles.inlineRow}>
+            <Text variant="label">Ejercicios</Text>
             <Text variant="numS" color="textPrimary">
               {day.exercises.length}
             </Text>
-          </Text>
-          <Text variant="caption" color="textTertiary">
+          </View>
+          <View style={styles.inlineRow}>
             <Text variant="numS" color="textBody">
               {totalSets}
             </Text>
-            {totalSets === 1 ? ' serie en total' : ' series en total'}
-          </Text>
+            <Text variant="caption" color="textTertiary">
+              {totalSets === 1 ? 'serie en total' : 'series en total'}
+            </Text>
+          </View>
         </View>
 
         <View style={styles.list}>
@@ -179,6 +181,7 @@ function Shell({ children }: { children: React.ReactNode }) {
 
 const styles = StyleSheet.create({
   content: { gap: space.lg + 2, paddingTop: space.sm + 2, paddingBottom: space.xxxl },
+  inlineRow: { flexDirection: 'row', alignItems: 'baseline', gap: space.xs + 1 },
   sectionHead: {
     flexDirection: 'row',
     alignItems: 'baseline',

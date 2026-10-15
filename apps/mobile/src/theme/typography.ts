@@ -22,9 +22,13 @@ export const type = {
   numL: { fontFamily: fonts.displayBold, fontSize: 32, lineHeight: 32, ...tnum },
   numM: { fontFamily: fonts.displayBold, fontSize: 25, lineHeight: 28, ...tnum },
   numS: { fontFamily: fonts.displayMedium, fontSize: 17, lineHeight: 20, ...tnum },
+  numD: { fontFamily: fonts.display, fontSize: 28, lineHeight: 28, ...tnum },
+  numMd: { fontFamily: fonts.displayBold, fontSize: 20, lineHeight: 22, ...tnum },
   badge: { fontFamily: fonts.display, fontSize: 13, lineHeight: 16, ...tnum },
   body: { fontFamily: fonts.body, fontSize: 16, lineHeight: 22 },
   bodyStrong: { fontFamily: fonts.bodyBold, fontSize: 16, lineHeight: 22 },
+  bodyM: { fontFamily: fonts.body, fontSize: 15, lineHeight: 20 },
+  bodyMSemi: { fontFamily: fonts.bodySemi, fontSize: 15, lineHeight: 20 },
   bodyS: { fontFamily: fonts.bodyRegular, fontSize: 14, lineHeight: 20 },
   caption: { fontFamily: fonts.bodyRegular, fontSize: 13, lineHeight: 18 },
   label: {

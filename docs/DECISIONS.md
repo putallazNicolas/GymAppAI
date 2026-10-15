@@ -59,3 +59,7 @@ Formato: fecha — decisión — motivo.
 - 2026-10-15 — (Rediseño) Badge "PR" en vivo por serie calculado en el cliente con el mejor e1RM histórico; descanso con "+15 s", "A LA BARRA" y cierre a los 5 s como en P03. — No cambian el flujo de 4.2.
 - 2026-10-15 — (Rediseño) Se usa el `theme.ts` de S3 tal cual como base del tema (incluye `accentPressed`, `accentBorder`, `successBorder`, `chartWeight` y `motion`, que no estaban en el brief). — Es la fuente del diseñador.
 - 2026-10-15 — (Rediseño) Los agentes de rediseño se lanzan con `isolation: "worktree"` y un agente de front nuevo. — Remote no aisló; el agente anterior tenía el contexto casi lleno.
+- 2026-10-15 — (QA) Prueba en navegador: build web (react-native-web) servido con COOP/COEP y recorrido con Playwright en viewport de iPhone (`tools/web-preview/`). `metro.config.js` agrega `wasm` a los assets (expo-sqlite web). — Pedido del dueño; no se puede usar Expo Go desde la nube.
+- 2026-10-15 — (QA) Bug encontrado en web: tocar ✓ rápido en varias series deja el ejercicio sin colapsar (estado viejo en el handler). Se corrige en R2. — SCREENS 4.2.
+- 2026-10-15 — (Rediseño) Override raíz `react-native-gesture-handler ~2.32.0`. — expo-router traía 3.3.0 duplicado (expo-doctor).
+- 2026-10-15 — (Rediseño, R1) Tokens extra para no dejar literales: `textBody`, `accentFaint`, `accentHalo`, `successPressed`, `successBorderStrong`, `transparent`, tipos `bodyStrong`/`badge`/`buttonM`/`buttonS`/`tab`; íconos SVG propios (sin expo-symbols); switch encendido en `accent` como P06. — Regla de tokens y diseño.

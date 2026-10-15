@@ -130,15 +130,17 @@ function PrRowView({ row, index, unit }: { row: PrRow; index: number; unit: Weig
     <Animated.View entering={useEnter('rise', index)} style={styles.prRow}>
       <View style={styles.flex}>
         <Text variant="bodyMSemi">{row.exerciseName}</Text>
-        <Text variant="caption">
-          {record.type === 'e1rm' ? 'e1RM' : 'Peso'}{' '}
+        <View style={styles.inlineRow}>
+          <Text variant="caption">{record.type === 'e1rm' ? 'e1RM' : 'Peso'}</Text>
           <Text variant="numS" color="textPrimary">
             {formatWeight(record.valueKg, unit)}
           </Text>
-          {record.previousKg !== undefined
-            ? ` · antes ${formatNumber(kgToUnit(record.previousKg, unit))}`
-            : ''}
-        </Text>
+          {record.previousKg !== undefined ? (
+            <Text variant="caption">
+              {`· antes ${formatNumber(kgToUnit(record.previousKg, unit))}`}
+            </Text>
+          ) : null}
+        </View>
       </View>
       <View style={styles.prValues}>
         {bestSet ? (
@@ -361,6 +363,12 @@ export default function SummaryScreen() {
 const styles = StyleSheet.create({
   content: { gap: space.md + 2, paddingVertical: space.lg, paddingBottom: space.xxl },
   flex: { flex: 1 },
+  inlineRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'baseline',
+    columnGap: space.xs + 1,
+  },
   shrink: { flexShrink: 1 },
   head: { gap: space.xs },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },

@@ -1,7 +1,7 @@
 import { forwardRef, useState } from 'react';
 import { StyleSheet, TextInput, View, type TextInputProps } from 'react-native';
 
-import { colors, hit, space, stroke, type } from '../theme';
+import { colors, hit, inputHeight, inputType, space, stroke } from '../theme';
 
 import { Text } from './Text';
 
@@ -18,37 +18,42 @@ export const UnderlineField = forwardRef<TextInput, UnderlineFieldProps>(functio
   return (
     <View style={styles.wrapper}>
       <Text variant="label">{label}</Text>
-      <TextInput
-        ref={ref}
-        placeholderTextColor={colors.textDisabled}
-        selectionColor={colors.accent}
-        accessibilityLabel={label}
-        {...rest}
-        onFocus={(e) => {
-          setFocused(true);
-          onFocus?.(e);
-        }}
-        onBlur={(e) => {
-          setFocused(false);
-          onBlur?.(e);
-        }}
-        style={[styles.input, focused && styles.focused, style]}
-      />
+      <View style={[styles.underline, focused && styles.focused]}>
+        <TextInput
+          ref={ref}
+          placeholderTextColor={colors.textDisabled}
+          selectionColor={colors.accent}
+          accessibilityLabel={label}
+          {...rest}
+          onFocus={(e) => {
+            setFocused(true);
+            onFocus?.(e);
+          }}
+          onBlur={(e) => {
+            setFocused(false);
+            onBlur?.(e);
+          }}
+          style={[styles.input, style]}
+        />
+      </View>
     </View>
   );
 });
 
 const styles = StyleSheet.create({
   wrapper: { gap: space.xs + 2 },
-  input: {
-    ...type.displayL,
+  underline: {
     minHeight: hit.min + space.xs,
-    paddingTop: 0,
-    paddingHorizontal: 0,
+    justifyContent: 'center',
     paddingBottom: space.xs + 2,
-    color: colors.textPrimary,
     borderBottomWidth: stroke.thick,
     borderBottomColor: colors.border,
+  },
+  input: {
+    ...inputType.displayLInput,
+    height: inputHeight.displayL,
+    padding: 0,
+    color: colors.textPrimary,
   },
   focused: { borderBottomColor: colors.accent },
 });

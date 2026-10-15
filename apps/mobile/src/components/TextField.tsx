@@ -1,7 +1,7 @@
 import { forwardRef, useState } from 'react';
 import { StyleSheet, TextInput, View, type TextInputProps } from 'react-native';
 
-import { colors, hit, radii, space, stroke, type } from '../theme';
+import { colors, hit, inputType, radii, space, stroke } from '../theme';
 
 import { Text } from './Text';
 
@@ -51,7 +51,7 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(function TextFiel
 const styles = StyleSheet.create({
   wrapper: { gap: space.xs },
   input: {
-    ...type.body,
+    ...inputType.bodyInput,
     minHeight: hit.min + space.xs,
     backgroundColor: colors.background,
     color: colors.textPrimary,

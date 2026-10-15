@@ -180,11 +180,13 @@ export default function PerfilScreen() {
           value={settings.unit}
           onChange={(u) => update({ unit: u })}
         />
-        <Text variant="caption" style={styles.example}>
-          {'Ejemplo: '}
+        <View style={styles.example}>
+          <Text variant="caption">Ejemplo:</Text>
           <Text variant="numRead">{example}</Text>
-          {' · tus datos se guardan siempre en kg'}
-        </Text>
+          <Text variant="caption" style={styles.shrink}>
+            · tus datos se guardan siempre en kg
+          </Text>
+        </View>
 
         <Text variant="label" style={styles.section}>
           DESCANSO
@@ -286,7 +288,14 @@ const styles = StyleSheet.create({
   statCell: { flex: 1, paddingHorizontal: space.md, paddingVertical: 10, gap: 3 },
   statDivider: { borderLeftWidth: stroke.hairline, borderLeftColor: colors.border },
   section: { marginTop: 22, marginBottom: space.sm },
-  example: { marginTop: space.sm },
+  example: {
+    marginTop: space.sm,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'baseline',
+    columnGap: space.xs + 1,
+  },
+  shrink: { flexShrink: 1 },
   switchCard: {
     minHeight: hit.row,
     paddingLeft: space.lg,

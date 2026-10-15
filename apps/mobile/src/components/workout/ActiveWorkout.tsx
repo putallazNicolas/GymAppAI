@@ -8,13 +8,14 @@ import type {
 import { useKeepAwake } from 'expo-keep-awake';
 import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { AppState, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { AppState, Keyboard, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { useRepositories, useServices } from '../../data/DataProvider';
 import { attempt } from '../../lib/errors';
 import { inputToKg, inputToReps, weightToInput } from '../../lib/format';
 import { haptics } from '../../lib/haptics';
+import { restSecondsFor } from '../../lib/rest';
 import { useNow } from '../../lib/useNow';
 import { firstPendingId, prSetIds, workoutTotals } from '../../lib/workoutStats';
 import { colors, radii, space, stroke } from '../../theme';
@@ -44,6 +45,8 @@ const COLLAPSE_PAUSE_MS = 350;
 /** Waits for the fold/unfold layout animation before scrolling to the next exercise. */
 const SCROLL_DELAY_MS = 380;
 const ADD_REST_SECONDS = 15;
+/** Bottom padding of the list so the floating rest bar never covers the last rows. */
+const REST_BAR_CLEARANCE = 140;
 
 function buildInputs(workout: WorkoutDetail, unit: WeightUnit): Record<string, SetInput> {
   const out: Record<string, SetInput> = {};
@@ -223,8 +226,7 @@ export function ActiveWorkout({
       const nextId = firstPendingId(w, idx);
       setExpanded(nextId);
       if (!nextId) return;
-      const firstSet = w.exercises.find((e) => e.id === nextId)?.sets.find((s) => !s.completed);
-      if (firstSet) focusKey(`${firstSet.id}:kg`);
+      // No keyboard here: the next exercise just opens with its first pending set framed.
       setTimeout(() => {
         const y = blockY.current.get(nextId);
         if (y !== undefined)
@@ -276,13 +278,15 @@ export function ActiveWorkout({
     const after = workoutRef.current.exercises[exIndex];
     if (after && prSetIds(after, bests[ex.exerciseId] ?? 0).has(setId)) haptics.heavy();
 
-    if (restTimerEnabled && ex.restSeconds) {
-      setRest(restFrom(ex.restSeconds));
-    }
+    // Close the keyboard (its blur saves the typed values) so the rest bar is visible below.
+    TextInput.State?.currentlyFocusedInput?.()?.blur(); // absent on web
+    Keyboard.dismiss();
 
-    const nextPending = after?.sets.find((s) => !s.completed);
-    if (!nextPending) scheduleCollapse(ex.id);
-    else focusKey(`${nextPending.id}:kg`);
+    // Every ✓ (also the last set) starts, or restarts, the rest. The next pending set only gets
+    // the visual focus frame (focusSetId); its input is not focused.
+    if (restTimerEnabled) setRest(restFrom(restSecondsFor(ex)));
+
+    if (!after?.sets.some((s) => !s.completed)) scheduleCollapse(ex.id);
 
     void enqueue(async () => {
       const updated = await attempt(() => services.completeSet(setId, { weightKg, reps }));
@@ -493,7 +497,7 @@ export function ActiveWorkout({
 
 const styles = StyleSheet.create({
   strip: { gap: space.sm + 2, paddingBottom: space.md },
-  content: { gap: space.sm, paddingBottom: 130 },
+  content: { gap: space.sm, paddingBottom: REST_BAR_CLEARANCE },
   allDone: {
     marginTop: space.sm,
     alignItems: 'center',

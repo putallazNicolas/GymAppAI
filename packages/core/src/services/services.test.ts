@@ -6,6 +6,7 @@ import {
   type Repositories,
 } from '../contracts';
 import { createInMemoryRepositories } from '../memory';
+import { EXERCISE_SEED } from '../seed';
 import { createSqliteRepositories } from '../sqlite';
 import { createSqlJsDriver } from '../testing/sqlJsDriver';
 import { createDomainServices } from './index';
@@ -486,8 +487,11 @@ describe.each(BACKENDS)('domain services on %s', (_name, build) => {
 
       const b = await setup();
       const result = await b.services.importAllData(JSON.parse(json));
-      expect(result).toEqual({ exercises: 4, routines: 1, workouts: 1 });
-      expect(await b.repos.backup.snapshot()).toEqual(await a.repos.backup.snapshot());
+      // the payload had no catalog rows, so the seed is re-added on import
+      expect(result).toEqual({ exercises: 4 + EXERCISE_SEED.length, routines: 1, workouts: 1 });
+      const snapA = await a.repos.backup.snapshot();
+      const snapB = await b.repos.backup.snapshot();
+      expect({ ...snapB, exercises: snapB.exercises.filter((e) => e.isCustom) }).toEqual(snapA);
       expect((await b.services.getRecentWorkouts(5)).length).toBe(1);
       expect((await b.repos.settings.get()).unit).toBe('lb');
     });

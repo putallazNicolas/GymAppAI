@@ -19,3 +19,7 @@ npm-debug.*
 .env*.local
 /apps/mobile/ios
 /apps/mobile/android
+
+# Claude Code agent worktrees
+.claude/worktrees/
+dist-web/

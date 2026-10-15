@@ -65,3 +65,22 @@ export function formatWeight(kg: number, unit: WeightUnit): string {
 export function formatVolume(volumeKg: number, unit: WeightUnit): string {
   return `${formatNumber(kgToUnit(volumeKg, unit), 0)} ${unit}`;
 }
+
+/** Plain editable text for a weight stored in kg ("82.5"); empty when undefined. */
+export function weightToInput(kg: number | undefined, unit: WeightUnit): string {
+  if (kg === undefined) return '';
+  return String(Math.round(kgToUnit(kg, unit) * 10) / 10);
+}
+
+/** Parses user input (accepts "," or ".") into kg; undefined when empty/invalid. */
+export function inputToKg(text: string, unit: WeightUnit): number | undefined {
+  const n = Number(text.trim().replace(',', '.'));
+  if (text.trim() === '' || !Number.isFinite(n) || n < 0) return undefined;
+  return unitToKg(n, unit);
+}
+
+/** Parses a reps input into a non-negative integer; undefined when empty/invalid. */
+export function inputToReps(text: string): number | undefined {
+  const n = parseInt(text.trim(), 10);
+  return Number.isFinite(n) && n >= 0 ? n : undefined;
+}

@@ -1,7 +1,12 @@
-import type { Repositories } from '@gym/core';
-import { createContext, useContext, type ReactNode } from 'react';
+import { createDomainServices, type DomainServices, type Repositories } from '@gym/core';
+import { createContext, useContext, useMemo, type ReactNode } from 'react';
 
-const RepositoriesContext = createContext<Repositories | null>(null);
+interface DataContextValue {
+  repositories: Repositories;
+  services: DomainServices;
+}
+
+const DataContext = createContext<DataContextValue | null>(null);
 
 export function DataProvider({
   repositories,
@@ -10,13 +15,23 @@ export function DataProvider({
   repositories: Repositories;
   children: ReactNode;
 }) {
-  return (
-    <RepositoriesContext.Provider value={repositories}>{children}</RepositoriesContext.Provider>
+  const value = useMemo(
+    () => ({ repositories, services: createDomainServices(repositories) }),
+    [repositories],
   );
+  return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
+}
+
+function useData(): DataContextValue {
+  const ctx = useContext(DataContext);
+  if (!ctx) throw new Error('Data hooks must be used inside <DataProvider>');
+  return ctx;
 }
 
 export function useRepositories(): Repositories {
-  const repos = useContext(RepositoriesContext);
-  if (!repos) throw new Error('useRepositories must be used inside <DataProvider>');
-  return repos;
+  return useData().repositories;
+}
+
+export function useServices(): DomainServices {
+  return useData().services;
 }

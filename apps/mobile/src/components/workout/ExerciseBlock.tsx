@@ -161,7 +161,9 @@ export function ExerciseBlock({
           <Text variant="caption" style={styles.caption}>
             {caption}
           </Text>
-        ) : null}
+        ) : (
+          <View style={styles.captionGap} />
+        )}
         <View style={styles.colHeader}>
           <Text variant="label" color="textTertiary" style={styles.colIndex}>
             #
@@ -357,6 +359,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   caption: { paddingHorizontal: space.sm - 2, paddingBottom: space.md },
+  captionGap: { height: space.md },
   colHeader: {
     flexDirection: 'row',
     alignItems: 'center',

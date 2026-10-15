@@ -1,7 +1,7 @@
-import { forwardRef } from 'react';
+import { forwardRef, useState } from 'react';
 import { StyleSheet, TextInput, View, type TextInputProps } from 'react-native';
 
-import { colors, radii, spacing, touch, typography } from '../theme';
+import { colors, hit, radii, space, stroke, type } from '../theme';
 
 import { Text } from './Text';
 
@@ -11,19 +11,33 @@ interface TextFieldProps extends TextInputProps {
 }
 
 export const TextField = forwardRef<TextInput, TextFieldProps>(function TextField(
-  { label, error, style, ...rest },
+  { label, error, style, onFocus, onBlur, ...rest },
   ref,
 ) {
+  const [focused, setFocused] = useState(false);
   return (
     <View style={styles.wrapper}>
-      {label ? <Text variant="caption">{label}</Text> : null}
+      {label ? <Text variant="label">{label}</Text> : null}
       <TextInput
         ref={ref}
-        placeholderTextColor={colors.textMuted}
-        selectionColor={colors.primary}
+        placeholderTextColor={colors.textDisabled}
+        selectionColor={colors.accent}
         accessibilityLabel={label}
         {...rest}
-        style={[styles.input, error ? styles.inputError : null, style]}
+        onFocus={(e) => {
+          setFocused(true);
+          onFocus?.(e);
+        }}
+        onBlur={(e) => {
+          setFocused(false);
+          onBlur?.(e);
+        }}
+        style={[
+          styles.input,
+          focused && styles.inputFocused,
+          error ? styles.inputError : null,
+          style,
+        ]}
       />
       {error ? (
         <Text variant="caption" color="danger">
@@ -35,16 +49,17 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(function TextFiel
 });
 
 const styles = StyleSheet.create({
-  wrapper: { gap: spacing.xs },
+  wrapper: { gap: space.xs },
   input: {
-    minHeight: touch.min,
-    backgroundColor: colors.surface,
-    color: colors.text,
-    borderWidth: 1,
+    ...type.body,
+    minHeight: hit.min + space.xs,
+    backgroundColor: colors.background,
+    color: colors.textPrimary,
+    borderWidth: stroke.regular,
     borderColor: colors.border,
-    borderRadius: radii.md,
-    paddingHorizontal: spacing.lg,
-    fontSize: typography.size.md,
+    borderRadius: radii.sm,
+    paddingHorizontal: space.lg,
   },
+  inputFocused: { borderColor: colors.accent },
   inputError: { borderColor: colors.danger },
 });

@@ -17,7 +17,7 @@ import { useSettings } from '../../data/useSettings';
 import { attempt } from '../../lib/errors';
 import { useNow } from '../../lib/useNow';
 import { formatDate, formatDuration, formatVolume } from '../../lib/format';
-import { colors, radii, spacing } from '../../theme';
+import { colors, radii, space } from '../../theme';
 
 function greeting(hour: number): string {
   if (hour < 6) return 'Buenas noches';
@@ -90,15 +90,15 @@ export default function HoyScreen() {
             style={styles.banner}
           >
             <View style={styles.bannerText}>
-              <Text variant="label" color="onSuccess">
+              <Text variant="bodyStrong" color="onAccent">
                 Continuar entrenamiento
               </Text>
-              <Text variant="caption" color="onSuccess">
+              <Text variant="caption" color="onAccent">
                 {inProgress.dayNameSnapshot} ·{' '}
                 {formatDuration(elapsedSeconds(inProgress.startedAt))}
               </Text>
             </View>
-            <Text variant="title" color="onSuccess">
+            <Text variant="displayS" color="onAccent">
               ›
             </Text>
           </Pressable>
@@ -107,7 +107,7 @@ export default function HoyScreen() {
         {suggested ? (
           <Card>
             <Text variant="caption">Entrenamiento de hoy</Text>
-            <Text variant="title">{suggested.day.name}</Text>
+            <Text variant="displayS">{suggested.day.name}</Text>
             <Text variant="caption">{suggested.routine.name}</Text>
             <View style={styles.exerciseList}>
               {suggested.exercises.slice(0, 5).map((e, i) => (
@@ -138,7 +138,7 @@ export default function HoyScreen() {
           </Card>
         ) : data.routineCount > 0 ? (
           <Card>
-            <Text variant="title">
+            <Text variant="displayS">
               {active ? 'Tu rutina activa no tiene días' : 'No tenés una rutina activa'}
             </Text>
             <Text variant="caption">
@@ -161,7 +161,7 @@ export default function HoyScreen() {
           </Card>
         ) : null}
 
-        <Text variant="title">Últimos entrenamientos</Text>
+        <Text variant="displayS">Últimos entrenamientos</Text>
         {recent.length === 0 ? (
           <Text variant="caption">Cuando termines tu primer entrenamiento va a aparecer acá.</Text>
         ) : (
@@ -186,23 +186,23 @@ export default function HoyScreen() {
   return (
     <ScreenContainer>
       <Text variant="caption">{formatDate(now)}</Text>
-      <Text variant="heading">{greeting(now.getHours())}</Text>
+      <Text variant="displayM">{greeting(now.getHours())}</Text>
       <View style={styles.body}>{body}</View>
     </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  body: { flex: 1, marginTop: spacing.md },
-  content: { gap: spacing.lg, paddingBottom: spacing.xl },
+  body: { flex: 1, marginTop: space.md },
+  content: { gap: space.lg, paddingBottom: space.xl },
   banner: {
     flexDirection: 'row',
     alignItems: 'center',
     minHeight: 64,
-    padding: spacing.lg,
+    padding: space.lg,
     borderRadius: radii.lg,
     backgroundColor: colors.success,
   },
   bannerText: { flex: 1 },
-  exerciseList: { gap: spacing.xs },
+  exerciseList: { gap: space.xs },
 });

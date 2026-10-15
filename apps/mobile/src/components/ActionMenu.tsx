@@ -1,13 +1,24 @@
-import { Modal, Pressable, StyleSheet, View } from 'react-native';
+import { useEffect } from 'react';
+import { Modal, Pressable, StyleSheet } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useReducedMotion,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { colors, radii, spacing, touch } from '../theme';
+import { colors, elevation, hit, motion, radii, space, stroke } from '../theme';
 
+import { Icon, type IconName } from './icons';
 import { Text } from './Text';
 
 export interface ActionMenuItem {
   label: string;
   onPress: () => void;
   destructive?: boolean;
+  icon?: IconName;
+  disabled?: boolean;
 }
 
 interface ActionMenuProps {
@@ -17,53 +28,101 @@ interface ActionMenuProps {
   onClose: () => void;
 }
 
-/** Cross-platform bottom sheet menu (Alert supports too few buttons on Android). */
+const FROM_SCALE = 0.92;
+const MENU_WIDTH = 220;
+/** The menu opens below the top-right "more" button of the screen header. */
+const ANCHOR_OFFSET = hit.cta;
+
+/** Popover menu (e2) that grows from the top-right corner. */
 export function ActionMenu({ visible, title, items, onClose }: ActionMenuProps) {
+  const reduced = useReducedMotion();
+  const insets = useSafeAreaInsets();
+  const progress = useSharedValue(0);
+
+  useEffect(() => {
+    if (!visible) return;
+    progress.value = 0;
+    progress.value = withTiming(1, {
+      duration: reduced ? motion.reduced : motion.base - 40,
+      easing: motion.easeOut,
+    });
+  }, [visible, progress, reduced]);
+
+  const animated = useAnimatedStyle(() => {
+    const scale = reduced ? 1 : FROM_SCALE + (1 - FROM_SCALE) * progress.value;
+    // Scale from the top-right corner: re-anchor the center-based transform by half the shrink.
+    const shiftX = reduced ? 0 : (MENU_WIDTH * (1 - scale)) / 2;
+    return {
+      opacity: progress.value,
+      transform: [{ translateX: shiftX }, { scale }],
+    };
+  });
+
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+    <Modal visible={visible} transparent animationType="none" onRequestClose={onClose}>
       <Pressable style={styles.backdrop} onPress={onClose} accessibilityLabel="Cerrar menú">
-        <View style={styles.sheet}>
+        <Animated.View
+          style={[styles.menu, { top: insets.top + ANCHOR_OFFSET }, animated]}
+          accessibilityRole="menu"
+        >
           {title ? (
-            <Text variant="caption" style={styles.title} numberOfLines={1}>
+            <Text variant="label" style={styles.title} numberOfLines={1}>
               {title}
             </Text>
           ) : null}
-          {items.map((item) => (
-            <Pressable
-              key={item.label}
-              accessibilityRole="button"
-              style={styles.item}
-              onPress={() => {
-                onClose();
-                item.onPress();
-              }}
-            >
-              <Text variant="label" color={item.destructive ? 'danger' : 'text'}>
-                {item.label}
-              </Text>
-            </Pressable>
-          ))}
-          <Pressable accessibilityRole="button" style={styles.item} onPress={onClose}>
-            <Text variant="label" color="textMuted">
-              Cancelar
-            </Text>
-          </Pressable>
-        </View>
+          {items.map((item) => {
+            const icon = item.icon ?? (item.destructive ? 'trash' : undefined);
+            const tint = item.disabled
+              ? 'textDisabled'
+              : item.destructive
+                ? 'danger'
+                : 'textPrimary';
+            return (
+              <Pressable
+                key={item.label}
+                accessibilityRole="menuitem"
+                accessibilityState={{ disabled: item.disabled }}
+                disabled={item.disabled}
+                style={({ pressed }) => [styles.item, pressed && styles.itemPressed]}
+                onPress={() => {
+                  onClose();
+                  item.onPress();
+                }}
+              >
+                {icon ? <Icon name={icon} size={20} color={tint} /> : null}
+                <Text variant="bodyStrong" color={tint}>
+                  {item.label}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </Animated.View>
       </Pressable>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
-  backdrop: { flex: 1, backgroundColor: colors.overlay, justifyContent: 'flex-end' },
-  sheet: {
-    backgroundColor: colors.surface,
-    borderTopLeftRadius: radii.lg,
-    borderTopRightRadius: radii.lg,
-    padding: spacing.lg,
-    paddingBottom: spacing.xxl,
-    gap: spacing.xs,
+  backdrop: { flex: 1 },
+  menu: {
+    position: 'absolute',
+    right: space.lg,
+    width: MENU_WIDTH,
+    padding: space.xs + 2,
+    borderRadius: radii.lg,
+    backgroundColor: colors.surfaceRaised,
+    borderWidth: stroke.hairline,
+    borderColor: colors.borderRaised,
+    ...elevation.floating,
   },
-  title: { textAlign: 'center', marginBottom: spacing.sm },
-  item: { minHeight: touch.min, justifyContent: 'center', alignItems: 'center' },
+  title: { paddingHorizontal: space.md, paddingVertical: space.sm },
+  item: {
+    minHeight: hit.row - 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.md,
+    paddingHorizontal: space.md,
+    borderRadius: radii.md,
+  },
+  itemPressed: { backgroundColor: colors.border },
 });

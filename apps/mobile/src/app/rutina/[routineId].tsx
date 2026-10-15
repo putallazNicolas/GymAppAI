@@ -18,7 +18,7 @@ import { useRepositories } from '../../data/DataProvider';
 import { useFocusAsync } from '../../data/useFocusAsync';
 import { attempt } from '../../lib/errors';
 import { moveId } from '../../lib/reorder';
-import { colors, spacing, touch } from '../../theme';
+import { colors, space, hit } from '../../theme';
 
 export default function RoutineScreen() {
   const { routineId } = useLocalSearchParams<{ routineId: string }>();
@@ -105,7 +105,7 @@ export default function RoutineScreen() {
           returnKeyType="done"
         />
         <View style={styles.switchRow}>
-          <Text variant="label">Rutina activa</Text>
+          <Text variant="bodyStrong">Rutina activa</Text>
           <Switch
             accessibilityLabel="Rutina activa"
             value={routine.isActive}
@@ -113,7 +113,7 @@ export default function RoutineScreen() {
             trackColor={{ true: colors.success, false: colors.border }}
           />
         </View>
-        <Text variant="title">Días</Text>
+        <Text variant="displayS">Días</Text>
         {routine.days.length === 0 ? (
           <Text variant="caption">Todavía no hay días. Agregá el primero.</Text>
         ) : null}
@@ -165,15 +165,15 @@ function Shell({ children }: { children: React.ReactNode }) {
 }
 
 const styles = StyleSheet.create({
-  content: { gap: spacing.lg, paddingVertical: spacing.lg },
+  content: { gap: space.lg, paddingVertical: space.lg },
   switchRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    minHeight: touch.min,
+    minHeight: hit.min,
   },
-  dayCard: { padding: spacing.md },
-  dayRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  dayCard: { padding: space.md },
+  dayRow: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
   dayInfo: { flex: 1 },
   dayBtn: { alignItems: 'flex-start', paddingHorizontal: 0 },
 });

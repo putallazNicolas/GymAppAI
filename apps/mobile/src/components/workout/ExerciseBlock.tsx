@@ -2,8 +2,8 @@ import type { PreviousPerformance, WeightUnit, WorkoutExerciseDetail } from '@gy
 import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 
 import { formatNumber, kgToUnit } from '../../lib/format';
-import { colors, radii, spacing, touch } from '../../theme';
-import { Icon } from '../Icon';
+import { colors, hit, radii, space } from '../../theme';
+import { Icon } from '../icons';
 import { SetRow } from '../SetRow';
 import { Text } from '../Text';
 
@@ -75,8 +75,8 @@ export function ExerciseBlock({
         {allDone ? <Icon name="check" size={22} color="success" /> : null}
         <View style={styles.headerText}>
           <Text
-            variant="label"
-            color={allDone ? 'success' : exercise.skipped ? 'textMuted' : 'text'}
+            variant="displayS"
+            color={allDone ? 'success' : exercise.skipped ? 'textSecondary' : 'textPrimary'}
           >
             {name}
           </Text>
@@ -95,7 +95,7 @@ export function ExerciseBlock({
         onPress={onOpenMenu}
         style={styles.menuBtn}
       >
-        <Text variant="title">⋯</Text>
+        <Icon name="more" size={22} color="textSecondary" />
       </Pressable>
     </View>
   );
@@ -111,16 +111,16 @@ export function ExerciseBlock({
             </Text>
           ) : null}
           <View style={styles.colHeader}>
-            <Text variant="caption" style={styles.colIndex}>
+            <Text variant="label" style={styles.colIndex}>
               #
             </Text>
-            <Text variant="caption" style={styles.colPrev}>
+            <Text variant="label" style={styles.colPrev}>
               Anterior
             </Text>
-            <Text variant="caption" style={styles.colInput}>
+            <Text variant="label" style={styles.colKg}>
               {unit === 'kg' ? 'Kg' : 'Lb'}
             </Text>
-            <Text variant="caption" style={styles.colInput}>
+            <Text variant="label" style={styles.colReps}>
               Reps
             </Text>
             <View style={styles.colCheck} />
@@ -158,37 +158,38 @@ export function ExerciseBlock({
 const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.surface,
-    borderRadius: radii.lg,
+    borderRadius: radii.xl,
     borderWidth: 1,
     borderColor: colors.border,
-    padding: spacing.sm,
+    padding: space.sm,
   },
-  cardDone: { borderColor: colors.success, backgroundColor: colors.successSurface },
+  cardDone: { borderColor: colors.successBorder, backgroundColor: colors.successMuted },
   header: { flexDirection: 'row', alignItems: 'center' },
   headerMain: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.sm,
-    minHeight: touch.primary,
-    paddingHorizontal: spacing.sm,
+    gap: space.sm,
+    minHeight: hit.cta,
+    paddingHorizontal: space.sm,
   },
   headerText: { flex: 1 },
   menuBtn: {
-    width: touch.min,
-    height: touch.min,
+    width: hit.min,
+    height: hit.min,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  notes: { paddingHorizontal: spacing.sm, paddingBottom: spacing.sm },
+  notes: { paddingHorizontal: space.sm, paddingBottom: space.sm },
   colHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.sm,
-    paddingHorizontal: spacing.sm,
+    gap: space.sm,
+    paddingHorizontal: space.sm,
   },
   colIndex: { width: 24, textAlign: 'center' },
-  colPrev: { flex: 1.2 },
-  colInput: { flex: 1, textAlign: 'center' },
-  colCheck: { width: touch.check },
+  colPrev: { flex: 1 },
+  colKg: { width: 72, textAlign: 'center' },
+  colReps: { width: 60, textAlign: 'center' },
+  colCheck: { width: hit.min },
 });

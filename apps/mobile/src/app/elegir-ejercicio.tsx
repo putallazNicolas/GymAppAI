@@ -17,7 +17,7 @@ import {
 import { useRepositories } from '../data/DataProvider';
 import { useAsync } from '../data/useAsync';
 import { attempt } from '../lib/errors';
-import { colors, radii, spacing, touch } from '../theme';
+import { colors, radii, space, hit } from '../theme';
 
 export default function PickExerciseScreen() {
   const { dayId } = useLocalSearchParams<{ dayId?: string }>();
@@ -103,7 +103,7 @@ export default function PickExerciseScreen() {
               style={[styles.row, on && styles.rowOn]}
             >
               <View style={styles.rowText}>
-                <Text variant="label">{item.name}</Text>
+                <Text variant="bodyStrong">{item.name}</Text>
                 <Text variant="caption">
                   {MUSCLE_GROUP_LABELS[item.muscleGroup]}
                   {item.equipment ? ` · ${EQUIPMENT_LABELS[item.equipment]}` : ''}
@@ -144,7 +144,7 @@ export default function PickExerciseScreen() {
         </ScrollView>
         {creating ? (
           <View style={styles.create}>
-            <Text variant="label">Crear ejercicio</Text>
+            <Text variant="bodyStrong">Crear ejercicio</Text>
             <TextField label="Nombre" value={newName} onChangeText={setNewName} error={newError} />
             <ScrollView
               horizontal
@@ -188,29 +188,29 @@ export default function PickExerciseScreen() {
 }
 
 const styles = StyleSheet.create({
-  top: { gap: spacing.md, paddingTop: spacing.md },
-  chips: { gap: spacing.sm },
+  top: { gap: space.md, paddingTop: space.md },
+  chips: { gap: space.sm },
   list: { flex: 1 },
   create: {
-    gap: spacing.md,
-    padding: spacing.md,
+    gap: space.md,
+    padding: space.md,
     borderRadius: radii.lg,
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
   },
-  createActions: { flexDirection: 'row', justifyContent: 'flex-end', gap: spacing.sm },
+  createActions: { flexDirection: 'row', justifyContent: 'flex-end', gap: space.sm },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    minHeight: touch.min + spacing.md,
-    paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.sm,
+    minHeight: hit.min + space.md,
+    paddingVertical: space.sm,
+    paddingHorizontal: space.sm,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.border,
     borderRadius: radii.md,
   },
-  rowOn: { backgroundColor: colors.successSurface },
-  rowText: { flex: 1, gap: spacing.xs },
-  cta: { marginVertical: spacing.md },
+  rowOn: { backgroundColor: colors.successMuted },
+  rowText: { flex: 1, gap: space.xs },
+  cta: { marginVertical: space.md },
 });

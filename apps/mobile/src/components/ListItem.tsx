@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
-import { colors, spacing, touch } from '../theme';
+import { colors, hit, space } from '../theme';
 
-import { Icon } from './Icon';
+import { Icon } from './icons';
 import { Text } from './Text';
 
 interface ListItemProps {
@@ -20,7 +20,7 @@ export function ListItem({ title, subtitle, trailing, onPress, chevron = true }:
   const content = (
     <>
       <View style={styles.texts}>
-        <Text variant="label" numberOfLines={1}>
+        <Text variant="bodyStrong" numberOfLines={1}>
           {title}
         </Text>
         {subtitle ? (
@@ -30,7 +30,7 @@ export function ListItem({ title, subtitle, trailing, onPress, chevron = true }:
         ) : null}
       </View>
       {trailing}
-      {onPress && chevron ? <Icon name="chevron" size={18} color="textMuted" /> : null}
+      {onPress && chevron ? <Icon name="chevron" size={18} color="textTertiary" /> : null}
     </>
   );
   if (!onPress) return <View style={styles.row}>{content}</View>;
@@ -50,12 +50,12 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.md,
-    minHeight: touch.min + spacing.md,
-    paddingVertical: spacing.md,
+    gap: space.md,
+    minHeight: hit.min + space.md,
+    paddingVertical: space.md,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.divider,
   },
-  texts: { flex: 1, gap: spacing.xs },
-  pressed: { opacity: 0.7 },
+  texts: { flex: 1, gap: space.xs },
+  pressed: { backgroundColor: colors.surface },
 });

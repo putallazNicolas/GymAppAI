@@ -2,7 +2,7 @@ import type { PlannedExercise } from '@gym/core';
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { spacing } from '../theme';
+import { space } from '../theme';
 
 import { Card } from './Card';
 import { IconButton } from './IconButton';
@@ -72,7 +72,7 @@ export function PlannedExerciseCard({
   return (
     <Card>
       <View style={styles.header}>
-        <Text variant="label" style={styles.name} numberOfLines={2}>
+        <Text variant="bodyStrong" style={styles.name} numberOfLines={2}>
           {name}
         </Text>
         <IconButton
@@ -132,8 +132,8 @@ export function PlannedExerciseCard({
 }
 
 const styles = StyleSheet.create({
-  header: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  header: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
   name: { flex: 1 },
-  fields: { flexDirection: 'row', gap: spacing.sm },
+  fields: { flexDirection: 'row', gap: space.sm },
   field: { flex: 1 },
 });

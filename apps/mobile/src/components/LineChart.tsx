@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import Svg, { Circle, G, Line, Polyline, Text as SvgText } from 'react-native-svg';
 
 import { formatNumber } from '../lib/format';
-import { colors, spacing, typography } from '../theme';
+import { colors, fonts, radii, space, type } from '../theme';
 
 import { Text } from './Text';
 
@@ -54,14 +54,15 @@ export function LineChart({ series, xLabels, unitLabel, height = 200 }: LineChar
                 x2={width - PAD.right}
                 y1={y(v)}
                 y2={y(v)}
-                stroke={colors.border}
+                stroke={colors.divider}
                 strokeWidth={1}
               />
               <SvgText
                 x={PAD.left - 6}
                 y={y(v) + 4}
-                fill={colors.textMuted}
-                fontSize={typography.size.xs}
+                fill={colors.textSecondary}
+                fontSize={type.label.fontSize}
+                fontFamily={fonts.bodyRegular}
                 textAnchor="end"
               >
                 {formatNumber(v, 0)}
@@ -73,8 +74,9 @@ export function LineChart({ series, xLabels, unitLabel, height = 200 }: LineChar
           <SvgText
             x={x(0)}
             y={height - 6}
-            fill={colors.textMuted}
-            fontSize={typography.size.xs}
+            fill={colors.textSecondary}
+            fontSize={type.label.fontSize}
+            fontFamily={fonts.bodyRegular}
             textAnchor={n <= 1 ? 'middle' : 'start'}
           >
             {xLabels[0]}
@@ -84,8 +86,9 @@ export function LineChart({ series, xLabels, unitLabel, height = 200 }: LineChar
           <SvgText
             x={x(n - 1)}
             y={height - 6}
-            fill={colors.textMuted}
-            fontSize={typography.size.xs}
+            fill={colors.textSecondary}
+            fontSize={type.label.fontSize}
+            fontFamily={fonts.bodyRegular}
             textAnchor="end"
           >
             {xLabels[n - 1]}
@@ -134,7 +137,7 @@ export function LineChart({ series, xLabels, unitLabel, height = 200 }: LineChar
 }
 
 const styles = StyleSheet.create({
-  legend: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.lg, marginTop: spacing.sm },
-  legendItem: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
-  swatch: { width: 12, height: 12, borderRadius: 6 },
+  legend: { flexDirection: 'row', flexWrap: 'wrap', gap: space.lg, marginTop: space.sm },
+  legendItem: { flexDirection: 'row', alignItems: 'center', gap: space.xs },
+  swatch: { width: 12, height: 12, borderRadius: radii.pill },
 });

@@ -1,11 +1,22 @@
-import { Pressable, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-import { colors, radii, touch } from '../theme';
+import { colors, hit, radii } from '../theme';
 
-import { Text } from './Text';
+import { Icon, type IconName } from './icons';
+import { PressableScale } from './PressableScale';
+
+/** Text glyphs accepted by the existing API, mapped to stroke icons (no emoji). */
+const GLYPHS: Record<string, IconName> = {
+  '↑': 'up',
+  '↓': 'down',
+  '✕': 'close',
+  '⋯': 'more',
+  '+': 'add',
+  '−': 'minus',
+};
 
 interface IconButtonProps {
-  /** Glyph shown inside, e.g. "↑", "↓", "✕", "⋯". */
+  /** Glyph shown inside, e.g. "↑", "↓", "✕", "⋯" (rendered as an SVG icon), or an icon name. */
   glyph: string;
   label: string;
   onPress: () => void;
@@ -13,7 +24,7 @@ interface IconButtonProps {
   danger?: boolean;
 }
 
-/** 48pt square text-glyph button for row actions. */
+/** 44pt square icon button for row actions. */
 export function IconButton({
   glyph,
   label,
@@ -21,31 +32,29 @@ export function IconButton({
   disabled = false,
   danger = false,
 }: IconButtonProps) {
+  const name = GLYPHS[glyph] ?? (glyph as IconName);
   return (
-    <Pressable
+    <PressableScale
       accessibilityRole="button"
       accessibilityLabel={label}
       accessibilityState={{ disabled }}
       disabled={disabled}
       onPress={onPress}
-      style={({ pressed }) => [styles.btn, disabled && styles.disabled, pressed && styles.pressed]}
+      style={[styles.btn, disabled && styles.disabled]}
     >
-      <Text variant="title" color={danger ? 'danger' : 'text'}>
-        {glyph}
-      </Text>
-    </Pressable>
+      <Icon name={name} size={20} color={danger ? 'danger' : 'textPrimary'} />
+    </PressableScale>
   );
 }
 
 const styles = StyleSheet.create({
   btn: {
-    width: touch.min,
-    height: touch.min,
+    width: hit.min,
+    height: hit.min,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: radii.md,
-    backgroundColor: colors.surfaceElevated,
+    backgroundColor: colors.surfaceRaised,
   },
   disabled: { opacity: 0.3 },
-  pressed: { opacity: 0.7 },
 });

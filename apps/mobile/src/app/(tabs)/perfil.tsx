@@ -19,7 +19,7 @@ import {
 import { useRepositories, useServices } from '../../data/DataProvider';
 import { useFocusAsync } from '../../data/useFocusAsync';
 import { attempt } from '../../lib/errors';
-import { colors, radii, spacing, touch } from '../../theme';
+import { colors, radii, space, hit } from '../../theme';
 
 const UNITS: WeightUnit[] = ['kg', 'lb'];
 
@@ -112,10 +112,10 @@ export default function PerfilScreen() {
 
   return (
     <ScreenContainer>
-      <Text variant="heading">Perfil</Text>
+      <Text variant="displayM">Perfil</Text>
       <ScrollView contentContainerStyle={styles.content}>
         <Card>
-          <Text variant="title">Unidad de peso</Text>
+          <Text variant="displayS">Unidad de peso</Text>
           <View style={styles.units}>
             {UNITS.map((u) => (
               <Chip
@@ -131,7 +131,7 @@ export default function PerfilScreen() {
 
         <Card>
           <View style={styles.switchRow}>
-            <Text variant="label" style={styles.switchLabel}>
+            <Text variant="bodyStrong" style={styles.switchLabel}>
               Temporizador de descanso
             </Text>
             <Switch
@@ -144,7 +144,7 @@ export default function PerfilScreen() {
         </Card>
 
         <View style={styles.warning} accessibilityRole="alert">
-          <Text color="warning" variant="label">
+          <Text color="accent" variant="bodyStrong">
             Tus datos se guardan solo en este teléfono. Si borrás la app, se pierden. Exportalos
             seguido.
           </Text>
@@ -167,20 +167,20 @@ export default function PerfilScreen() {
 }
 
 const styles = StyleSheet.create({
-  content: { gap: spacing.lg, paddingVertical: spacing.lg },
-  units: { flexDirection: 'row', gap: spacing.sm },
+  content: { gap: space.lg, paddingVertical: space.lg },
+  units: { flexDirection: 'row', gap: space.sm },
   switchRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    minHeight: touch.min,
+    minHeight: hit.min,
   },
   switchLabel: { flex: 1 },
   warning: {
-    padding: spacing.lg,
+    padding: space.lg,
     borderRadius: radii.md,
     borderWidth: 1,
-    borderColor: colors.warning,
+    borderColor: colors.accentBorder,
   },
   version: { textAlign: 'center' },
 });

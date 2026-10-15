@@ -11,3 +11,6 @@ export { ScreenContainer } from './ScreenContainer';
 export { SetRow } from './SetRow';
 export { Text } from './Text';
 export { TextField } from './TextField';
+export { ActionMenu, type ActionMenuItem } from './ActionMenu';
+export { IconButton } from './IconButton';
+export { PlannedExerciseCard } from './PlannedExerciseCard';

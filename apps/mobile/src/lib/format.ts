@@ -90,3 +90,43 @@ export function formatShortDate(input: Date | string): string {
   const d = typeof input === 'string' ? new Date(input) : input;
   return `${d.getDate()}/${d.getMonth() + 1}`;
 }
+
+const MONTHS_SHORT = [
+  'ene',
+  'feb',
+  'mar',
+  'abr',
+  'may',
+  'jun',
+  'jul',
+  'ago',
+  'sep',
+  'oct',
+  'nov',
+  'dic',
+];
+const WEEKDAYS_SHORT = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+
+/** Three-letter lowercase month: "oct" (local time). */
+export function formatMonthShort(input: Date | string): string {
+  const d = typeof input === 'string' ? new Date(input) : input;
+  return MONTHS_SHORT[d.getMonth()] ?? '';
+}
+
+/** "8 oct" (local time). */
+export function formatDayMonth(input: Date | string): string {
+  const d = typeof input === 'string' ? new Date(input) : input;
+  return `${d.getDate()} ${formatMonthShort(d)}`;
+}
+
+/** "Jue 15 oct" (local time). */
+export function formatWeekdayDayMonth(input: Date | string): string {
+  const d = typeof input === 'string' ? new Date(input) : input;
+  return `${WEEKDAYS_SHORT[d.getDay()]} ${formatDayMonth(d)}`;
+}
+
+/** "03/24" (month/two-digit year, local time). */
+export function formatMonthYear(input: Date | string): string {
+  const d = typeof input === 'string' ? new Date(input) : input;
+  return `${pad(d.getMonth() + 1)}/${pad(d.getFullYear() % 100)}`;
+}

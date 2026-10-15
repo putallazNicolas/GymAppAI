@@ -21,7 +21,19 @@ export const type = {
   numXL: { fontFamily: fonts.displayBold, fontSize: 40, lineHeight: 40, ...tnum },
   numL: { fontFamily: fonts.displayBold, fontSize: 32, lineHeight: 32, ...tnum },
   numM: { fontFamily: fonts.displayBold, fontSize: 25, lineHeight: 28, ...tnum },
+  /** Row values (history best set), 22. */
+  numRow: { fontFamily: fonts.displayBold, fontSize: 22, lineHeight: 24, ...tnum },
+  /** Chart readout values, 20. */
+  numRead: { fontFamily: fonts.displayBold, fontSize: 20, lineHeight: 22, ...tnum },
+  /** Small numbers: deltas, bar values, counts, 14. */
+  numXS: { fontFamily: fonts.displayBold, fontSize: 14, lineHeight: 16, ...tnum },
+  /** Chart axis labels (Y and week dates), 12. */
+  numAxis: { fontFamily: fonts.displayMedium, fontSize: 12, lineHeight: 14, ...tnum },
   numS: { fontFamily: fonts.displayMedium, fontSize: 17, lineHeight: 20, ...tnum },
+  /** Exercise name inside a selector card, 24. */
+  displayName: { fontFamily: fonts.displayBold, fontSize: 24, lineHeight: 26, ...upper },
+  /** kg / lb segmented pill labels, 22. */
+  unitPill: { fontFamily: fonts.display, fontSize: 22, lineHeight: 24, ...tnum },
   badge: { fontFamily: fonts.display, fontSize: 13, lineHeight: 16, ...tnum },
   body: { fontFamily: fonts.body, fontSize: 16, lineHeight: 22 },
   bodyStrong: { fontFamily: fonts.bodyBold, fontSize: 16, lineHeight: 22 },
@@ -37,6 +49,10 @@ export const type = {
   button: { fontFamily: fonts.bodyHeavy, fontSize: 18, lineHeight: 22 },
   buttonM: { fontFamily: fonts.bodyHeavy, fontSize: 16, lineHeight: 20 },
   buttonS: { fontFamily: fonts.bodyBold, fontSize: 15, lineHeight: 20 },
+  /** Range segmented control labels (1M, 3M…), 13. */
+  segment: { fontFamily: fonts.bodyBold, fontSize: 13, lineHeight: 16 },
+  /** SVG month labels on the chart X axis, 11. */
+  axisX: { fontFamily: fonts.bodySemi, fontSize: 11, lineHeight: 14 },
   tab: { fontFamily: fonts.bodyBold, fontSize: 11, lineHeight: 14 },
 } as const;
 

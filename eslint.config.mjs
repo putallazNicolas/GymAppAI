@@ -15,6 +15,15 @@ export default [
   },
   // Mobile app: Expo's recommended rules.
   ...expoConfig.map((c) => ({ ...c, files: c.files ?? ['apps/mobile/**/*.{js,jsx,ts,tsx}'] })),
+  {
+    files: ['apps/mobile/**/*.{js,jsx,ts,tsx}'],
+    settings: {
+      'import/resolver': {
+        typescript: { project: 'apps/mobile/tsconfig.json' },
+        node: true,
+      },
+    },
+  },
   // Core package: plain TypeScript.
   ...tseslint.configs.recommended.map((c) => ({ ...c, files: ['packages/core/**/*.ts'] })),
   {

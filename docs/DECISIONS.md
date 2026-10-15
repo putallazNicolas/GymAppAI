@@ -14,3 +14,11 @@ Formato: fecha — decisión — motivo.
 - 2026-10-15 — Seed de ejercicios se entrega en B1 (no B4), B4 queda para export/import + seed en SQLite. — El front necesita el catálogo para F2.
 - 2026-10-15 — Orden de back: B1 (memoria) → B3 (servicios) → B2 (SQLite) → B4. — Los servicios se escriben contra interfaces; así F3 tiene servicios reales antes.
 - 2026-10-15 — Un PR de un primer día ("PR") solo se reporta si existía historial previo del ejercicio. — Evita que la primera sesión llene el resumen de PRs.
+- 2026-10-15 — PRs se revisan y mergean con las herramientas GitHub MCP (gh sin auth). — Restricción del entorno.
+- 2026-10-15 — `isolation: "remote"` no aisló a los subagentes: corrieron en el mismo checkout. Se los movió a worktrees propios (`/home/user/wt-back`, `/home/user/wt-front`); los próximos se lanzan con `isolation: "worktree"`. — Evitar commits mezclados entre front y back.
+- 2026-10-15 — (F1) Tabs desde `expo-router/js-tabs` (el export de `expo-router` está deprecado en SDK 57). — API vigente.
+- 2026-10-15 — (F1) Íconos con `expo-symbols` vía un registro semántico `Icon` (nombres iOS/Android). — Incluido en Expo Go, sin deps nuevas.
+- 2026-10-15 — (F1) Color primario azul; verde reservado para "completado". — Que el verde signifique solo "hecho".
+- 2026-10-15 — (F1) Formato numérico es-AR propio ("1.234 kg", "82,5 kg") en vez de `Intl`. — Hermes/Intl inconsistente entre plataformas.
+- 2026-10-15 — (F1) Botón ✓ de 48 pt; fila de serie ≥ 56 pt. — Táctil grande sin ser un botón "Cargar serie".
+- 2026-10-15 — ESLint resuelve el alias `@/` del mobile con `eslint-import-resolver-typescript`. — Pedido del agente de front.

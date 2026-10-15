@@ -7,3 +7,5 @@ export * from './labels';
 export * from './seed';
 export * from './memory';
 export * from './services';
+
+export * from './sqlite';

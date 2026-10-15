@@ -1,14 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { EmptyState, ScreenContainer, Text } from '../../components';
 
 export default function RutinasScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Rutinas</Text>
-    </View>
+    <ScreenContainer>
+      <Text variant="heading">Mis rutinas</Text>
+      <EmptyState icon="routines" title="Mis rutinas" message="Esta pantalla llega pronto." />
+    </ScreenContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  text: { color: '#FFFFFF', fontSize: 20 },
-});

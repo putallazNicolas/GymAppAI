@@ -6,3 +6,4 @@ export * from './utils';
 export * from './labels';
 export * from './seed';
 export * from './memory';
+export * from './services';

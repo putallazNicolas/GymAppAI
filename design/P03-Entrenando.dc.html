@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Entrenando</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#050505}
+.num{font-family:'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums}
+a{color:inherit;text-decoration:none}
+input{font:inherit;color:inherit;background:none;border:0;outline:none;padding:0;margin:0;width:100%;text-align:center}
+input::placeholder{color:#5E5E64}
+button{font:inherit;cursor:pointer}
+.scroll::-webkit-scrollbar{display:none}
+@keyframes pop{0%{transform:scale(0.84)}60%{transform:scale(1.08)}100%{transform:scale(1)}}
+.pop{animation:pop 320ms cubic-bezier(0.34,1.56,0.64,1)}
+@keyframes rowdone{0%{background-color:rgba(61,220,132,0.42)}100%{background-color:rgba(61,220,132,0.12)}}
+.rowdone{animation:rowdone 600ms cubic-bezier(0.22,1,0.36,1)}
+@keyframes cardin{0%{opacity:0;transform:translateY(14px)}100%{opacity:1;transform:none}}
+.cardin{animation:cardin 320ms cubic-bezier(0.22,1,0.36,1)}
+@keyframes collapsein{0%{opacity:0;transform:scaleY(0.6)}100%{opacity:1;transform:none}}
+.collapsein{animation:collapsein 280ms cubic-bezier(0.22,1,0.36,1);transform-origin:top}
+@keyframes prin{0%{opacity:0;transform:scale(0.4)}70%{transform:scale(1.15)}100%{opacity:1;transform:none}}
+.prin{animation:prin 420ms cubic-bezier(0.34,1.56,0.64,1)}
+@keyframes restin{0%{opacity:0;transform:translateY(24px)}100%{opacity:1;transform:none}}
+.restin{animation:restin 260ms cubic-bezier(0.22,1,0.36,1)}
+</style>
+</helmet>
+<div style="width:393px;height:852px;box-sizing:border-box;padding-top:58px;background:#0B0B0C;color:#F4F4F2;font-family:'Barlow',sans-serif;position:relative;overflow:hidden">
+
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:0 16px 14px">
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#FF5B1F">ENTRENANDO · FUERZA 4 DÍAS</span>
+      <h1 class="num" style="margin:0;font-size:38px;line-height:0.95;font-weight:800;text-transform:uppercase">Piernas A</h1>
+    </div>
+    <a href="P04-Resumen.dc.html" style="height:44px;padding:0 18px;box-sizing:border-box;border-radius:12px;border:1.5px solid #FF5B1F;color:#FF5B1F;font-weight:700;font-size:15px;display:flex;align-items:center">Finalizar</a>
+  </div>
+
+  <div style="margin:0 16px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));background:#141416;border:1px solid #2A2A2E;border-radius:14px;overflow:hidden">
+    <div style="padding:10px 12px;display:flex;flex-direction:column;gap:3px">
+      <span style="font-size:11px;font-weight:600;letter-spacing:0.12em;color:#9A9A9F">TIEMPO</span>
+      <span class="num" style="font-size:32px;font-weight:700;line-height:1">{{timeLabel}}</span>
+    </div>
+    <div style="padding:10px 12px;display:flex;flex-direction:column;gap:3px;border-left:1px solid #2A2A2E">
+      <span style="font-size:11px;font-weight:600;letter-spacing:0.12em;color:#9A9A9F">SERIES</span>
+      <span class="num" style="font-size:32px;font-weight:700;line-height:1">{{doneSets}}<span style="color:#7C7C82;font-weight:600">/{{totalSets}}</span></span>
+    </div>
+    <div style="padding:10px 12px;display:flex;flex-direction:column;gap:3px;border-left:1px solid #2A2A2E">
+      <span style="font-size:11px;font-weight:600;letter-spacing:0.12em;color:#9A9A9F">VOLUMEN</span>
+      <span class="num" style="font-size:32px;font-weight:700;line-height:1">{{volumeLabel}}<span style="font-size:16px;color:#7C7C82;font-weight:600"> kg</span></span>
+    </div>
+  </div>
+
+  <div style="margin:10px 16px 0;display:flex;gap:7px" aria-hidden="true">
+    <sc-for list="{{exercises}}" as="e" hint-placeholder-count="4">
+      <div style="flex:{{e.flex}};display:flex;gap:3px">
+        <sc-for list="{{e.segs}}" as="seg" hint-placeholder-count="4">
+          <span style="flex:1;height:5px;border-radius:2px;background:{{seg.bg}};transition:background-color 220ms ease-out"></span>
+        </sc-for>
+      </div>
+    </sc-for>
+  </div>
+
+  <div class="scroll" style="position:absolute;top:218px;left:0;right:0;bottom:0;overflow-y:auto;padding:0 16px 130px;box-sizing:border-box;display:flex;flex-direction:column;gap:8px">
+    <sc-for list="{{exercises}}" as="e" hint-placeholder-count="4">
+
+      <sc-if value="{{e.isDone}}" hint-placeholder-val="{{false}}">
+        <div class="collapsein" style="flex:none;height:56px;box-sizing:border-box;padding:0 14px;border-radius:14px;background:rgba(61,220,132,0.10);border:1px solid rgba(61,220,132,0.30);display:flex;align-items:center;gap:12px">
+          <span style="width:28px;height:28px;border-radius:14px;background:#3DDC84;color:#0B0B0C;display:flex;align-items:center;justify-content:center;flex:none">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+          </span>
+          <span class="num" style="flex:1;min-width:0;font-size:22px;font-weight:700;color:#3DDC84;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{e.name}}</span>
+          <span style="font-size:13px;color:#9A9A9F;white-space:nowrap">{{e.doneLabel}} · mejor <span class="num" style="font-size:17px;font-weight:700;color:#F4F4F2">{{e.best}}</span></span>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{e.isCur}}" hint-placeholder-val="{{true}}">
+        <section class="cardin" style="flex:none;padding:14px 8px 10px;border-radius:16px;background:#141416;border:1px solid rgba(255,91,31,0.45)">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:0 6px">
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#FF5B1F">{{e.idxLabel}}</span>
+              <h2 class="num" style="margin:0;font-size:27px;line-height:1.02;font-weight:700;text-transform:uppercase">{{e.name}}</h2>
+            </div>
+            <span class="num" style="padding:3px 10px;border-radius:8px;background:#1C1C1F;border:1px solid #2A2A2E;font-size:21px;font-weight:700;white-space:nowrap">{{e.plan}}</span>
+          </div>
+          <div style="padding:4px 6px 12px;font-size:13px;color:#9A9A9F">{{e.sub}}</div>
+
+          <div style="display:grid;grid-template-columns:24px minmax(0,1fr) 72px 60px 44px;gap:8px;padding:0 8px 6px;font-size:11px;font-weight:600;letter-spacing:0.12em;color:#7C7C82">
+            <span>#</span><span>ANTERIOR</span><span style="text-align:center">KG</span><span style="text-align:center">REPS</span><span style="text-align:center">OK</span>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <sc-for list="{{e.rows}}" as="r" hint-placeholder-count="4">
+
+              <sc-if value="{{r.isDone}}" hint-placeholder-val="{{false}}">
+                <div class="{{r.rowClass}}" style="display:grid;grid-template-columns:24px minmax(0,1fr) 72px 60px 44px;gap:8px;align-items:center;height:52px;padding:0 8px;border-radius:10px;background:rgba(61,220,132,0.12)">
+                  <span class="num" style="font-size:20px;font-weight:700;color:#3DDC84">{{r.n}}</span>
+                  <span style="display:flex;align-items:center;gap:6px;min-width:0">
+                    <span class="num" style="font-size:17px;color:#7C7C82;white-space:nowrap">{{r.prev}}</span>
+                    <sc-if value="{{r.isPR}}" hint-placeholder-val="{{false}}">
+                      <span class="num prin" style="padding:1px 6px;border-radius:5px;background:#FFC83D;color:#0B0B0C;font-size:13px;font-weight:800;letter-spacing:0.04em">PR</span>
+                    </sc-if>
+                  </span>
+                  <span class="num" style="font-size:25px;font-weight:700;text-align:center">{{r.kgShow}}</span>
+                  <span class="num" style="font-size:25px;font-weight:700;text-align:center">{{r.repsShow}}</span>
+                  <button class="{{r.pop}}" onClick="{{r.toggle}}" aria-label="{{r.doneLabel}}" style="width:44px;height:44px;border-radius:10px;border:0;background:#3DDC84;color:#0B0B0C;display:flex;align-items:center;justify-content:center">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+                  </button>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{r.isFocus}}" hint-placeholder-val="{{false}}">
+                <div style="display:grid;grid-template-columns:24px minmax(0,1fr) 72px 60px 44px;gap:8px;align-items:center;height:56px;padding:0 8px;border-radius:10px;background:#1C1C1F;box-shadow:inset 0 0 0 1.5px #FF5B1F;transition:box-shadow 200ms ease-out">
+                  <span class="num" style="font-size:20px;font-weight:700;color:#FF5B1F">{{r.n}}</span>
+                  <span class="num" style="font-size:17px;color:#9A9A9F">{{r.prev}}</span>
+                  <label class="num" style="height:42px;border-radius:8px;background:#0B0B0C;box-shadow:inset 0 0 0 2px #FF5B1F;display:flex;align-items:center;font-size:25px;font-weight:700">
+                    <input type="text" inputmode="decimal" value="{{r.kg}}" placeholder="{{r.kgPh}}" onChange="{{r.onKg}}" aria-label="{{r.kgLabel}}">
+                  </label>
+                  <label class="num" style="height:42px;border-radius:8px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;display:flex;align-items:center;font-size:25px;font-weight:700">
+                    <input type="text" inputmode="numeric" value="{{r.reps}}" placeholder="{{r.repsPh}}" onChange="{{r.onReps}}" aria-label="{{r.repsLabel}}">
+                  </label>
+                  <button onClick="{{r.toggle}}" aria-label="{{r.checkLabel}}" style="width:44px;height:44px;border-radius:10px;border:1.5px solid #FF5B1F;background:rgba(255,91,31,0.10);color:#FF5B1F;display:flex;align-items:center;justify-content:center">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+                  </button>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{r.isPending}}" hint-placeholder-val="{{true}}">
+                <div style="display:grid;grid-template-columns:24px minmax(0,1fr) 72px 60px 44px;gap:8px;align-items:center;height:52px;padding:0 8px;border-radius:10px">
+                  <span class="num" style="font-size:20px;font-weight:700;color:#7C7C82">{{r.n}}</span>
+                  <span class="num" style="font-size:17px;color:#7C7C82">{{r.prev}}</span>
+                  <label class="num" style="height:42px;border-radius:8px;box-shadow:inset 0 0 0 1px #2A2A2E;display:flex;align-items:center;font-size:25px;font-weight:600;color:#C9C9CC">
+                    <input type="text" inputmode="decimal" value="{{r.kg}}" placeholder="{{r.kgPh}}" onChange="{{r.onKg}}" aria-label="{{r.kgLabel}}">
+                  </label>
+                  <label class="num" style="height:42px;border-radius:8px;box-shadow:inset 0 0 0 1px #2A2A2E;display:flex;align-items:center;font-size:25px;font-weight:600;color:#C9C9CC">
+                    <input type="text" inputmode="numeric" value="{{r.reps}}" placeholder="{{r.repsPh}}" onChange="{{r.onReps}}" aria-label="{{r.repsLabel}}">
+                  </label>
+                  <button onClick="{{r.toggle}}" aria-label="{{r.checkLabel}}" style="width:44px;height:44px;border-radius:10px;border:1.5px solid #3A3A3F;background:transparent;color:#5E5E64;display:flex;align-items:center;justify-content:center">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+                  </button>
+                </div>
+              </sc-if>
+
+            </sc-for>
+          </div>
+        </section>
+      </sc-if>
+
+      <sc-if value="{{e.isNext}}" hint-placeholder-val="{{false}}">
+        <div style="flex:none;height:64px;box-sizing:border-box;padding:0 14px;border-radius:14px;background:#141416;border:1px solid #2A2A2E;display:flex;align-items:center;gap:12px">
+          <div style="flex:1;display:flex;flex-direction:column;gap:1px">
+            <span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">SIGUIENTE</span>
+            <span class="num" style="font-size:22px;font-weight:700;text-transform:uppercase">{{e.name}}</span>
+          </div>
+          <span class="num" style="font-size:20px;font-weight:700;color:#9A9A9F">{{e.plan}}</span>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{e.isLater}}" hint-placeholder-val="{{false}}">
+        <div style="flex:none;height:56px;box-sizing:border-box;padding:0 14px;border-radius:14px;border:1px solid #1F1F22;display:flex;align-items:center;gap:12px">
+          <span class="num" style="flex:1;font-size:21px;font-weight:600;text-transform:uppercase;color:#7C7C82">{{e.name}}</span>
+          <span class="num" style="font-size:19px;font-weight:600;color:#7C7C82">{{e.plan}}</span>
+        </div>
+      </sc-if>
+
+    </sc-for>
+
+    <sc-if value="{{allDone}}" hint-placeholder-val="{{false}}">
+      <section class="cardin" style="flex:none;margin-top:8px;padding:20px 16px 16px;border-radius:16px;background:#141416;border:1px solid rgba(61,220,132,0.35);display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center">
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#3DDC84">TODAS LAS SERIES COMPLETAS</span>
+        <span class="num" style="font-size:30px;font-weight:800;text-transform:uppercase">Buen laburo</span>
+        <a href="P04-Resumen.dc.html" style="margin-top:10px;align-self:stretch;height:56px;border-radius:14px;background:#FF5B1F;color:#0B0B0C;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800">Finalizar y ver resumen</a>
+      </section>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{restOn}}" hint-placeholder-val="{{true}}">
+    <div class="restin" role="timer" aria-label="Descanso" style="position:absolute;left:12px;right:12px;bottom:30px;height:68px;box-sizing:border-box;padding:0 8px 0 12px;border-radius:20px;background:#1C1C1F;border:1px solid #2F2F33;box-shadow:0 16px 40px rgba(0,0,0,0.7);display:flex;align-items:center;gap:12px">
+      <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true">
+        <circle cx="22" cy="22" r="18" fill="none" stroke="#2F2F33" stroke-width="4"/>
+        <circle cx="22" cy="22" r="18" fill="none" stroke="{{restColor}}" stroke-width="4" stroke-linecap="round" stroke-dasharray="113.1" stroke-dashoffset="{{restOffset}}" transform="rotate(-90 22 22)" style="transition:stroke-dashoffset 1s linear"/>
+      </svg>
+      <div style="flex:1;display:flex;flex-direction:column">
+        <span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">{{restTitle}}</span>
+        <span class="num" style="font-size:30px;font-weight:700;line-height:1">{{restLabel}}</span>
+      </div>
+      <button onClick="{{addRest}}" style="height:44px;padding:0 14px;border-radius:12px;border:0;background:#2A2A2E;color:#F4F4F2;font-weight:700;font-size:15px">+15 s</button>
+      <button onClick="{{closeRest}}" aria-label="Descartar descanso" style="width:44px;height:44px;border-radius:12px;border:0;background:transparent;color:#9A9A9F;display:flex;align-items:center;justify-content:center">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":393,"height":852}}'>
+function S(prevKg, prevReps, kg, reps, done) {
+  return { prevKg: prevKg, prevReps: prevReps, kg: kg == null ? '' : String(kg), reps: reps == null ? '' : String(reps), done: !!done };
+}
+function n(v) { var x = parseFloat(String(v).replace(',', '.')); return isNaN(x) ? 0 : x; }
+function fk(v) { return String(v).replace('.', ','); }
+function e1rm(kg, reps) { return reps > 1 ? kg * (1 + reps / 30) : kg; }
+function clock(s) {
+  var h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), ss = s % 60;
+  var p = function (x) { return (x < 10 ? '0' : '') + x; };
+  return h > 0 ? h + ':' + p(m) + ':' + p(ss) : m + ':' + p(ss);
+}
+function initial() {
+  return [
+    { name: 'Sentadilla trasera', plan: '4 × 5', rest: 180, note: 'Barra alta, profundidad bajo paralelo', hist: 163.3,
+      sets: [S(125, 5, 130, 5, 1), S(130, 5, 135, 5, 1), S(135, 5, 140, 5, 1), S(140, 5, 140, 5, 1)] },
+    { name: 'Peso muerto rumano', plan: '4 × 8-10', rest: 120, note: 'Barra, agarre prono', hist: 133.3,
+      sets: [S(100, 10, 105, 10, 1), S(100, 10, 105, 9, 1), S(100, 9, 105, null, 0), S(100, 8, 105, null, 0)] },
+    { name: 'Prensa 45°', plan: '3 × 12', rest: 90, note: 'Pies a la altura de los hombros', hist: 252,
+      sets: [S(180, 12, 190, null), S(180, 12, 190, null), S(180, 11, 190, null)] },
+    { name: 'Camilla femoral', plan: '3 × 10-12', rest: 75, note: 'Bajada en 3 segundos', hist: 63,
+      sets: [S(45, 12, null, null), S(45, 11, null, null), S(45, 10, null, null)] }
+  ];
+}
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { ex: initial(), elapsed: 42 * 60 + 17, restOn: true, rest: 84, restTotal: 120, pop: null, collapsed: null };
+  }
+  componentDidMount() {
+    this.timer = setInterval(() => {
+      this.setState((s) => ({ elapsed: s.elapsed + 1, rest: s.restOn ? Math.max(0, s.rest - 1) : s.rest }));
+    }, 1000);
+  }
+  componentWillUnmount() { clearInterval(this.timer); }
+  clone() { return this.state.ex.map((e) => Object.assign({}, e, { sets: e.sets.map((x) => Object.assign({}, x)) })); }
+  edit(ei, si, key, value) {
+    const ex = this.clone();
+    ex[ei].sets[si][key] = value;
+    this.setState({ ex: ex });
+  }
+  toggle(ei, si) {
+    const ex = this.clone();
+    const set = ex[ei].sets[si];
+    if (set.done) { set.done = false; this.setState({ ex: ex, pop: null }); return; }
+    if (!set.kg) set.kg = String(set.prevKg);
+    if (!set.reps) set.reps = String(set.prevReps);
+    set.done = true;
+    const finished = ex[ei].sets.every((x) => x.done);
+    this.setState({ ex: ex, pop: ei + '-' + si, restOn: true, rest: ex[ei].rest, restTotal: ex[ei].rest, collapsed: finished ? ei : null });
+  }
+  renderVals() {
+    const s = this.state;
+    const ex = s.ex;
+    const cur = ex.findIndex((e) => e.sets.some((x) => !x.done));
+    let done = 0, total = 0, vol = 0;
+    const exercises = ex.map((e, ei) => {
+      const doneCount = e.sets.filter((x) => x.done).length;
+      done += doneCount; total += e.sets.length;
+      const isCur = ei === cur;
+      const isDone = doneCount === e.sets.length;
+      const focus = isCur ? e.sets.findIndex((x) => !x.done) : -1;
+      let runBest = e.hist, bestE = 0, bestLabel = '';
+      const rows = e.sets.map((x, si) => {
+        const kg = n(x.kg || x.prevKg), reps = n(x.reps || x.prevReps);
+        let isPR = false;
+        if (x.done) {
+          vol += kg * reps;
+          const est = e1rm(kg, reps);
+          if (est > runBest + 0.05) { isPR = true; runBest = est; }
+          if (est > bestE) { bestE = est; bestLabel = fk(kg) + ' × ' + reps; }
+        }
+        const key = ei + '-' + si;
+        return {
+          n: si + 1,
+          prev: fk(x.prevKg) + ' × ' + x.prevReps,
+          kg: x.kg, reps: x.reps,
+          kgShow: fk(kg), repsShow: reps,
+          kgPh: fk(x.prevKg), repsPh: String(x.prevReps),
+          isDone: x.done, isFocus: si === focus, isPending: !x.done && si !== focus,
+          isPR: isPR,
+          pop: s.pop === key ? 'pop' : '',
+          rowClass: s.pop === key ? 'rowdone' : '',
+          kgLabel: 'Kg, serie ' + (si + 1), repsLabel: 'Reps, serie ' + (si + 1),
+          checkLabel: 'Completar serie ' + (si + 1), doneLabel: 'Serie ' + (si + 1) + ' completada. Tocá para deshacer',
+          toggle: () => this.toggle(ei, si),
+          onKg: (ev) => this.edit(ei, si, 'kg', ev.target.value),
+          onReps: (ev) => this.edit(ei, si, 'reps', ev.target.value)
+        };
+      });
+      return {
+        name: e.name, plan: e.plan,
+        sub: 'Descanso ' + clock(e.rest) + ' · ' + e.note,
+        idxLabel: 'EJERCICIO ' + (ei + 1) + ' DE ' + ex.length,
+        isDone: isDone, isCur: isCur,
+        isNext: !isDone && cur >= 0 && ei === cur + 1,
+        isLater: !isDone && !isCur && !(cur >= 0 && ei === cur + 1),
+        doneLabel: doneCount + '/' + e.sets.length,
+        best: bestLabel,
+        flex: e.sets.length,
+        rows: rows,
+        segs: e.sets.map((x, si) => ({ bg: x.done ? '#3DDC84' : (si === focus ? '#FF5B1F' : '#2A2A2E') }))
+      };
+    });
+    const restLeft = s.rest;
+    return {
+      exercises: exercises,
+      allDone: cur === -1,
+      timeLabel: clock(s.elapsed),
+      doneSets: done, totalSets: total,
+      volumeLabel: Math.round(vol).toLocaleString('es-AR'),
+      restOn: s.restOn,
+      restTitle: restLeft === 0 ? 'A LA BARRA' : 'DESCANSO',
+      restLabel: clock(restLeft),
+      restColor: restLeft === 0 ? '#3DDC84' : '#FF5B1F',
+      restOffset: s.restTotal ? 113.1 * (1 - restLeft / s.restTotal) : 0,
+      addRest: () => this.setState((st) => ({ rest: st.rest + 15, restTotal: Math.max(st.restTotal, st.rest + 15) })),
+      closeRest: () => this.setState({ restOn: false })
+    };
+  }
+}
+</script>
+</body>
+</html>

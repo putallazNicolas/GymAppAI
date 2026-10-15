@@ -4,3 +4,5 @@ dist
 coverage
 package-lock.json
 apps/mobile/assets
+design/*.dc.html
+design/canvas.json

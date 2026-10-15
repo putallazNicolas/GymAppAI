@@ -53,3 +53,9 @@ Formato: fecha — decisión — motivo.
 - 2026-10-15 — (F4) Switch "Temporizador de descanso" en Perfil. — El setting ya existía en el contrato.
 - 2026-10-15 — (F5) Selector de Progreso: "con historial" según los últimos 100 entrenamientos finalizados. — Evitar ~68 consultas por foco.
 - 2026-10-15 — (F5) Entrenando guarda los valores pendientes (`flushAll`) al finalizar, al cambiar de ejercicio y al ir a segundo plano. — No perder lo tipeado.
+- 2026-10-15 — (Rediseño) Diseño "A · Plataforma" copiado a `design/` (versión 1792031927-2d26 del canvas); los `.dc.html` y `canvas.json` quedan fuera de Prettier para conservar la copia exacta. — Los subagentes necesitan el diseño en el repo.
+- 2026-10-15 — (Rediseño, choque) Placeholder de reps en Entrenando = reps planificadas (SCREENS 4.2), no lo de la última vez (P03). — El flujo de SCREENS gana.
+- 2026-10-15 — (Rediseño, choque) Se omite "SEMANA 1/4" del header de Hoy (P01). — Periodización por bloques fuera de V1.
+- 2026-10-15 — (Rediseño) Badge "PR" en vivo por serie calculado en el cliente con el mejor e1RM histórico; descanso con "+15 s", "A LA BARRA" y cierre a los 5 s como en P03. — No cambian el flujo de 4.2.
+- 2026-10-15 — (Rediseño) Se usa el `theme.ts` de S3 tal cual como base del tema (incluye `accentPressed`, `accentBorder`, `successBorder`, `chartWeight` y `motion`, que no estaban en el brief). — Es la fuente del diseñador.
+- 2026-10-15 — (Rediseño) Los agentes de rediseño se lanzan con `isolation: "worktree"` y un agente de front nuevo. — Remote no aisló; el agente anterior tenía el contexto casi lleno.

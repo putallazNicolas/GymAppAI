@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Armar día</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#050505}
+.num{font-family:'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer}
+button:disabled{cursor:default;opacity:0.35}
+input{font:inherit;color:inherit;background:none;border:0;outline:none;padding:0;margin:0;width:100%}
+input::placeholder{color:#5E5E64}
+@keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.18)}100%{transform:scale(1)}}
+.bump{animation:bump 200ms ease-out}
+</style>
+</helmet>
+<div style="width:393px;height:1180px;box-sizing:border-box;padding-top:50px;background:#0B0B0C;color:#F4F4F2;font-family:'Barlow',sans-serif;position:relative">
+
+  <div style="height:44px;padding:0 8px;display:flex;align-items:center;justify-content:space-between">
+    <a href="P06-Armar-Rutina.dc.html" style="height:44px;padding:0 8px;display:flex;align-items:center;gap:2px;color:#FF5B1F;font-size:16px;font-weight:600">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Fuerza 4 días
+    </a>
+    <span style="padding:0 10px;display:flex;align-items:center;gap:6px;font-size:13px;color:#9A9A9F">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3DDC84" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Guardado
+    </span>
+  </div>
+
+  <label style="margin:10px 16px 0;display:flex;flex-direction:column;gap:6px">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">DÍA 1 · NOMBRE</span>
+    <span class="num" style="display:block;padding-bottom:6px;border-bottom:2px solid #2A2A2E;font-size:38px;line-height:1.05;font-weight:800;text-transform:uppercase">
+      <input type="text" value="Piernas A" aria-label="Nombre del día">
+    </span>
+  </label>
+
+  <div style="margin:20px 16px 8px;display:flex;align-items:baseline;justify-content:space-between">
+    <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">EJERCICIOS <span class="num" style="font-size:16px;color:#F4F4F2">{{count}}</span></span>
+    <span style="font-size:12px;color:#7C7C82"><span class="num" style="font-size:15px;color:#C9C9CC">{{totalSets}}</span> series en total</span>
+  </div>
+
+  <div style="margin:0 16px;display:flex;flex-direction:column;gap:10px">
+    <sc-for list="{{items}}" as="it" hint-placeholder-count="4">
+      <section style="padding:10px 12px 14px 14px;border-radius:16px;background:#141416;border:1px solid #2A2A2E;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:6px">
+          <span class="num" style="width:22px;font-size:22px;font-weight:800;color:#FF5B1F">{{it.n}}</span>
+          <span class="num" style="flex:1;min-width:0;font-size:22px;font-weight:700;text-transform:uppercase;line-height:1.05">{{it.name}}</span>
+          <button onClick="{{it.up}}" disabled="{{it.first}}" aria-label="{{it.upLabel}}" style="width:40px;height:44px;border:0;border-radius:10px;background:transparent;color:#C9C9CC;display:flex;align-items:center;justify-content:center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+          </button>
+          <button onClick="{{it.down}}" disabled="{{it.last}}" aria-label="{{it.downLabel}}" style="width:40px;height:44px;border:0;border-radius:10px;background:transparent;color:#C9C9CC;display:flex;align-items:center;justify-content:center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+          </button>
+          <button onClick="{{it.remove}}" aria-label="{{it.removeLabel}}" style="width:44px;height:44px;border:0;border-radius:10px;background:transparent;color:#9A9A9F;display:flex;align-items:center;justify-content:center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>
+          </button>
+        </div>
+
+        <div style="display:grid;grid-template-columns:132px minmax(0,1fr) minmax(0,1fr);gap:8px">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span style="font-size:11px;font-weight:600;letter-spacing:0.12em;color:#9A9A9F">SERIES</span>
+            <div style="height:48px;border-radius:10px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center">
+              <button onClick="{{it.dec}}" aria-label="{{it.decLabel}}" style="height:48px;border:0;background:transparent;color:#C9C9CC;display:flex;align-items:center;justify-content:center">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg>
+              </button>
+              <span class="num {{it.bump}}" style="text-align:center;font-size:26px;font-weight:800">{{it.sets}}</span>
+              <button onClick="{{it.inc}}" aria-label="{{it.incLabel}}" style="height:48px;border:0;background:transparent;color:#FF5B1F;display:flex;align-items:center;justify-content:center">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+              </button>
+            </div>
+          </div>
+          <label style="display:flex;flex-direction:column;gap:4px">
+            <span style="font-size:11px;font-weight:600;letter-spacing:0.12em;color:#9A9A9F">REPS</span>
+            <span class="num" style="height:48px;padding:0 10px;border-radius:10px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;display:flex;align-items:center;font-size:24px;font-weight:700">
+              <input type="text" value="{{it.reps}}" onChange="{{it.onReps}}" placeholder="8-10" aria-label="{{it.repsLabel}}">
+            </span>
+          </label>
+          <label style="display:flex;flex-direction:column;gap:4px">
+            <span style="font-size:11px;font-weight:600;letter-spacing:0.12em;color:#9A9A9F">DESCANSO</span>
+            <span class="num" style="height:48px;padding:0 10px;border-radius:10px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;display:flex;align-items:center;font-size:24px;font-weight:700">
+              <input type="text" inputmode="numeric" value="{{it.rest}}" placeholder="—" aria-label="{{it.restLabel}}">
+            </span>
+          </label>
+        </div>
+
+        <label style="height:44px;padding:0 12px;border-radius:10px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;display:flex;align-items:center;gap:8px;font-size:15px;color:#C9C9CC">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7C7C82" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg>
+          <input type="text" value="{{it.note}}" placeholder="Notas (opcional)" aria-label="{{it.noteLabel}}">
+        </label>
+      </section>
+    </sc-for>
+  </div>
+
+  <a href="P08-Elegir-Ejercicio.dc.html" style="margin:12px 16px 0;height:56px;border-radius:14px;border:1.5px dashed #3A3A3F;color:#F4F4F2;display:flex;align-items:center;justify-content:center;gap:8px;font-size:16px;font-weight:700">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF5B1F" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+    Agregar ejercicio
+  </a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":393,"height":1180}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      bumped: null,
+      items: [
+        { id: 'sq', name: 'Sentadilla trasera', sets: 4, reps: '5', rest: '3:00', note: 'Barra alta, profundidad bajo paralelo' },
+        { id: 'rdl', name: 'Peso muerto rumano', sets: 4, reps: '8-10', rest: '2:00', note: 'Barra, agarre prono' },
+        { id: 'lp', name: 'Prensa 45°', sets: 3, reps: '12', rest: '1:30', note: '' },
+        { id: 'lc', name: 'Camilla femoral', sets: 3, reps: '10-12', rest: '1:15', note: 'Bajada en 3 segundos' }
+      ]
+    };
+  }
+  patch(i, obj) {
+    const items = this.state.items.map((x, k) => (k === i ? Object.assign({}, x, obj) : x));
+    this.setState({ items: items });
+  }
+  move(i, dir) {
+    const items = this.state.items.slice();
+    const j = i + dir;
+    if (j < 0 || j >= items.length) return;
+    const t = items[i]; items[i] = items[j]; items[j] = t;
+    this.setState({ items: items });
+  }
+  renderVals() {
+    const items = this.state.items;
+    return {
+      count: items.length,
+      totalSets: items.reduce((a, x) => a + x.sets, 0),
+      items: items.map((x, i) => ({
+        n: i + 1, name: x.name, sets: x.sets, reps: x.reps, rest: x.rest, note: x.note,
+        first: i === 0, last: i === items.length - 1,
+        bump: this.state.bumped === x.id + x.sets ? 'bump' : '',
+        upLabel: 'Subir ' + x.name, downLabel: 'Bajar ' + x.name, removeLabel: 'Eliminar ' + x.name,
+        decLabel: 'Una serie menos', incLabel: 'Una serie más',
+        repsLabel: 'Reps de ' + x.name, restLabel: 'Descanso de ' + x.name, noteLabel: 'Notas de ' + x.name,
+        up: () => this.move(i, -1),
+        down: () => this.move(i, 1),
+        remove: () => this.setState({ items: items.filter((y) => y.id !== x.id) }),
+        dec: () => { const v = Math.max(1, x.sets - 1); this.setState({ bumped: x.id + v }); this.patch(i, { sets: v }); },
+        inc: () => { const v = Math.min(12, x.sets + 1); this.setState({ bumped: x.id + v }); this.patch(i, { sets: v }); },
+        onReps: (e) => this.patch(i, { reps: e.target.value })
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

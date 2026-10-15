@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Mis rutinas</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#050505}
+.num{font-family:'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer}
+@keyframes menuin{0%{opacity:0;transform:scale(0.92) translateY(-6px)}100%{opacity:1;transform:none}}
+.menuin{animation:menuin 180ms cubic-bezier(0.22,1,0.36,1);transform-origin:top right}
+@keyframes fade{0%{opacity:0}100%{opacity:1}}
+.fade{animation:fade 180ms ease-out}
+@keyframes dlg{0%{opacity:0;transform:scale(0.94)}100%{opacity:1;transform:none}}
+.dlg{animation:dlg 220ms cubic-bezier(0.22,1,0.36,1)}
+</style>
+</helmet>
+<div style="width:393px;height:852px;box-sizing:border-box;padding-top:58px;background:#0B0B0C;color:#F4F4F2;font-family:'Barlow',sans-serif;position:relative;overflow:hidden">
+
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:0 16px">
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">3 RUTINAS · 2 ARCHIVADAS</span>
+      <h1 class="num" style="margin:0;font-size:38px;line-height:0.95;font-weight:800;text-transform:uppercase">Rutinas</h1>
+    </div>
+    <a href="P06-Armar-Rutina.dc.html" style="height:44px;padding:0 16px 0 12px;border-radius:12px;background:#FF5B1F;color:#0B0B0C;display:flex;align-items:center;gap:6px;font-size:15px;font-weight:800">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      Nueva rutina
+    </a>
+  </div>
+
+  <div style="margin:18px 16px 0;display:flex;flex-direction:column;gap:10px">
+
+    <div style="position:relative">
+      <a href="P06-Armar-Rutina.dc.html" style="display:flex;align-items:stretch;border-radius:16px;background:#141416;border:1px solid rgba(255,91,31,0.5);overflow:hidden;min-height:108px">
+        <div style="flex:1;padding:14px 56px 14px 16px;display:flex;flex-direction:column;gap:6px">
+          <span style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:0.14em;color:#FF5B1F"><span style="width:7px;height:7px;border-radius:4px;background:#FF5B1F"></span>ACTIVA</span>
+          <span class="num" style="font-size:28px;line-height:1;font-weight:800;text-transform:uppercase">Fuerza 4 días</span>
+          <span style="font-size:13px;color:#9A9A9F">Piernas A · Torso A · Piernas B · Torso B</span>
+        </div>
+        <div style="width:72px;border-left:1px solid #2A2A2E;display:flex;flex-direction:column;align-items:center;justify-content:center">
+          <span class="num" style="font-size:38px;font-weight:800;line-height:1">4</span>
+          <span style="font-size:10px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">DÍAS</span>
+        </div>
+      </a>
+      <button onClick="{{t0}}" aria-label="Opciones de Fuerza 4 días" aria-expanded="{{m0}}" style="position:absolute;top:6px;right:78px;width:44px;height:44px;border-radius:12px;border:0;background:transparent;color:#9A9A9F;display:flex;align-items:center;justify-content:center">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
+      </button>
+      <sc-if value="{{m0}}" hint-placeholder-val="{{false}}">
+        <div class="menuin" role="menu" style="position:absolute;z-index:5;top:50px;right:78px;width:220px;padding:6px;border-radius:14px;background:#1C1C1F;border:1px solid #2F2F33;box-shadow:0 18px 40px rgba(0,0,0,0.7);display:flex;flex-direction:column">
+          <button role="menuitem" disabled style="height:48px;padding:0 12px;border:0;border-radius:10px;background:transparent;color:#5E5E64;display:flex;align-items:center;gap:12px;font-size:16px;font-weight:600;text-align:left">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>Ya está activa</button>
+          <button role="menuitem" style="height:48px;padding:0 12px;border:0;border-radius:10px;background:transparent;color:#F4F4F2;display:flex;align-items:center;gap:12px;font-size:16px;font-weight:600">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>Duplicar</button>
+          <button role="menuitem" style="height:48px;padding:0 12px;border:0;border-radius:10px;background:transparent;color:#F4F4F2;display:flex;align-items:center;gap:12px;font-size:16px;font-weight:600">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="5" rx="1"/><path d="M5 9v10h14V9M10 13h4"/></svg>Archivar</button>
+          <span style="height:1px;margin:4px 8px;background:#2A2A2E"></span>
+          <button role="menuitem" onClick="{{askDelete}}" style="height:48px;padding:0 12px;border:0;border-radius:10px;background:transparent;color:#FF4D6A;display:flex;align-items:center;gap:12px;font-size:16px;font-weight:600">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>Eliminar</button>
+        </div>
+      </sc-if>
+    </div>
+
+    <div style="position:relative">
+      <a href="P06-Armar-Rutina.dc.html" style="display:flex;align-items:stretch;border-radius:16px;background:#141416;border:1px solid #2A2A2E;overflow:hidden;min-height:96px">
+        <div style="flex:1;padding:14px 56px 14px 16px;display:flex;flex-direction:column;gap:6px;justify-content:center">
+          <span class="num" style="font-size:26px;line-height:1;font-weight:700;text-transform:uppercase">PPL 6 días</span>
+          <span style="font-size:13px;color:#9A9A9F">Último uso: 2 de agosto</span>
+        </div>
+        <div style="width:72px;border-left:1px solid #2A2A2E;display:flex;flex-direction:column;align-items:center;justify-content:center">
+          <span class="num" style="font-size:38px;font-weight:800;line-height:1;color:#C9C9CC">6</span>
+          <span style="font-size:10px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">DÍAS</span>
+        </div>
+      </a>
+      <button onClick="{{t1}}" aria-label="Opciones de PPL 6 días" aria-expanded="{{m1}}" style="position:absolute;top:6px;right:78px;width:44px;height:44px;border-radius:12px;border:0;background:{{b1}};color:#F4F4F2;display:flex;align-items:center;justify-content:center">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
+      </button>
+      <sc-if value="{{m1}}" hint-placeholder-val="{{true}}">
+        <div class="menuin" role="menu" style="position:absolute;z-index:5;top:50px;right:78px;width:220px;padding:6px;border-radius:14px;background:#1C1C1F;border:1px solid #2F2F33;box-shadow:0 18px 40px rgba(0,0,0,0.7);display:flex;flex-direction:column">
+          <button role="menuitem" style="height:48px;padding:0 12px;border:0;border-radius:10px;background:transparent;color:#F4F4F2;display:flex;align-items:center;gap:12px;font-size:16px;font-weight:600">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF5B1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>Activar</button>
+          <button role="menuitem" style="height:48px;padding:0 12px;border:0;border-radius:10px;background:transparent;color:#F4F4F2;display:flex;align-items:center;gap:12px;font-size:16px;font-weight:600">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>Duplicar</button>
+          <button role="menuitem" style="height:48px;padding:0 12px;border:0;border-radius:10px;background:transparent;color:#F4F4F2;display:flex;align-items:center;gap:12px;font-size:16px;font-weight:600">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="5" rx="1"/><path d="M5 9v10h14V9M10 13h4"/></svg>Archivar</button>
+          <span style="height:1px;margin:4px 8px;background:#2A2A2E"></span>
+          <button role="menuitem" onClick="{{askDelete}}" style="height:48px;padding:0 12px;border:0;border-radius:10px;background:transparent;color:#FF4D6A;display:flex;align-items:center;gap:12px;font-size:16px;font-weight:600">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>Eliminar</button>
+        </div>
+      </sc-if>
+    </div>
+
+    <div style="position:relative">
+      <a href="P06-Armar-Rutina.dc.html" style="display:flex;align-items:stretch;border-radius:16px;background:#141416;border:1px solid #2A2A2E;overflow:hidden;min-height:96px">
+        <div style="flex:1;padding:14px 56px 14px 16px;display:flex;flex-direction:column;gap:6px;justify-content:center">
+          <span class="num" style="font-size:26px;line-height:1;font-weight:700;text-transform:uppercase">Hipertrofia verano</span>
+          <span style="font-size:13px;color:#9A9A9F">Último uso: 14 de marzo</span>
+        </div>
+        <div style="width:72px;border-left:1px solid #2A2A2E;display:flex;flex-direction:column;align-items:center;justify-content:center">
+          <span class="num" style="font-size:38px;font-weight:800;line-height:1;color:#C9C9CC">5</span>
+          <span style="font-size:10px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">DÍAS</span>
+        </div>
+      </a>
+      <button onClick="{{t2}}" aria-label="Opciones de Hipertrofia verano" aria-expanded="{{m2}}" style="position:absolute;top:6px;right:78px;width:44px;height:44px;border-radius:12px;border:0;background:transparent;color:#9A9A9F;display:flex;align-items:center;justify-content:center">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
+      </button>
+      <sc-if value="{{m2}}" hint-placeholder-val="{{false}}">
+        <div class="menuin" role="menu" style="position:absolute;z-index:5;top:50px;right:78px;width:220px;padding:6px;border-radius:14px;background:#1C1C1F;border:1px solid #2F2F33;box-shadow:0 18px 40px rgba(0,0,0,0.7);display:flex;flex-direction:column">
+          <button role="menuitem" style="height:48px;padding:0 12px;border:0;border-radius:10px;background:transparent;color:#F4F4F2;display:flex;align-items:center;gap:12px;font-size:16px;font-weight:600">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF5B1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>Activar</button>
+          <button role="menuitem" style="height:48px;padding:0 12px;border:0;border-radius:10px;background:transparent;color:#F4F4F2;display:flex;align-items:center;gap:12px;font-size:16px;font-weight:600">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>Duplicar</button>
+          <button role="menuitem" style="height:48px;padding:0 12px;border:0;border-radius:10px;background:transparent;color:#F4F4F2;display:flex;align-items:center;gap:12px;font-size:16px;font-weight:600">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="5" rx="1"/><path d="M5 9v10h14V9M10 13h4"/></svg>Archivar</button>
+          <span style="height:1px;margin:4px 8px;background:#2A2A2E"></span>
+          <button role="menuitem" onClick="{{askDelete}}" style="height:48px;padding:0 12px;border:0;border-radius:10px;background:transparent;color:#FF4D6A;display:flex;align-items:center;gap:12px;font-size:16px;font-weight:600">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>Eliminar</button>
+        </div>
+      </sc-if>
+    </div>
+
+    <button style="height:52px;padding:0 4px;border:0;background:transparent;color:#9A9A9F;display:flex;align-items:center;justify-content:space-between;font-size:15px;font-weight:600;border-top:1px solid #1F1F22;margin-top:4px">
+      <span style="display:flex;align-items:center;gap:10px">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="5" rx="1"/><path d="M5 9v10h14V9M10 13h4"/></svg>
+        Archivadas <span class="num" style="font-size:17px;color:#F4F4F2">2</span>
+      </span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+    </button>
+  </div>
+
+  <nav aria-label="Secciones" style="position:absolute;left:0;right:0;bottom:0;height:84px;box-sizing:border-box;padding-bottom:30px;background:rgba(11,11,12,0.96);border-top:1px solid #1F1F22;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))">
+    <a href="P01-Hoy.dc.html" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#7C7C82;font-size:11px;font-weight:600">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>
+      Hoy
+    </a>
+    <a href="P05-Rutinas.dc.html" aria-current="page" style="position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#F4F4F2;font-size:11px;font-weight:700">
+      <span style="position:absolute;top:-1px;width:28px;height:2px;border-radius:1px;background:#FF5B1F"></span>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF5B1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h1M4 12h1M4 18h1"/></svg>
+      Rutinas
+    </a>
+    <a href="P09-Progreso.dc.html" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#7C7C82;font-size:11px;font-weight:600">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20h18"/><path d="M4 16l5-5 4 3 7-8"/></svg>
+      Progreso
+    </a>
+    <a href="P11-Perfil.dc.html" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#7C7C82;font-size:11px;font-weight:600">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
+      Perfil
+    </a>
+  </nav>
+
+  <sc-if value="{{confirm}}" hint-placeholder-val="{{false}}">
+    <div class="fade" style="position:absolute;inset:0;z-index:10;background:rgba(0,0,0,0.66);display:flex;align-items:center;justify-content:center;padding:0 24px">
+      <div class="dlg" role="alertdialog" aria-labelledby="dlg-t" style="width:100%;padding:22px 20px 16px;border-radius:20px;background:#1C1C1F;border:1px solid #2F2F33;display:flex;flex-direction:column;gap:10px">
+        <span style="width:44px;height:44px;border-radius:12px;background:rgba(255,77,106,0.14);color:#FF4D6A;display:flex;align-items:center;justify-content:center">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>
+        </span>
+        <h2 id="dlg-t" class="num" style="margin:4px 0 0;font-size:28px;line-height:1;font-weight:800;text-transform:uppercase">¿Eliminar PPL 6 días?</h2>
+        <p style="margin:0;font-size:15px;line-height:1.45;color:#C9C9CC">Se borran sus 6 días y lo planificado. Los entrenamientos que ya registraste se conservan.</p>
+        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px">
+          <button onClick="{{cancel}}" style="height:52px;border-radius:14px;border:1.5px solid #3A3A3F;background:transparent;color:#F4F4F2;font-size:16px;font-weight:700">Cancelar</button>
+          <button onClick="{{cancel}}" style="height:52px;border-radius:14px;border:0;background:#FF4D6A;color:#0B0B0C;font-size:16px;font-weight:800">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":393,"height":852}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { menu: 1, confirm: false };
+  }
+  renderVals() {
+    const m = this.state.menu;
+    const t = (i) => () => this.setState({ menu: m === i ? -1 : i });
+    return {
+      m0: m === 0, m1: m === 1, m2: m === 2,
+      b1: m === 1 ? '#2A2A2E' : 'transparent',
+      t0: t(0), t1: t(1), t2: t(2),
+      confirm: this.state.confirm,
+      askDelete: () => this.setState({ confirm: true, menu: -1 }),
+      cancel: () => this.setState({ confirm: false })
+    };
+  }
+}
+</script>
+</body>
+</html>

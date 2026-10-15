@@ -1,0 +1,66 @@
+{
+  "v": 3,
+  "createdOnFiles": { "v": 1, "at": "2026-10-15T12:00:00Z" },
+  "title": "Gym App Rediseño",
+  "launch": { "view": "canvas", "page": "plataforma" },
+  "pages": [
+    { "id": "plataforma", "name": "Plataforma (A)" },
+    { "id": "direcciones", "name": "Direcciones" }
+  ],
+  "boards": {
+    "Main.dc.html": { "x": 0, "y": 0, "w": 393, "h": 852, "title": "A · Plataforma — Entrenando", "radius": 44, "page": "direcciones" },
+    "A-Ficha.dc.html": { "x": 0, "y": 972, "w": 393, "h": 640, "title": "A · Plataforma — Ficha", "page": "direcciones" },
+    "B-Entrenando.dc.html": { "x": 473, "y": 0, "w": 393, "h": 852, "title": "B · Calibre — Entrenando", "radius": 44, "page": "direcciones" },
+    "B-Ficha.dc.html": { "x": 473, "y": 972, "w": 393, "h": 640, "title": "B · Calibre — Ficha", "page": "direcciones" },
+    "C-Entrenando.dc.html": { "x": 946, "y": 0, "w": 393, "h": 852, "title": "C · Tiza y hierro — Entrenando", "radius": 44, "page": "direcciones" },
+    "C-Ficha.dc.html": { "x": 946, "y": 972, "w": 393, "h": 640, "title": "C · Tiza y hierro — Ficha", "page": "direcciones" },
+
+    "P01-Hoy.dc.html": { "x": 0, "y": 0, "w": 393, "h": 852, "title": "1 · Hoy — con datos y entrenamiento sin terminar", "radius": 44, "page": "plataforma", "is_interactive": true },
+    "P02-Hoy-Vacio.dc.html": { "x": 473, "y": 0, "w": 393, "h": 852, "title": "1b · Hoy — estado vacío", "radius": 44, "page": "plataforma", "is_interactive": true },
+    "P03-Entrenando.dc.html": { "x": 946, "y": 0, "w": 393, "h": 852, "title": "2 · Entrenando — prototipo (tocá ✓)", "radius": 44, "page": "plataforma", "is_interactive": true },
+    "P04-Resumen.dc.html": { "x": 1419, "y": 0, "w": 393, "h": 1240, "title": "3 · Resumen — con PR nuevo", "radius": 44, "page": "plataforma", "is_interactive": true },
+
+    "P05-Rutinas.dc.html": { "x": 0, "y": 1620, "w": 393, "h": 852, "title": "4 · Mis rutinas — menú abierto", "radius": 44, "page": "plataforma", "is_interactive": true },
+    "P06-Armar-Rutina.dc.html": { "x": 473, "y": 1620, "w": 393, "h": 852, "title": "5 · Armar rutina", "radius": 44, "page": "plataforma", "is_interactive": true },
+    "P07-Armar-Dia.dc.html": { "x": 946, "y": 1620, "w": 393, "h": 1180, "title": "6 · Armar día", "radius": 44, "page": "plataforma", "is_interactive": true },
+    "P08-Elegir-Ejercicio.dc.html": { "x": 1419, "y": 1620, "w": 393, "h": 852, "title": "7 · Elegir ejercicio — selección múltiple", "radius": 44, "page": "plataforma", "is_interactive": true },
+
+    "P09-Progreso.dc.html": { "x": 0, "y": 3320, "w": 393, "h": 1400, "title": "8 · Progreso — con datos (tocá el gráfico)", "radius": 44, "page": "plataforma", "is_interactive": true },
+    "P10-Progreso-Vacio.dc.html": { "x": 473, "y": 3320, "w": 393, "h": 852, "title": "8b · Progreso — estado vacío", "radius": 44, "page": "plataforma", "is_interactive": true },
+    "P11-Perfil.dc.html": { "x": 946, "y": 3320, "w": 393, "h": 852, "title": "9 · Perfil", "radius": 44, "page": "plataforma", "is_interactive": true },
+
+    "S1-Tokens.dc.html": { "x": 0, "y": 5240, "w": 880, "h": 1300, "title": "Sistema · Tokens", "page": "plataforma" },
+    "S2-Componentes.dc.html": { "x": 960, "y": 5240, "w": 880, "h": 1900, "title": "Sistema · Componentes", "page": "plataforma" },
+    "S3-Implementacion.dc.html": { "x": 1920, "y": 5240, "w": 880, "h": 2800, "title": "Notas de implementación (RN)", "page": "plataforma" }
+  },
+  "order": [
+    "Main.dc.html",
+    "A-Ficha.dc.html",
+    "B-Entrenando.dc.html",
+    "B-Ficha.dc.html",
+    "C-Entrenando.dc.html",
+    "C-Ficha.dc.html",
+    "P01-Hoy.dc.html",
+    "P02-Hoy-Vacio.dc.html",
+    "P03-Entrenando.dc.html",
+    "P04-Resumen.dc.html",
+    "P05-Rutinas.dc.html",
+    "P06-Armar-Rutina.dc.html",
+    "P07-Armar-Dia.dc.html",
+    "P08-Elegir-Ejercicio.dc.html",
+    "P09-Progreso.dc.html",
+    "P10-Progreso-Vacio.dc.html",
+    "P11-Perfil.dc.html",
+    "S1-Tokens.dc.html",
+    "S2-Componentes.dc.html",
+    "S3-Implementacion.dc.html"
+  ],
+  "notes": {
+    "titulo": { "x": 0, "y": -260, "text": "Paso 1 · Tres direcciones sobre Entrenando", "kind": "title1", "maxW": 1339, "page": "direcciones" },
+    "filaA": { "x": 0, "y": -260, "text": "Plataforma · Hoy, Entrenando y Resumen", "kind": "title1", "maxW": 1812, "page": "plataforma" },
+    "filaB": { "x": 0, "y": 1360, "text": "Rutinas · armar rutina, día y elegir ejercicio", "kind": "title1", "maxW": 1812, "page": "plataforma" },
+    "filaC": { "x": 0, "y": 3060, "text": "Progreso y Perfil", "kind": "title1", "maxW": 1339, "page": "plataforma" },
+    "filaD": { "x": 0, "y": 4980, "text": "Sistema de diseño y notas para React Native", "kind": "title1", "maxW": 2800, "page": "plataforma" }
+  },
+  "designSystems": []
+}

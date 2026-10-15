@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Progreso</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#050505}
+.num{font-family:'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer}
+@keyframes draw{0%{stroke-dashoffset:520}100%{stroke-dashoffset:0}}
+.draw{stroke-dasharray:520;animation:draw 900ms cubic-bezier(0.22,1,0.36,1) both}
+@keyframes areain{0%{opacity:0}100%{opacity:1}}
+.areain{animation:areain 600ms ease-out 300ms both}
+@keyframes grow{0%{transform:scaleY(0)}100%{transform:scaleY(1)}}
+.grow{animation:grow 500ms cubic-bezier(0.22,1,0.36,1) both;transform-origin:bottom}
+</style>
+</helmet>
+<div style="width:393px;height:1400px;box-sizing:border-box;padding-top:58px;background:#0B0B0C;color:#F4F4F2;font-family:'Barlow',sans-serif;position:relative;overflow:hidden">
+
+  <div style="display:flex;flex-direction:column;gap:4px;padding:0 16px">
+    <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">ÚLTIMAS 12 SEMANAS</span>
+    <h1 class="num" style="margin:0;font-size:38px;line-height:0.95;font-weight:800;text-transform:uppercase">Progreso</h1>
+  </div>
+
+  <button aria-haspopup="listbox" style="margin:14px 16px 0;width:361px;height:60px;padding:0 12px 0 16px;border-radius:14px;border:1px solid #2A2A2E;background:#141416;color:#F4F4F2;display:flex;align-items:center;gap:10px;text-align:left">
+    <span style="flex:1;display:flex;flex-direction:column">
+      <span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">EJERCICIO</span>
+      <span class="num" style="font-size:24px;font-weight:700;line-height:1.05;text-transform:uppercase">Sentadilla trasera</span>
+    </span>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF5B1F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+  </button>
+
+  <div style="margin:10px 16px 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));background:#141416;border:1px solid #2A2A2E;border-radius:14px;overflow:hidden">
+    <div style="padding:10px 12px;display:flex;flex-direction:column;gap:3px">
+      <span style="font-size:11px;font-weight:600;letter-spacing:0.12em;color:#9A9A9F">E1RM</span>
+      <span class="num" style="font-size:32px;font-weight:700;line-height:1">163<span style="font-size:15px;color:#7C7C82"> kg</span></span>
+      <span class="num" style="font-size:14px;font-weight:600;color:#3DDC84">▲ 17,5 kg</span>
+    </div>
+    <div style="padding:10px 12px;display:flex;flex-direction:column;gap:3px;border-left:1px solid #2A2A2E">
+      <span style="font-size:11px;font-weight:600;letter-spacing:0.12em;color:#9A9A9F">MEJOR PESO</span>
+      <span class="num" style="font-size:32px;font-weight:700;line-height:1">145<span style="font-size:15px;color:#7C7C82"> kg</span></span>
+      <span style="font-size:12px;color:#9A9A9F">8 oct · × 3</span>
+    </div>
+    <div style="padding:10px 12px;display:flex;flex-direction:column;gap:3px;border-left:1px solid #2A2A2E">
+      <span style="font-size:11px;font-weight:600;letter-spacing:0.12em;color:#9A9A9F">SESIONES</span>
+      <span class="num" style="font-size:32px;font-weight:700;line-height:1">13</span>
+      <span style="font-size:12px;color:#9A9A9F">desde 23 jul</span>
+    </div>
+  </div>
+
+  <section aria-label="Gráfico de e1RM y mejor peso" style="margin:10px 16px 0;padding:12px 0 10px;border-radius:16px;background:#141416;border:1px solid #2A2A2E">
+    <div style="padding:0 12px;display:flex;align-items:center;justify-content:space-between;gap:8px">
+      <div role="group" aria-label="Rango" style="display:flex;padding:3px;border-radius:10px;background:#0B0B0C;border:1px solid #2A2A2E">
+        <button style="width:44px;height:32px;border:0;border-radius:7px;background:transparent;color:#9A9A9F;font-size:13px;font-weight:700">1M</button>
+        <button aria-pressed="true" style="width:44px;height:32px;border:0;border-radius:7px;background:#2A2A2E;color:#F4F4F2;font-size:13px;font-weight:700">3M</button>
+        <button style="width:44px;height:32px;border:0;border-radius:7px;background:transparent;color:#9A9A9F;font-size:13px;font-weight:700">6M</button>
+        <button style="width:44px;height:32px;border:0;border-radius:7px;background:transparent;color:#9A9A9F;font-size:13px;font-weight:700">1A</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px;font-size:12px;color:#C9C9CC">
+        <span style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:3px;border-radius:2px;background:#FF5B1F"></span>e1RM</span>
+        <span style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:2px;background:#8A8A90"></span>Mejor peso</span>
+      </div>
+    </div>
+
+    <div aria-live="polite" style="margin:12px 12px 0;padding:8px 10px;border-radius:10px;background:#0B0B0C;display:flex;align-items:center;gap:10px">
+      <span class="num" style="font-size:20px;font-weight:700;min-width:58px">{{sel.date}}</span>
+      <span style="width:1px;height:26px;background:#2A2A2E"></span>
+      <span style="display:flex;flex-direction:column;flex:1">
+        <span style="font-size:10px;font-weight:700;letter-spacing:0.12em;color:#FF5B1F">E1RM</span>
+        <span class="num" style="font-size:20px;font-weight:700;line-height:1">{{sel.e1}} kg</span>
+      </span>
+      <span style="display:flex;flex-direction:column;flex:1">
+        <span style="font-size:10px;font-weight:700;letter-spacing:0.12em;color:#9A9A9F">MEJOR SERIE</span>
+        <span class="num" style="font-size:20px;font-weight:700;line-height:1">{{sel.set}}</span>
+      </span>
+      <sc-if value="{{sel.pr}}" hint-placeholder-val="{{false}}">
+        <span class="num" style="padding:1px 6px;border-radius:5px;background:#FFC83D;color:#0B0B0C;font-size:13px;font-weight:800">PR</span>
+      </sc-if>
+    </div>
+
+    <div style="position:relative;width:361px;height:220px;margin-top:6px">
+      <svg width="361" height="220" viewBox="0 0 361 220" role="img" aria-label="e1RM de sentadilla trasera de 145,8 a 163,3 kg entre julio y octubre; mejor peso de 125 a 145 kg">
+        <defs>
+          <linearGradient id="ga" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#FF5B1F" stop-opacity="0.32"/>
+            <stop offset="1" stop-color="#FF5B1F" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <g stroke="#1F1F22" stroke-width="1">
+          <path d="M32 12H353M32 48.8H353M32 85.6H353M32 122.4H353M32 159.2H353"/>
+        </g>
+        <path d="M32 196H353" stroke="#3A3A3F" stroke-width="1"/>
+        <g font-family="Barlow Condensed, sans-serif" font-size="12" fill="#7C7C82" text-anchor="end">
+          <text x="26" y="16">170</text><text x="26" y="52.8">160</text><text x="26" y="89.6">150</text><text x="26" y="126.4">140</text><text x="26" y="163.2">130</text><text x="26" y="200">120</text>
+        </g>
+        <g font-family="Barlow, sans-serif" font-size="11" font-weight="600" fill="#7C7C82">
+          <text x="32" y="214">jul</text><text x="85.5" y="214" text-anchor="middle">ago</text><text x="192.5" y="214" text-anchor="middle">sep</text><text x="299.5" y="214" text-anchor="middle">oct</text>
+        </g>
+        <path class="areain" d="M32 101.1L58.75 90L85.5 79.3L112.25 63.5L139 68.7L165.75 74.6L192.5 58L219.25 47.3L246 70.9L272.75 36.7L299.5 43.3L326.25 50.6L353 36.7L353 196L32 196Z" fill="url(#ga)"/>
+        <path d="M32 177.6L58.75 168.4L85.5 159.2L112.25 159.2L139 150L165.75 140.8L192.5 140.8L219.25 131.6L246 122.4L272.75 122.4L299.5 113.2L326.25 104L353 122.4" fill="none" stroke="#8A8A90" stroke-width="2" stroke-linejoin="round"/>
+        <g fill="#0B0B0C" stroke="#8A8A90" stroke-width="2">
+          <circle cx="32" cy="177.6" r="3"/><circle cx="58.75" cy="168.4" r="3"/><circle cx="85.5" cy="159.2" r="3"/><circle cx="112.25" cy="159.2" r="3"/><circle cx="139" cy="150" r="3"/><circle cx="165.75" cy="140.8" r="3"/><circle cx="192.5" cy="140.8" r="3"/><circle cx="219.25" cy="131.6" r="3"/><circle cx="246" cy="122.4" r="3"/><circle cx="272.75" cy="122.4" r="3"/><circle cx="299.5" cy="113.2" r="3"/><circle cx="326.25" cy="104" r="3"/><circle cx="353" cy="122.4" r="3"/>
+        </g>
+        <path class="draw" d="M32 101.1L58.75 90L85.5 79.3L112.25 63.5L139 68.7L165.75 74.6L192.5 58L219.25 47.3L246 70.9L272.75 36.7L299.5 43.3L326.25 50.6L353 36.7" fill="none" stroke="#FF5B1F" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+        <g fill="#FFC83D" stroke="#141416" stroke-width="2">
+          <circle cx="112.25" cy="63.5" r="5"/><circle cx="192.5" cy="58" r="5"/><circle cx="219.25" cy="47.3" r="5"/><circle cx="272.75" cy="36.7" r="5"/>
+        </g>
+      </svg>
+      <span aria-hidden="true" style="position:absolute;top:12px;left:{{sel.x}}px;width:0;height:184px;border-left:1px dashed #5E5E64;pointer-events:none"></span>
+      <span aria-hidden="true" style="position:absolute;left:{{sel.wx}}px;top:{{sel.wy}}px;width:10px;height:10px;border-radius:5px;background:#F4F4F2;box-shadow:0 0 0 2px #141416;pointer-events:none;transition:left 160ms ease-out, top 160ms ease-out"></span>
+      <span aria-hidden="true" style="position:absolute;left:{{sel.ex}}px;top:{{sel.ey}}px;width:14px;height:14px;border-radius:7px;background:#FF5B1F;box-shadow:0 0 0 3px #141416, 0 0 0 7px rgba(255,91,31,0.25);pointer-events:none;transition:left 160ms ease-out, top 160ms ease-out"></span>
+      <sc-for list="{{pts}}" as="p" hint-placeholder-count="13">
+        <button onClick="{{p.pick}}" onMouseEnter="{{p.pick}}" aria-label="{{p.label}}" style="position:absolute;top:0;left:{{p.hl}}px;width:26.75px;height:200px;border:0;padding:0;background:transparent"></button>
+      </sc-for>
+    </div>
+    <p style="margin:4px 12px 0;font-size:12px;color:#7C7C82;display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:4px;background:#FFC83D"></span>PR de e1RM · e1RM estimado con Epley: kg × (1 + reps/30)</p>
+  </section>
+
+  <section style="margin:10px 16px 0;padding:14px 14px 12px;border-radius:16px;background:#141416;border:1px solid #2A2A2E">
+    <div style="display:flex;align-items:baseline;justify-content:space-between">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">RESUMEN SEMANAL</span>
+      <span style="font-size:12px;color:#9A9A9F">Volumen total · entrenamientos</span>
+    </div>
+    <div style="margin-top:6px;display:flex;align-items:baseline;gap:14px">
+      <span class="num" style="font-size:28px;font-weight:700">25.880<span style="font-size:14px;color:#7C7C82"> kg</span></span>
+      <span style="font-size:13px;color:#9A9A9F">esta semana · 2 de 4 días</span>
+    </div>
+    <div style="margin-top:10px;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px;align-items:end;height:126px">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="grow" style="width:100%;height:76px;border-radius:4px 4px 0 0;background:#3A3A3F"></span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="grow" style="width:100%;height:83px;border-radius:4px 4px 0 0;background:#3A3A3F"></span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="grow" style="width:100%;height:74px;border-radius:4px 4px 0 0;background:#3A3A3F"></span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="grow" style="width:100%;height:88px;border-radius:4px 4px 0 0;background:#3A3A3F"></span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="grow" style="width:100%;height:93px;border-radius:4px 4px 0 0;background:#3A3A3F"></span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="grow" style="width:100%;height:44px;border-radius:4px 4px 0 0;background:#3A3A3F"></span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="num" style="font-size:13px;font-weight:700;color:#C9C9CC">47,9 t</span><span class="grow" style="width:100%;height:96px;border-radius:4px 4px 0 0;background:#5E5E64"></span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span class="num" style="font-size:13px;font-weight:700;color:#F4F4F2">25,9 t</span><span class="grow" style="width:100%;height:52px;border-radius:4px 4px 0 0;background:#FF5B1F"></span></div>
+    </div>
+    <div style="border-top:1px solid #3A3A3F;margin-top:0;padding-top:6px;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px;text-align:center">
+      <span class="num" style="font-size:12px;color:#7C7C82">25/8</span><span class="num" style="font-size:12px;color:#7C7C82">1/9</span><span class="num" style="font-size:12px;color:#7C7C82">8/9</span><span class="num" style="font-size:12px;color:#7C7C82">15/9</span><span class="num" style="font-size:12px;color:#7C7C82">22/9</span><span class="num" style="font-size:12px;color:#7C7C82">29/9</span><span class="num" style="font-size:12px;color:#7C7C82">6/10</span><span class="num" style="font-size:12px;font-weight:700;color:#F4F4F2">13/10</span>
+    </div>
+    <div style="padding-top:6px;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px;text-align:center" aria-label="Entrenamientos por semana: 4, 4, 3, 4, 4, 2, 4, 2">
+      <span class="num" style="font-size:15px;font-weight:700">4</span><span class="num" style="font-size:15px;font-weight:700">4</span><span class="num" style="font-size:15px;font-weight:700">3</span><span class="num" style="font-size:15px;font-weight:700">4</span><span class="num" style="font-size:15px;font-weight:700">4</span><span class="num" style="font-size:15px;font-weight:700;color:#9A9A9F">2</span><span class="num" style="font-size:15px;font-weight:700">4</span><span class="num" style="font-size:15px;font-weight:700;color:#FF5B1F">2</span>
+    </div>
+  </section>
+
+  <div style="margin:18px 16px 8px;display:flex;align-items:baseline;justify-content:space-between">
+    <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">HISTORIAL</span>
+    <span style="font-size:12px;color:#7C7C82">Mejor serie · e1RM</span>
+  </div>
+  <div style="margin:0 16px;border-radius:14px;background:#141416;overflow:hidden">
+    <div style="display:flex;align-items:center;gap:12px;height:60px;padding:0 14px;border-bottom:1px solid #1F1F22">
+      <div style="flex:1;display:flex;flex-direction:column"><span style="font-size:15px;font-weight:600">Jue 15 oct</span><span style="font-size:13px;color:#9A9A9F">Piernas A · 4 series</span></div>
+      <span class="num" style="font-size:22px;font-weight:700">140 × 5</span>
+      <span class="num" style="width:52px;text-align:right;font-size:18px;font-weight:600;color:#9A9A9F">163</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;height:60px;padding:0 14px;border-bottom:1px solid #1F1F22">
+      <div style="flex:1;display:flex;flex-direction:column"><span style="font-size:15px;font-weight:600;display:flex;align-items:center;gap:6px">Jue 8 oct <span class="num" style="padding:0 5px;border-radius:4px;border:1px solid #FFC83D;color:#FFC83D;font-size:11px;font-weight:800">PR PESO</span></span><span style="font-size:13px;color:#9A9A9F">Piernas A · 5 series</span></div>
+      <span class="num" style="font-size:22px;font-weight:700">145 × 3</span>
+      <span class="num" style="width:52px;text-align:right;font-size:18px;font-weight:600;color:#9A9A9F">159,5</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;height:60px;padding:0 14px;border-bottom:1px solid #1F1F22">
+      <div style="flex:1;display:flex;flex-direction:column"><span style="font-size:15px;font-weight:600">Jue 1 oct</span><span style="font-size:13px;color:#9A9A9F">Piernas A · 4 series</span></div>
+      <span class="num" style="font-size:22px;font-weight:700">142,5 × 4</span>
+      <span class="num" style="width:52px;text-align:right;font-size:18px;font-weight:600;color:#9A9A9F">161,5</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;height:60px;padding:0 14px;border-bottom:1px solid #1F1F22">
+      <div style="flex:1;display:flex;flex-direction:column"><span style="font-size:15px;font-weight:600;display:flex;align-items:center;gap:6px">Jue 24 sep <span class="num" style="padding:0 5px;border-radius:4px;background:#FFC83D;color:#0B0B0C;font-size:11px;font-weight:800">PR</span></span><span style="font-size:13px;color:#9A9A9F">Piernas A · 4 series</span></div>
+      <span class="num" style="font-size:22px;font-weight:700">140 × 5</span>
+      <span class="num" style="width:52px;text-align:right;font-size:18px;font-weight:600;color:#9A9A9F">163</span>
+    </div>
+    <a href="P09-Progreso.dc.html" style="height:48px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#FF5B1F">Ver las 13 sesiones</a>
+  </div>
+
+  <nav aria-label="Secciones" style="position:absolute;left:0;right:0;bottom:0;height:84px;box-sizing:border-box;padding-bottom:30px;background:rgba(11,11,12,0.96);border-top:1px solid #1F1F22;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))">
+    <a href="P01-Hoy.dc.html" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#7C7C82;font-size:11px;font-weight:600">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>
+      Hoy
+    </a>
+    <a href="P05-Rutinas.dc.html" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#7C7C82;font-size:11px;font-weight:600">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h1M4 12h1M4 18h1"/></svg>
+      Rutinas
+    </a>
+    <a href="P09-Progreso.dc.html" aria-current="page" style="position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#F4F4F2;font-size:11px;font-weight:700">
+      <span style="position:absolute;top:-1px;width:28px;height:2px;border-radius:1px;background:#FF5B1F"></span>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF5B1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20h18"/><path d="M4 16l5-5 4 3 7-8"/></svg>
+      Progreso
+    </a>
+    <a href="P11-Perfil.dc.html" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#7C7C82;font-size:11px;font-weight:600">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
+      Perfil
+    </a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":393,"height":1400}}'>
+var P = [
+  ['23 jul', 125, 5, 145.8, 101.1, 177.6, 0], ['30 jul', 127.5, 5, 148.8, 90, 168.4, 0], ['6 ago', 130, 5, 151.7, 79.3, 159.2, 0],
+  ['13 ago', 130, 6, 156, 63.5, 159.2, 1], ['20 ago', 132.5, 5, 154.6, 68.7, 150, 0], ['27 ago', 135, 4, 153, 74.6, 140.8, 0],
+  ['3 sep', 135, 5, 157.5, 58, 140.8, 1], ['10 sep', 137.5, 5, 160.4, 47.3, 131.6, 1], ['17 sep', 140, 3, 154, 70.9, 122.4, 0],
+  ['24 sep', 140, 5, 163.3, 36.7, 122.4, 1], ['1 oct', 142.5, 4, 161.5, 43.3, 113.2, 0], ['8 oct', 145, 3, 159.5, 50.6, 104, 0],
+  ['15 oct', 140, 5, 163.3, 36.7, 122.4, 0]
+];
+function fk(v) { return String(v).replace('.', ','); }
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { i: 12 };
+  }
+  renderVals() {
+    const i = this.state.i;
+    const x = (k) => 32 + k * 26.75;
+    const p = P[i];
+    return {
+      sel: {
+        date: p[0], e1: fk(p[3]), set: fk(p[1]) + ' × ' + p[2], pr: !!p[6],
+        x: x(i), wx: x(i) - 5, wy: p[5] - 5, ex: x(i) - 7, ey: p[4] - 7
+      },
+      pts: P.map((q, k) => ({
+        hl: x(k) - 13.375,
+        label: q[0] + ': mejor serie ' + fk(q[1]) + ' por ' + q[2] + ', e1RM ' + fk(q[3]) + ' kilos' + (q[6] ? ', PR' : ''),
+        pick: () => this.setState({ i: k })
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

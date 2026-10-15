@@ -114,11 +114,17 @@ export default function RootLayout() {
             }}
           >
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="rutina/[routineId]" options={{ title: 'Armar rutina' }} />
-            <Stack.Screen name="rutina/dia/[dayId]" options={{ title: 'Armar día' }} />
+            <Stack.Screen
+              name="rutina/[routineId]"
+              options={{ title: 'Armar rutina', headerShown: false }}
+            />
+            <Stack.Screen
+              name="rutina/dia/[dayId]"
+              options={{ title: 'Armar día', headerShown: false }}
+            />
             <Stack.Screen
               name="elegir-ejercicio"
-              options={{ title: 'Elegir ejercicio', presentation: 'modal' }}
+              options={{ title: 'Elegir ejercicio', presentation: 'modal', headerShown: false }}
             />
             <Stack.Screen
               name="elegir-dia"

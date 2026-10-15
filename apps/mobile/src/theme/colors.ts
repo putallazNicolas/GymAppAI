@@ -1,6 +1,8 @@
 /** Design tokens: colors (design/S3). Never hard-code colors outside src/theme. */
 export const colors = {
   background: '#0B0B0C',
+  /** Fully transparent background color, for vertical fades into the background. */
+  backgroundClear: 'rgba(11,11,12,0)',
   surface: '#141416',
   surfaceRaised: '#1C1C1F',
   divider: '#1F1F22',

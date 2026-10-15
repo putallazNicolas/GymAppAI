@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Modal, Pressable, StyleSheet } from 'react-native';
+import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useReducedMotion,
@@ -8,7 +8,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { colors, elevation, hit, motion, radii, space, stroke } from '../theme';
+import { colors, elevation, hit, motion, radii, space, stroke, type ColorToken } from '../theme';
 
 import { Icon, type IconName } from './icons';
 import { Text } from './Text';
@@ -19,6 +19,16 @@ export interface ActionMenuItem {
   destructive?: boolean;
   icon?: IconName;
   disabled?: boolean;
+  /** Tint for the icon only (e.g. accent for "Activar"). */
+  iconColor?: ColorToken;
+  /** Draws a divider above this item. */
+  separatorBefore?: boolean;
+}
+
+/** Where a popover menu hangs: `top` from the window top, `right` from the window's right edge. */
+export interface MenuAnchor {
+  top: number;
+  right: number;
 }
 
 interface ActionMenuProps {
@@ -26,6 +36,8 @@ interface ActionMenuProps {
   title?: string;
   items: ActionMenuItem[];
   onClose: () => void;
+  /** Anchors the menu to a point (scales from its top-right corner). Default: under the header. */
+  anchor?: MenuAnchor;
 }
 
 const FROM_SCALE = 0.92;
@@ -34,7 +46,7 @@ const MENU_WIDTH = 220;
 const ANCHOR_OFFSET = hit.cta;
 
 /** Popover menu (e2) that grows from the top-right corner. */
-export function ActionMenu({ visible, title, items, onClose }: ActionMenuProps) {
+export function ActionMenu({ visible, title, items, onClose, anchor }: ActionMenuProps) {
   const reduced = useReducedMotion();
   const insets = useSafeAreaInsets();
   const progress = useSharedValue(0);
@@ -50,6 +62,14 @@ export function ActionMenu({ visible, title, items, onClose }: ActionMenuProps) 
 
   const animated = useAnimatedStyle(() => {
     const scale = reduced ? 1 : FROM_SCALE + (1 - FROM_SCALE) * progress.value;
+    if (anchor) {
+      // Anchored menus grow from their top-right corner (design/P05: scale 0.92 → 1, slight drop).
+      return {
+        opacity: progress.value,
+        transformOrigin: 'top right',
+        transform: [{ translateY: reduced ? 0 : -6 * (1 - progress.value) }, { scale }],
+      };
+    }
     // Scale from the top-right corner: re-anchor the center-based transform by half the shrink.
     const shiftX = reduced ? 0 : (MENU_WIDTH * (1 - scale)) / 2;
     return {
@@ -62,7 +82,13 @@ export function ActionMenu({ visible, title, items, onClose }: ActionMenuProps) 
     <Modal visible={visible} transparent animationType="none" onRequestClose={onClose}>
       <Pressable style={styles.backdrop} onPress={onClose} accessibilityLabel="Cerrar menú">
         <Animated.View
-          style={[styles.menu, { top: insets.top + ANCHOR_OFFSET }, animated]}
+          style={[
+            styles.menu,
+            anchor
+              ? { top: anchor.top, right: anchor.right }
+              : { top: insets.top + ANCHOR_OFFSET, right: space.lg },
+            animated,
+          ]}
           accessibilityRole="menu"
         >
           {title ? (
@@ -78,22 +104,30 @@ export function ActionMenu({ visible, title, items, onClose }: ActionMenuProps) 
                 ? 'danger'
                 : 'textPrimary';
             return (
-              <Pressable
-                key={item.label}
-                accessibilityRole="menuitem"
-                accessibilityState={{ disabled: item.disabled }}
-                disabled={item.disabled}
-                style={({ pressed }) => [styles.item, pressed && styles.itemPressed]}
-                onPress={() => {
-                  onClose();
-                  item.onPress();
-                }}
-              >
-                {icon ? <Icon name={icon} size={20} color={tint} /> : null}
-                <Text variant="bodyStrong" color={tint}>
-                  {item.label}
-                </Text>
-              </Pressable>
+              <View key={item.label}>
+                {item.separatorBefore ? <View style={styles.separator} /> : null}
+                <Pressable
+                  accessibilityRole="menuitem"
+                  accessibilityState={{ disabled: item.disabled }}
+                  disabled={item.disabled}
+                  style={({ pressed }) => [styles.item, pressed && styles.itemPressed]}
+                  onPress={() => {
+                    onClose();
+                    item.onPress();
+                  }}
+                >
+                  {icon ? (
+                    <Icon
+                      name={icon}
+                      size={20}
+                      color={item.disabled ? tint : (item.iconColor ?? tint)}
+                    />
+                  ) : null}
+                  <Text variant="bodyStrong" color={tint}>
+                    {item.label}
+                  </Text>
+                </Pressable>
+              </View>
             );
           })}
         </Animated.View>
@@ -106,7 +140,6 @@ const styles = StyleSheet.create({
   backdrop: { flex: 1 },
   menu: {
     position: 'absolute',
-    right: space.lg,
     width: MENU_WIDTH,
     padding: space.xs + 2,
     borderRadius: radii.lg,
@@ -123,6 +156,12 @@ const styles = StyleSheet.create({
     gap: space.md,
     paddingHorizontal: space.md,
     borderRadius: radii.md,
+  },
+  separator: {
+    height: stroke.hairline,
+    marginVertical: space.xs,
+    marginHorizontal: space.sm,
+    backgroundColor: colors.border,
   },
   itemPressed: { backgroundColor: colors.border },
 });

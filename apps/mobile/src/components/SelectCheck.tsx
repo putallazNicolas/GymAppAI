@@ -15,7 +15,7 @@ import { Icon } from './icons';
 const SIZE = 28;
 const FROM = 0.6;
 
-/** Round selection check for multi-select rows: pops in 0.6 → 1 when selected. */
+/** Square (radius 8) selection check for multi-select rows: pops in 0.6 → 1 when selected. */
 export function SelectCheck({ selected }: { selected: boolean }) {
   const reduced = useReducedMotion();
   const scale = useSharedValue(selected ? 1 : FROM);
@@ -46,17 +46,17 @@ const styles = StyleSheet.create({
   ring: {
     width: SIZE,
     height: SIZE,
-    borderRadius: radii.pill,
-    borderWidth: stroke.regular,
+    borderRadius: radii.sm,
+    borderWidth: stroke.thick,
     borderColor: colors.borderStrong,
   },
   fill: {
     position: 'absolute',
-    top: -stroke.regular,
-    left: -stroke.regular,
+    top: -stroke.thick,
+    left: -stroke.thick,
     width: SIZE,
     height: SIZE,
-    borderRadius: radii.pill,
+    borderRadius: radii.sm,
     backgroundColor: colors.accent,
     alignItems: 'center',
     justifyContent: 'center',

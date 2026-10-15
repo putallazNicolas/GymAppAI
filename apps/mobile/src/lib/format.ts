@@ -84,3 +84,9 @@ export function inputToReps(text: string): number | undefined {
   const n = parseInt(text.trim(), 10);
   return Number.isFinite(n) && n >= 0 ? n : undefined;
 }
+
+/** "15/10" from an ISO date or Date (local time). */
+export function formatShortDate(input: Date | string): string {
+  const d = typeof input === 'string' ? new Date(input) : input;
+  return `${d.getDate()}/${d.getMonth() + 1}`;
+}

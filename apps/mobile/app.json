@@ -3,14 +3,23 @@
     "name": "Gym App",
     "slug": "gym-app",
     "version": "0.1.0",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "gymapp",
     "userInterfaceStyle": "dark",
     "ios": {
-      "supportsTablet": false
+      "supportsTablet": false,
+      "bundleIdentifier": "com.putallaznicolas.gymapp",
+      "buildNumber": "1",
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
+      "package": "com.putallaznicolas.gymapp",
       "adaptiveIcon": {
         "backgroundColor": "#0B0F0D",
         "foregroundImage": "./assets/images/android-icon-foreground.png",

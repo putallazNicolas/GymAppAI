@@ -1,5 +1,39 @@
 # Progreso
 
+## Para instalar en el iPhone (2026-11-16)
+
+Guía completa: [INSTALAR-EN-IPHONE.md](INSTALAR-EN-IPHONE.md).
+
+**Lo que tenés que correr una sola vez en la PC** (desde la raíz del repo):
+
+```powershell
+npm i -g eas-cli
+eas login
+cd apps/mobile
+eas init                 # crea el proyecto en tu cuenta y agrega el projectId a app.json
+eas update:configure     # agrega updates.url a app.json
+git add app.json eas.json; git commit -m "chore: link EAS project"; git push
+npm run update:preview   # primer update → abrilo en Expo Go desde expo.dev → Updates → Preview (QR)
+```
+
+Después, creá un token en expo.dev/settings/access-tokens y cargalo en GitHub como secret `EXPO_TOKEN`.
+
+**Qué queda automatizado:** cada merge a `main` con CI verde dispara el workflow **EAS Update (preview)**,
+que publica un update al branch `preview`. La próxima vez que abrís la app en Expo Go, tenés la versión
+nueva. Sin `EXPO_TOKEN`, el workflow se saltea y queda en verde. Para TestFlight (con Apple Developer):
+`npm run build:ios` y `npm run submit:ios` desde `apps/mobile`.
+
+**Decisiones:**
+
+- `runtimeVersion` usa la política `appVersion`: Expo Go la acepta desde el SDK 49 y sirve también para los
+  builds reales (el runtime es la `version` de `app.json`). Si cambia una dependencia nativa, hay que subir
+  `version` y hacer un build nuevo.
+- Bundle ID / package `com.putallaznicolas.gymapp`. El número de build lo maneja EAS
+  (`appVersionSource: "remote"`, `autoIncrement` en producción).
+- No se inventó ningún `projectId`, Apple ID ni credencial: los genera tu cuenta (`eas init`, primer
+  `eas build`). En `eas.json` → `submit.production.ios` hay dos valores `COMPLETAR_…` para cuando tengas App
+  Store Connect.
+
 ## Reporte para la mañana (2026-10-15)
 
 ### Qué funciona

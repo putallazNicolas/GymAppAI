@@ -1,5 +1,27 @@
 # Progreso
 
+## Para probar en el iPhone (2026-11-17)
+
+Arreglos de tres bugs que solo aparecían en iOS (PRs #38 y #39). Abrí el update más nuevo de `preview` en Expo
+Go y probá:
+
+1. **Nombre (bug "HELLO WORLd").** Renombrá una rutina y un día a "Hello world" con "Listo". El encabezado lo
+   muestra en mayúsculas, pero al volver a tocarlo para editar tiene que decir "Hello world" tal cual.
+   Mientras escribís se ve el texto real (minúsculas incluidas): es a propósito. Lo que ya quedó mal
+   guardado, renombralo a mano.
+2. **Hoja "Editar ejercicio".** Tocá un ejercicio del día. Arriba tienen que verse el nombre, "Listo" y el
+   control de **Series** (− 3 +), sin franja vacía. Probá − y + (mantené apretado). En "Igual en todas", tocá
+   el "3 ×" naranja: lleva al control de series. En "Por serie", usá "Agregar serie" y "Quitar serie" debajo
+   de la lista. La hoja ahora ocupa toda la altura y se cierra deslizando hacia abajo o con "Listo".
+3. **Descanso.** Desde la hoja, tocá Descanso: también abre como hoja completa; presets, ±15 s y "Sin
+   descanso".
+4. **Barra del teclado.** Tocá el número grande de reps (o una serie en "Por serie"): arriba del teclado
+   numérico tiene que aparecer la barra **AMRAP · – · Siguiente**. Escribí "8", "–", "10" y tocá
+   "Siguiente": pasa a la serie siguiente y la fila queda a la vista, no tapada por la barra. "AMRAP" carga
+   AMRAP y cierra el teclado. En el campo de Notas la barra **no** aparece.
+
+Si algo de esto falla, mandá una captura: el navegador no puede reproducir la hoja ni el teclado de iOS.
+
 ## Ajustes UX (2026-11-17)
 
 Diseño aprobado en `design/` (P06b, P06c, P07b, P07c, P07c2, P07d, P08b, P08c, P03b, S4). PRs #29 (diseño + spec), #31

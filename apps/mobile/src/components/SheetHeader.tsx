@@ -17,7 +17,7 @@ interface SheetHeaderProps {
   bordered?: boolean;
 }
 
-/** Header of the formSheet routes (design/P07c, P07d): eyebrow, title and "Listo". */
+/** Header of the sheet routes (design/P07c, P07d): eyebrow, title and "Listo". */
 export function SheetHeader({
   eyebrow,
   title,

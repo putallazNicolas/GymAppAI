@@ -89,13 +89,17 @@ tabs. **Resumen** aparece al finalizar el entrenamiento.
 - Lista de ejercicios planificados **cerrada** (`design/P07b`, `PlannedExerciseRow`): número, nombre, resumen
   ("4 × 8-10", o "5 · 3 · 1 · AMRAP" + tag POR SERIE), descanso (m:ss o "Sin descanso") y la nota. Solo ↑/↓
   apilados en la fila; **no hay inputs ni tacho en la fila**.
-- **Se edita en una hoja** (`design/P07c`, `P07c2`), no en la fila: tocar la fila abre la hoja con:
-  - Series con `Stepper` grande (mantener apretado repite).
+- **Se edita en una hoja** (`design/P07c`, `P07c2`), no en la fila: tocar la fila abre la hoja (en iOS, una
+  page sheet nativa: `presentation: 'modal'`) con:
+  - Series con `Stepper` grande arriba, en los dos modos (mantener apretado repite). En "Igual en todas", el
+    "N ×" al lado de las reps lleva a ese stepper. En "Por serie", debajo de la última fila, "Quitar serie"
+    (saca la última) y "Agregar serie" (copia la última).
   - `RepsModeToggle`: **"Igual en todas"** / **"Por serie"**. En "Por serie", una `PlannedSetRow` por serie
     con stepper chico de reps (también editable como texto) y la celda CARGA punteada, reservada y sin
     función.
   - Reps: **presets primero** (5 · 6-8 · 8-10 · 10-12 · 12-15 · 15-20 · AMRAP), **teclado después** (solo si
-    tocás el número), con barra sobre el teclado: "AMRAP", "–" y "Siguiente". Al salir del campo se
+    tocás el número), con barra propia sobre el teclado (`RepsKeyboardBar`): "AMRAP", "–" y "Siguiente". Solo
+    aparece con el foco en un campo de reps; sin la barra, el campo usa el teclado con puntuación. Al salir del campo se
     normaliza (trim, mayúsculas, "8 - 10" → "8-10"); si queda vacío vuelve al valor anterior. Reps sigue
     siendo texto: acepta "8-10" y "AMRAP".
   - Descanso con **`RestPicker`** (`design/P07d`): **presets + ±15 s, sin rueda**. Rango 0 a 600 s en pasos de

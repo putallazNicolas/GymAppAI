@@ -1,37 +1,368 @@
 {
   "v": 3,
-  "createdOnFiles": { "v": 1, "at": "2026-10-15T12:00:00Z" },
-  "title": "Gym App Rediseño",
-  "launch": { "view": "canvas", "page": "plataforma" },
-  "pages": [
-    { "id": "plataforma", "name": "Plataforma (A)" },
-    { "id": "direcciones", "name": "Direcciones" }
-  ],
+  "attachments": {},
   "boards": {
-    "Main.dc.html": { "x": 0, "y": 0, "w": 393, "h": 852, "title": "A · Plataforma — Entrenando", "radius": 44, "page": "direcciones" },
-    "A-Ficha.dc.html": { "x": 0, "y": 972, "w": 393, "h": 640, "title": "A · Plataforma — Ficha", "page": "direcciones" },
-    "B-Entrenando.dc.html": { "x": 473, "y": 0, "w": 393, "h": 852, "title": "B · Calibre — Entrenando", "radius": 44, "page": "direcciones" },
-    "B-Ficha.dc.html": { "x": 473, "y": 972, "w": 393, "h": 640, "title": "B · Calibre — Ficha", "page": "direcciones" },
-    "C-Entrenando.dc.html": { "x": 946, "y": 0, "w": 393, "h": 852, "title": "C · Tiza y hierro — Entrenando", "radius": 44, "page": "direcciones" },
-    "C-Ficha.dc.html": { "x": 946, "y": 972, "w": 393, "h": 640, "title": "C · Tiza y hierro — Ficha", "page": "direcciones" },
-
-    "P01-Hoy.dc.html": { "x": 0, "y": 0, "w": 393, "h": 852, "title": "1 · Hoy — con datos y entrenamiento sin terminar", "radius": 44, "page": "plataforma", "is_interactive": true },
-    "P02-Hoy-Vacio.dc.html": { "x": 473, "y": 0, "w": 393, "h": 852, "title": "1b · Hoy — estado vacío", "radius": 44, "page": "plataforma", "is_interactive": true },
-    "P03-Entrenando.dc.html": { "x": 946, "y": 0, "w": 393, "h": 852, "title": "2 · Entrenando — prototipo (tocá ✓)", "radius": 44, "page": "plataforma", "is_interactive": true },
-    "P04-Resumen.dc.html": { "x": 1419, "y": 0, "w": 393, "h": 1240, "title": "3 · Resumen — con PR nuevo", "radius": 44, "page": "plataforma", "is_interactive": true },
-
-    "P05-Rutinas.dc.html": { "x": 0, "y": 1620, "w": 393, "h": 852, "title": "4 · Mis rutinas — menú abierto", "radius": 44, "page": "plataforma", "is_interactive": true },
-    "P06-Armar-Rutina.dc.html": { "x": 473, "y": 1620, "w": 393, "h": 852, "title": "5 · Armar rutina", "radius": 44, "page": "plataforma", "is_interactive": true },
-    "P07-Armar-Dia.dc.html": { "x": 946, "y": 1620, "w": 393, "h": 1180, "title": "6 · Armar día", "radius": 44, "page": "plataforma", "is_interactive": true },
-    "P08-Elegir-Ejercicio.dc.html": { "x": 1419, "y": 1620, "w": 393, "h": 852, "title": "7 · Elegir ejercicio — selección múltiple", "radius": 44, "page": "plataforma", "is_interactive": true },
-
-    "P09-Progreso.dc.html": { "x": 0, "y": 3320, "w": 393, "h": 1400, "title": "8 · Progreso — con datos (tocá el gráfico)", "radius": 44, "page": "plataforma", "is_interactive": true },
-    "P10-Progreso-Vacio.dc.html": { "x": 473, "y": 3320, "w": 393, "h": 852, "title": "8b · Progreso — estado vacío", "radius": 44, "page": "plataforma", "is_interactive": true },
-    "P11-Perfil.dc.html": { "x": 946, "y": 3320, "w": 393, "h": 852, "title": "9 · Perfil", "radius": 44, "page": "plataforma", "is_interactive": true },
-
-    "S1-Tokens.dc.html": { "x": 0, "y": 5240, "w": 880, "h": 1300, "title": "Sistema · Tokens", "page": "plataforma" },
-    "S2-Componentes.dc.html": { "x": 960, "y": 5240, "w": 880, "h": 1900, "title": "Sistema · Componentes", "page": "plataforma" },
-    "S3-Implementacion.dc.html": { "x": 1920, "y": 5240, "w": 880, "h": 2800, "title": "Notas de implementación (RN)", "page": "plataforma" }
+    "A-Ficha.dc.html": {
+      "h": 640,
+      "page": "direcciones",
+      "title": "A · Plataforma — Ficha",
+      "w": 393,
+      "x": 0,
+      "y": 972
+    },
+    "B-Entrenando.dc.html": {
+      "h": 852,
+      "page": "direcciones",
+      "radius": 44,
+      "title": "B · Calibre — Entrenando",
+      "w": 393,
+      "x": 473,
+      "y": 0
+    },
+    "B-Ficha.dc.html": {
+      "h": 640,
+      "page": "direcciones",
+      "title": "B · Calibre — Ficha",
+      "w": 393,
+      "x": 473,
+      "y": 972
+    },
+    "C-Entrenando.dc.html": {
+      "h": 852,
+      "page": "direcciones",
+      "radius": 44,
+      "title": "C · Tiza y hierro — Entrenando",
+      "w": 393,
+      "x": 946,
+      "y": 0
+    },
+    "C-Ficha.dc.html": {
+      "h": 640,
+      "page": "direcciones",
+      "title": "C · Tiza y hierro — Ficha",
+      "w": 393,
+      "x": 946,
+      "y": 972
+    },
+    "Main.dc.html": {
+      "h": 852,
+      "page": "direcciones",
+      "radius": 44,
+      "title": "A · Plataforma — Entrenando",
+      "w": 393,
+      "x": 0,
+      "y": 0
+    },
+    "P01-Hoy.dc.html": {
+      "h": 852,
+      "is_interactive": true,
+      "page": "plataforma",
+      "radius": 44,
+      "title": "1 · Hoy — con datos y entrenamiento sin terminar",
+      "w": 393,
+      "x": 0,
+      "y": 0
+    },
+    "P02-Hoy-Vacio.dc.html": {
+      "h": 852,
+      "is_interactive": true,
+      "page": "plataforma",
+      "radius": 44,
+      "title": "1b · Hoy — estado vacío",
+      "w": 393,
+      "x": 473,
+      "y": 0
+    },
+    "P03-Entrenando.dc.html": {
+      "h": 852,
+      "is_interactive": true,
+      "page": "plataforma",
+      "radius": 44,
+      "title": "2 · Entrenando — prototipo (tocá ✓)",
+      "w": 393,
+      "x": 946,
+      "y": 0
+    },
+    "P03b-Entrenando.dc.html": {
+      "h": 852,
+      "page": "ajustes-ux",
+      "radius": 44,
+      "title": "2b · Entrenando — reps planificadas por serie",
+      "w": 393,
+      "x": 1892,
+      "y": 0
+    },
+    "P04-Resumen.dc.html": {
+      "h": 1240,
+      "is_interactive": true,
+      "page": "plataforma",
+      "radius": 44,
+      "title": "3 · Resumen — con PR nuevo",
+      "w": 393,
+      "x": 1419,
+      "y": 0
+    },
+    "P05-Rutinas.dc.html": {
+      "h": 852,
+      "is_interactive": true,
+      "page": "plataforma",
+      "radius": 44,
+      "title": "4 · Mis rutinas — menú abierto",
+      "w": 393,
+      "x": 0,
+      "y": 1620
+    },
+    "P06-Armar-Rutina.dc.html": {
+      "h": 852,
+      "is_interactive": true,
+      "page": "plataforma",
+      "radius": 44,
+      "title": "5 · Armar rutina",
+      "w": 393,
+      "x": 473,
+      "y": 1620
+    },
+    "P06b-Armar-Rutina.dc.html": {
+      "h": 852,
+      "is_interactive": true,
+      "page": "ajustes-ux",
+      "radius": 44,
+      "title": "5b · Armar rutina — título editable (tocá el nombre)",
+      "w": 393,
+      "x": 0,
+      "y": 0
+    },
+    "P06c-Titulo-Estados.dc.html": {
+      "h": 640,
+      "page": "ajustes-ux",
+      "title": "5c · Título editable — normal, editando, vacío",
+      "w": 865,
+      "x": 1420,
+      "y": 1500
+    },
+    "P07-Armar-Dia.dc.html": {
+      "h": 1180,
+      "is_interactive": true,
+      "page": "plataforma",
+      "radius": 44,
+      "title": "6 · Armar día",
+      "w": 393,
+      "x": 946,
+      "y": 1620
+    },
+    "P07b-Armar-Dia.dc.html": {
+      "h": 1180,
+      "is_interactive": true,
+      "page": "ajustes-ux",
+      "radius": 44,
+      "title": "6b · Armar día — lista cerrada (simple y por serie)",
+      "w": 393,
+      "x": 473,
+      "y": 0
+    },
+    "P07c-Editar-Ejercicio.dc.html": {
+      "h": 852,
+      "is_interactive": true,
+      "page": "ajustes-ux",
+      "radius": 44,
+      "title": "6c · Editar ejercicio — hoja (prototipo)",
+      "w": 393,
+      "x": 946,
+      "y": 0
+    },
+    "P07c2-Estados.dc.html": {
+      "h": 900,
+      "page": "ajustes-ux",
+      "title": "6c · Editar ejercicio — estados y transiciones",
+      "w": 1340,
+      "x": -26,
+      "y": 1379
+    },
+    "P07d-Descanso.dc.html": {
+      "h": 852,
+      "is_interactive": true,
+      "page": "ajustes-ux",
+      "radius": 44,
+      "title": "6d · Descanso — presets + ajuste fino (prototipo)",
+      "w": 393,
+      "x": 1419,
+      "y": 0
+    },
+    "P08-Elegir-Ejercicio.dc.html": {
+      "h": 852,
+      "is_interactive": true,
+      "page": "plataforma",
+      "radius": 44,
+      "title": "7 · Elegir ejercicio — selección múltiple",
+      "w": 393,
+      "x": 1419,
+      "y": 1620
+    },
+    "P08b-Crear-Ejercicio.dc.html": {
+      "h": 1250,
+      "is_interactive": true,
+      "page": "ajustes-ux",
+      "radius": 44,
+      "title": "7b · Crear ejercicio (prototipo)",
+      "w": 393,
+      "x": 0,
+      "y": 2780
+    },
+    "P08c-Ejercicio-Propio.dc.html": {
+      "h": 852,
+      "is_interactive": true,
+      "page": "ajustes-ux",
+      "radius": 44,
+      "title": "7c · Ejercicio propio en la lista y cómo se edita",
+      "w": 393,
+      "x": 473,
+      "y": 2780
+    },
+    "P09-Progreso.dc.html": {
+      "h": 1400,
+      "is_interactive": true,
+      "page": "plataforma",
+      "radius": 44,
+      "title": "8 · Progreso — con datos (tocá el gráfico)",
+      "w": 393,
+      "x": 0,
+      "y": 3320
+    },
+    "P10-Progreso-Vacio.dc.html": {
+      "h": 852,
+      "is_interactive": true,
+      "page": "plataforma",
+      "radius": 44,
+      "title": "8b · Progreso — estado vacío",
+      "w": 393,
+      "x": 473,
+      "y": 3320
+    },
+    "P11-Perfil.dc.html": {
+      "h": 852,
+      "is_interactive": true,
+      "page": "plataforma",
+      "radius": 44,
+      "title": "9 · Perfil",
+      "w": 393,
+      "x": 946,
+      "y": 3320
+    },
+    "S1-Tokens.dc.html": {
+      "h": 1300,
+      "page": "plataforma",
+      "title": "Sistema · Tokens",
+      "w": 880,
+      "x": 0,
+      "y": 5240
+    },
+    "S2-Componentes.dc.html": {
+      "h": 1900,
+      "page": "plataforma",
+      "title": "Sistema · Componentes",
+      "w": 880,
+      "x": 960,
+      "y": 5240
+    },
+    "S3-Implementacion.dc.html": {
+      "h": 2800,
+      "page": "plataforma",
+      "title": "Notas de implementación (RN)",
+      "w": 880,
+      "x": 1920,
+      "y": 5240
+    },
+    "S4-Notas-UX.dc.html": {
+      "h": 2700,
+      "page": "ajustes-ux",
+      "title": "S4 · Notas UX para el desarrollador",
+      "w": 1100,
+      "x": 946,
+      "y": 2780
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-10-15T12:00:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "page": "ajustes-ux",
+    "view": "canvas"
+  },
+  "notes": {
+    "filaA": {
+      "kind": "title1",
+      "maxW": 1812,
+      "page": "plataforma",
+      "text": "Plataforma · Hoy, Entrenando y Resumen",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    },
+    "filaB": {
+      "kind": "title1",
+      "maxW": 1812,
+      "page": "plataforma",
+      "text": "Rutinas · armar rutina, día y elegir ejercicio",
+      "w": 240,
+      "x": 0,
+      "y": 1360
+    },
+    "filaC": {
+      "kind": "title1",
+      "maxW": 1339,
+      "page": "plataforma",
+      "text": "Progreso y Perfil",
+      "w": 240,
+      "x": 0,
+      "y": 3060
+    },
+    "filaD": {
+      "kind": "title1",
+      "maxW": 2800,
+      "page": "plataforma",
+      "text": "Sistema de diseño y notas para React Native",
+      "w": 240,
+      "x": 0,
+      "y": 4980
+    },
+    "titulo": {
+      "kind": "title1",
+      "maxW": 1339,
+      "page": "direcciones",
+      "text": "Paso 1 · Tres direcciones sobre Entrenando",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    },
+    "uxA": {
+      "kind": "title1",
+      "maxW": 2285,
+      "page": "ajustes-ux",
+      "text": "Ajustes UX · armar rutina, día, series y descanso",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    },
+    "uxB": {
+      "kind": "title1",
+      "maxW": 2285,
+      "page": "ajustes-ux",
+      "text": "Estados: edición de ejercicio y título",
+      "w": 240,
+      "x": 0,
+      "y": 1240
+    },
+    "uxC": {
+      "kind": "title1",
+      "maxW": 2046,
+      "page": "ajustes-ux",
+      "text": "Crear ejercicio propio y notas para el desarrollador",
+      "w": 240,
+      "x": 0,
+      "y": 2520
+    }
   },
   "order": [
     "Main.dc.html",
@@ -53,14 +384,31 @@
     "P11-Perfil.dc.html",
     "S1-Tokens.dc.html",
     "S2-Componentes.dc.html",
-    "S3-Implementacion.dc.html"
+    "S3-Implementacion.dc.html",
+    "P06b-Armar-Rutina.dc.html",
+    "P07b-Armar-Dia.dc.html",
+    "P07c-Editar-Ejercicio.dc.html",
+    "P07d-Descanso.dc.html",
+    "P03b-Entrenando.dc.html",
+    "P07c2-Estados.dc.html",
+    "P06c-Titulo-Estados.dc.html",
+    "P08b-Crear-Ejercicio.dc.html",
+    "P08c-Ejercicio-Propio.dc.html",
+    "S4-Notas-UX.dc.html"
   ],
-  "notes": {
-    "titulo": { "x": 0, "y": -260, "text": "Paso 1 · Tres direcciones sobre Entrenando", "kind": "title1", "maxW": 1339, "page": "direcciones" },
-    "filaA": { "x": 0, "y": -260, "text": "Plataforma · Hoy, Entrenando y Resumen", "kind": "title1", "maxW": 1812, "page": "plataforma" },
-    "filaB": { "x": 0, "y": 1360, "text": "Rutinas · armar rutina, día y elegir ejercicio", "kind": "title1", "maxW": 1812, "page": "plataforma" },
-    "filaC": { "x": 0, "y": 3060, "text": "Progreso y Perfil", "kind": "title1", "maxW": 1339, "page": "plataforma" },
-    "filaD": { "x": 0, "y": 4980, "text": "Sistema de diseño y notas para React Native", "kind": "title1", "maxW": 2800, "page": "plataforma" }
-  },
-  "designSystems": []
+  "pages": [
+    {
+      "id": "plataforma",
+      "name": "Plataforma (A)"
+    },
+    {
+      "id": "direcciones",
+      "name": "Direcciones"
+    },
+    {
+      "id": "ajustes-ux",
+      "name": "Ajustes UX"
+    }
+  ],
+  "title": "Gym App Rediseño"
 }

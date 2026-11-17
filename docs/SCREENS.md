@@ -34,10 +34,15 @@ tabs. **Resumen** aparece al finalizar el entrenamiento.
   - El nombre y lo planificado (por ejemplo "4 × 8-10").
   - Todas sus series a la vez, una fila por serie: `# | Anterior | Kg | Reps | ✓`.
   - "Anterior" es lo que se hizo en esa serie la última vez.
-  - Kg viene precargado con el valor anterior o con la serie previa. Reps muestra lo planificado como
-    placeholder.
+  - Kg viene precargado con el valor anterior o con la serie previa. Reps muestra como placeholder **lo
+    planificado para esa serie** (`plannedSetReps[i]`; una serie agregada de más repite el último valor). Si
+    no es numérico (AMRAP), el placeholder va a 16 pt. _(Ajustes UX, `design/P03b`.)_
+  - Las notas del ejercicio (cues) se muestran en la card del ejercicio actual.
   - Teclado numérico: `decimal-pad` para kg y `number-pad` para reps.
 - Botón de check compacto por fila. **NO** va un botón grande de "Cargar serie".
+- ✓ con las reps vacías: si lo planificado para esa serie es un número, se carga ese número. Si es un rango
+  ("8-10") o AMRAP, **no se completa**: el campo de reps tiembla (2 × 240 ms), recibe el foco y vibra con un
+  aviso (`notificationAsync(Warning)`). _(Decisión del dueño al aprobar el diseño de Ajustes UX.)_
 - Al tocar ✓: la fila queda verde, se guarda al instante, **se cierra el teclado** y el foco avanza
   automáticamente a la siguiente serie **de forma visual** (marco naranja, sin abrir el teclado; tocar el
   campo lo abre). _(Decisión del dueño, 2026-10-15.)_
@@ -45,7 +50,8 @@ tabs. **Resumen** aparece al finalizar el entrenamiento.
   siguiente. Tocar un ejercicio colapsado lo vuelve a abrir para editarlo.
 - Menú por ejercicio: agregar serie, quitar serie y saltar ejercicio.
 - Después de **cada** ✓ aparece abajo la barra de descanso no bloqueante (como en `design/P03`): cuenta
-  regresiva de `restSeconds` del ejercicio o **2:00 por defecto** si no tiene, "+15 s", descartable.
+  regresiva de `restSeconds` del ejercicio o **2:00 por defecto** si no tiene, "+15 s", descartable. Si el
+  ejercicio tiene `restSeconds = 0` ("Sin descanso"), no aparece.
   Se puede apagar en Perfil ("Temporizador de descanso"). _(Decisión del dueño, 2026-10-15.)_
 - Pantalla siempre encendida mientras se entrena (`expo-keep-awake`).
 - Finalizar: si quedan series sin completar, se confirma con un diálogo. Después va al Resumen.
@@ -66,24 +72,52 @@ tabs. **Resumen** aparece al finalizar el entrenamiento.
 
 ## 4.5 Armar rutina
 
-- Nombre editable.
+- Nombre editable con **`EditableTitle`** (`design/P06b`, `P06c`): se ve como un campo (caja, label "NOMBRE DE
+  LA RUTINA", lápiz); al tocarlo pasa a edición (borde accent de 2 px, botón **"Listo"**). Se guarda **una sola
+  vez** al terminar de editar (Listo, "done" del teclado o salir del campo). `trim()`, máximo 40 caracteres;
+  si queda vacío se restaura el nombre anterior y se avisa abajo, sin diálogo ("El nombre no puede quedar
+  vacío. Dejamos «…»."). Ayuda debajo: "Tocá el nombre para cambiarlo".
 - Lista de días. Se reordenan con botones ↑/↓ (sin librerías de drag & drop), se agregan y se eliminan.
+- "Agregar día" abre el día nuevo con el título enfocado y el texto seleccionado.
 - Al tocar un día se abre Armar día.
 - Toggle **"Rutina activa"**.
 
 ## 4.6 Armar día
 
-- Nombre del día (por ejemplo "Piernas A").
-- Lista de ejercicios planificados. Para cada uno: nombre, series (número), reps y descanso (opcional, en
-  segundos), notas (opcional), reordenar ↑/↓ y eliminar.
-  - Reps es un **INPUT DE TEXTO**, no numérico, para aceptar rangos como "8-10" o "AMRAP".
+- Nombre del día con el mismo `EditableTitle` (label "DÍA N · NOMBRE", placeholder "Nombre del día", ayuda
+  "Ej.: Piernas A, Torso B, Empuje" mientras está vacío).
+- Lista de ejercicios planificados **cerrada** (`design/P07b`, `PlannedExerciseRow`): número, nombre, resumen
+  ("4 × 8-10", o "5 · 3 · 1 · AMRAP" + tag POR SERIE), descanso (m:ss o "Sin descanso") y la nota. Solo ↑/↓
+  apilados en la fila; **no hay inputs ni tacho en la fila**.
+- **Se edita en una hoja** (`design/P07c`, `P07c2`), no en la fila: tocar la fila abre la hoja con:
+  - Series con `Stepper` grande (mantener apretado repite).
+  - `RepsModeToggle`: **"Igual en todas"** / **"Por serie"**. En "Por serie", una `PlannedSetRow` por serie
+    con stepper chico de reps (también editable como texto) y la celda CARGA punteada, reservada y sin
+    función.
+  - Reps: **presets primero** (5 · 6-8 · 8-10 · 10-12 · 12-15 · 15-20 · AMRAP), **teclado después** (solo si
+    tocás el número), con barra sobre el teclado: "AMRAP", "–" y "Siguiente". Al salir del campo se
+    normaliza (trim, mayúsculas, "8 - 10" → "8-10"); si queda vacío vuelve al valor anterior. Reps sigue
+    siendo texto: acepta "8-10" y "AMRAP".
+  - Descanso con **`RestPicker`** (`design/P07d`): **presets + ±15 s, sin rueda**. Rango 0 a 600 s en pasos de
+    15; "Sin descanso" se guarda como 0.
+  - Notas (opcional).
+  - **"Quitar del día"** va dentro de la hoja.
+  - Cada cambio se persiste al instante.
 - Botón **"Agregar ejercicio"**, que abre Elegir ejercicio.
 
 ## 4.7 Elegir ejercicio
 
 - Buscador, chips de filtro por grupo muscular y lista.
 - Selección múltiple con el botón **"Agregar (N)"**.
-- **"Crear ejercicio"** (nombre y grupo muscular) para ejercicios personalizados.
+- **Crear ejercicio progresivo** (`design/P08b`, `CreateExerciseScreen`, pantalla modal): nombre + grupo
+  muscular y ya se puede guardar (botón Guardar fijo abajo, deshabilitado hasta que sea válido). El resto
+  (grupos secundarios, equipo, notas) va dentro de **"Más detalles"**, cerrado por defecto. Los campos
+  marcados "(propuesta)" en el diseño (tipo de registro, unilateral) **no se implementan** todavía.
+- Al guardar, el ejercicio nuevo queda **preseleccionado y resaltado** en la lista, y aparece un toast con la
+  acción **"Editar"** (`design/P08c`).
+- Ejercicios propios (`design/P08c`): tag **"PROPIO"**, menú ⋯ (Editar / Eliminar) y chip de filtro
+  **"Propios"**. Editar usa la misma pantalla de crear. Eliminar uno que ya se usó lo **archiva** (deja de
+  aparecer) en vez de borrarlo.
 - El catálogo inicial viene del seed del back: unos 60 ejercicios comunes en español.
 
 ## 4.8 Progreso

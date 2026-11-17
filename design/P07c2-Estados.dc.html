@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Editar ejercicio · estados</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.num{font-family:'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums}
+</style>
+</helmet>
+<div style="width:1340px;height:900px;box-sizing:border-box;padding:36px 40px;background:#0B0B0C;color:#F4F4F2;font-family:'Barlow',sans-serif;display:flex;flex-direction:column;gap:22px">
+
+  <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;align-items:start">
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#FF5B1F">A · IGUAL EN TODAS (DEFAULT)</span>
+      <div style="border-radius:20px;background:#1C1C1F;padding:14px;display:flex;flex-direction:column;gap:12px;min-height:520px;box-sizing:border-box">
+        <span class="num" style="font-size:22px;font-weight:800;text-transform:uppercase">Peso muerto rumano</span>
+        <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">SERIES</span>
+          <span style="display:flex;align-items:center;gap:6px"><span style="width:44px;height:44px;border-radius:12px;background:#2A2A2E;display:flex;align-items:center;justify-content:center;font-size:22px">−</span><span class="num" style="width:44px;text-align:center;font-size:38px;font-weight:800">4</span><span style="width:44px;height:44px;border-radius:12px;background:rgba(255,91,31,0.16);color:#FF5B1F;display:flex;align-items:center;justify-content:center;font-size:22px">+</span></span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">REPS</span>
+          <span style="display:grid;grid-template-columns:1fr 1fr;padding:3px;border-radius:10px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;font-size:12px;font-weight:700"><span style="padding:8px 10px;border-radius:8px;background:#F4F4F2;color:#0B0B0C">Igual en todas</span><span style="padding:8px 10px;color:#9A9A9F">Por serie</span></span></div>
+        <div style="height:60px;border-radius:12px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;display:flex;align-items:center;gap:10px;padding:0 12px"><span class="num" style="font-size:20px;color:#9A9A9F">4 ×</span><span class="num" style="font-size:38px;font-weight:800">8-10</span></div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <span class="num" style="height:36px;padding:0 10px;border-radius:18px;box-shadow:inset 0 0 0 1px #2A2A2E;display:flex;align-items:center;font-size:17px;font-weight:700;color:#C9C9CC">5</span>
+          <span class="num" style="height:36px;padding:0 10px;border-radius:18px;box-shadow:inset 0 0 0 1px #2A2A2E;display:flex;align-items:center;font-size:17px;font-weight:700;color:#C9C9CC">6-8</span>
+          <span class="num" style="height:36px;padding:0 10px;border-radius:18px;background:#F4F4F2;color:#0B0B0C;display:flex;align-items:center;font-size:17px;font-weight:700">8-10</span>
+          <span class="num" style="height:36px;padding:0 10px;border-radius:18px;box-shadow:inset 0 0 0 1px #2A2A2E;display:flex;align-items:center;font-size:17px;font-weight:700;color:#C9C9CC">10-12</span>
+          <span class="num" style="height:36px;padding:0 10px;border-radius:18px;box-shadow:inset 0 0 0 1px #2A2A2E;display:flex;align-items:center;font-size:17px;font-weight:700;color:#C9C9CC">12-15</span>
+          <span class="num" style="height:36px;padding:0 10px;border-radius:18px;box-shadow:inset 0 0 0 1px #2A2A2E;display:flex;align-items:center;font-size:17px;font-weight:700;color:#C9C9CC">AMRAP</span>
+        </div>
+        <div style="height:52px;border-radius:12px;background:#141416;box-shadow:inset 0 0 0 1px #2A2A2E;display:flex;align-items:center;justify-content:space-between;padding:0 12px"><span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">DESCANSO</span><span class="num" style="font-size:26px;font-weight:800">2:00 ›</span></div>
+      </div>
+      <ul style="margin:0;padding-left:18px;font-size:13px;line-height:1.5;color:#C9C9CC">
+        <li>Un toque en un preset y listo: sin teclado.</li>
+        <li>El campo grande abre el teclado solo si el valor no está en los presets.</li>
+        <li>±series agrega o quita la última serie con el mismo valor.</li>
+      </ul>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#FF5B1F">B · POR SERIE</span>
+      <div style="border-radius:20px;background:#1C1C1F;padding:14px;display:flex;flex-direction:column;gap:10px;min-height:520px;box-sizing:border-box">
+        <span class="num" style="font-size:22px;font-weight:800;text-transform:uppercase">Prensa 45°</span>
+        <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">REPS</span>
+          <span style="display:grid;grid-template-columns:1fr 1fr;padding:3px;border-radius:10px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;font-size:12px;font-weight:700"><span style="padding:8px 10px;color:#9A9A9F">Igual en todas</span><span style="padding:8px 10px;border-radius:8px;background:#F4F4F2;color:#0B0B0C">Por serie</span></span></div>
+        <div style="display:flex;gap:6px"><span style="height:32px;padding:0 10px;border-radius:16px;box-shadow:inset 0 0 0 1px #2A2A2E;display:flex;align-items:center;font-size:12px;font-weight:700;color:#C9C9CC">Igualar a la serie 1</span><span style="height:32px;padding:0 10px;border-radius:16px;box-shadow:inset 0 0 0 1px #2A2A2E;display:flex;align-items:center;font-size:12px;font-weight:700;color:#C9C9CC">Escalera −2</span></div>
+        <div style="display:grid;grid-template-columns:36px 1fr 48px;gap:6px;font-size:10px;font-weight:700;letter-spacing:0.12em;color:#7C7C82;padding:0 4px"><span>SERIE</span><span style="text-align:center">REPS</span><span style="text-align:center">CARGA</span></div>
+        <div style="display:grid;grid-template-columns:36px 1fr 48px;gap:6px;align-items:center;height:48px;padding:0 4px;border-radius:10px;background:#141416"><span class="num" style="font-size:20px;font-weight:800;color:#FF5B1F;text-align:center">1</span><span style="display:grid;grid-template-columns:36px 1fr 36px;align-items:center;height:40px;border-radius:8px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;text-align:center"><span>−</span><span class="num" style="font-size:22px;font-weight:800">12</span><span style="color:#FF5B1F">+</span></span><span style="height:32px;border-radius:8px;border:1.5px dashed #3A3A3F"></span></div>
+        <div style="display:grid;grid-template-columns:36px 1fr 48px;gap:6px;align-items:center;height:48px;padding:0 4px;border-radius:10px;background:#141416"><span class="num" style="font-size:20px;font-weight:800;color:#FF5B1F;text-align:center">2</span><span style="display:grid;grid-template-columns:36px 1fr 36px;align-items:center;height:40px;border-radius:8px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;text-align:center"><span>−</span><span class="num" style="font-size:22px;font-weight:800">10</span><span style="color:#FF5B1F">+</span></span><span style="height:32px;border-radius:8px;border:1.5px dashed #3A3A3F"></span></div>
+        <div style="display:grid;grid-template-columns:36px 1fr 48px;gap:6px;align-items:center;height:48px;padding:0 4px;border-radius:10px;background:#141416"><span class="num" style="font-size:20px;font-weight:800;color:#FF5B1F;text-align:center">3</span><span style="display:grid;grid-template-columns:36px 1fr 36px;align-items:center;height:40px;border-radius:8px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;text-align:center"><span>−</span><span class="num" style="font-size:22px;font-weight:800">8</span><span style="color:#FF5B1F">+</span></span><span style="height:32px;border-radius:8px;border:1.5px dashed #3A3A3F"></span></div>
+        <div style="display:grid;grid-template-columns:36px 1fr 48px;gap:6px;align-items:center;height:48px;padding:0 4px;border-radius:10px;background:#141416;box-shadow:inset 0 0 0 1.5px rgba(255,91,31,0.5)"><span class="num" style="font-size:20px;font-weight:800;color:#FF5B1F;text-align:center">4</span><span style="display:grid;grid-template-columns:36px 1fr 36px;align-items:center;height:40px;border-radius:8px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;text-align:center"><span>−</span><span class="num" style="font-size:22px;font-weight:800">8</span><span style="color:#FF5B1F">+</span></span><span style="height:32px;border-radius:8px;border:1.5px dashed #3A3A3F"></span></div>
+        <span style="font-size:11px;color:#7C7C82">↑ serie recién agregada: copia la anterior (8) y entra deslizando.</span>
+      </div>
+      <ul style="margin:0;padding-left:18px;font-size:13px;line-height:1.5;color:#C9C9CC">
+        <li>Al entrar, cada serie copia el valor de «Igual en todas».</li>
+        <li>± ajusta números y rangos (8-10 → 9-11). AMRAP no tiene ±.</li>
+        <li>CARGA: columna reservada, sin función todavía.</li>
+      </ul>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#FF5B1F">C · ESCRIBIENDO (SOLO SI HACE FALTA)</span>
+      <div style="border-radius:20px;background:#1C1C1F;padding:14px;display:flex;flex-direction:column;gap:10px;min-height:520px;box-sizing:border-box;position:relative;overflow:hidden">
+        <span class="num" style="font-size:22px;font-weight:800;text-transform:uppercase">Sentadilla trasera</span>
+        <div style="display:grid;grid-template-columns:36px 1fr 48px;gap:6px;align-items:center;height:48px;padding:0 4px;border-radius:10px;background:#141416"><span class="num" style="font-size:20px;font-weight:800;color:#FF5B1F;text-align:center">3</span><span style="display:grid;grid-template-columns:36px 1fr 36px;align-items:center;height:40px;border-radius:8px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;text-align:center"><span>−</span><span class="num" style="font-size:22px;font-weight:800">1</span><span style="color:#FF5B1F">+</span></span><span style="height:32px;border-radius:8px;border:1.5px dashed #3A3A3F"></span></div>
+        <div style="display:grid;grid-template-columns:36px 1fr 48px;gap:6px;align-items:center;height:48px;padding:0 4px;border-radius:10px;background:#141416"><span class="num" style="font-size:20px;font-weight:800;color:#FF5B1F;text-align:center">4</span><span style="display:flex;align-items:center;justify-content:center;height:40px;border-radius:8px;background:#0B0B0C;box-shadow:inset 0 0 0 2px #FF5B1F"><span class="num" style="font-size:20px;font-weight:800">AMRAP</span><span style="width:2px;height:20px;margin-left:2px;background:#FF5B1F"></span></span><span style="height:32px;border-radius:8px;border:1.5px dashed #3A3A3F"></span></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;background:#2B2B2F;padding:8px 6px 10px;display:flex;flex-direction:column;gap:6px" aria-label="Teclado del sistema con barra de accesos">
+          <div style="display:flex;gap:6px;padding:0 2px">
+            <span class="num" style="flex:1;height:34px;border-radius:8px;background:#3A3A3F;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800">AMRAP</span>
+            <span class="num" style="flex:1;height:34px;border-radius:8px;background:#3A3A3F;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800">–</span>
+            <span style="flex:1.2;height:34px;border-radius:8px;background:#FF5B1F;color:#0B0B0C;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800">Siguiente</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+            <span style="height:38px;border-radius:6px;background:#48484D;display:flex;align-items:center;justify-content:center;font-size:20px">1</span><span style="height:38px;border-radius:6px;background:#48484D;display:flex;align-items:center;justify-content:center;font-size:20px">2</span><span style="height:38px;border-radius:6px;background:#48484D;display:flex;align-items:center;justify-content:center;font-size:20px">3</span>
+            <span style="height:38px;border-radius:6px;background:#48484D;display:flex;align-items:center;justify-content:center;font-size:20px">4</span><span style="height:38px;border-radius:6px;background:#48484D;display:flex;align-items:center;justify-content:center;font-size:20px">5</span><span style="height:38px;border-radius:6px;background:#48484D;display:flex;align-items:center;justify-content:center;font-size:20px">6</span>
+            <span style="height:38px;border-radius:6px;background:#48484D;display:flex;align-items:center;justify-content:center;font-size:20px">7</span><span style="height:38px;border-radius:6px;background:#48484D;display:flex;align-items:center;justify-content:center;font-size:20px">8</span><span style="height:38px;border-radius:6px;background:#48484D;display:flex;align-items:center;justify-content:center;font-size:20px">9</span>
+            <span style="height:38px"></span><span style="height:38px;border-radius:6px;background:#48484D;display:flex;align-items:center;justify-content:center;font-size:20px">0</span><span style="height:38px;border-radius:6px;background:#3A3A3F;display:flex;align-items:center;justify-content:center;font-size:16px">⌫</span>
+          </div>
+        </div>
+      </div>
+      <ul style="margin:0;padding-left:18px;font-size:13px;line-height:1.5;color:#C9C9CC">
+        <li>Teclado numérico + barra propia: «AMRAP», «–» para rangos y «Siguiente» salta a la serie que sigue.</li>
+        <li>La fila activa sube sola sobre el teclado.</li>
+        <li>Si queda vacío, vuelve al valor anterior.</li>
+      </ul>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#FF5B1F">D · VOLVER A «IGUAL» CON VALORES DISTINTOS</span>
+      <div style="border-radius:20px;background:#1C1C1F;padding:14px;display:flex;flex-direction:column;gap:12px;min-height:520px;box-sizing:border-box">
+        <span class="num" style="font-size:22px;font-weight:800;text-transform:uppercase">Prensa 45°</span>
+        <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">REPS</span>
+          <span style="display:grid;grid-template-columns:1fr 1fr;padding:3px;border-radius:10px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;font-size:12px;font-weight:700"><span style="padding:8px 10px;border-radius:8px;background:#F4F4F2;color:#0B0B0C">Igual en todas</span><span style="padding:8px 10px;color:#9A9A9F">Por serie</span></span></div>
+        <div style="padding:10px 12px;border-radius:12px;background:rgba(255,91,31,0.12);box-shadow:inset 0 0 0 1px rgba(255,91,31,0.45);font-size:13px;line-height:1.4;color:#E4E4E2">Las series tenían reps distintas: quedó «12» en todas. Volvé a «Por serie» para recuperar 12 · 10 · 8 · 8.</div>
+        <div style="height:60px;border-radius:12px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;display:flex;align-items:center;gap:10px;padding:0 12px"><span class="num" style="font-size:20px;color:#9A9A9F">4 ×</span><span class="num" style="font-size:38px;font-weight:800">12</span></div>
+        <span style="font-size:13px;line-height:1.45;color:#9A9A9F">No hay diálogo de confirmación: el cambio es reversible mientras la hoja esté abierta. Al cerrarla, o si tocás ±series o cambiás las reps, la copia guardada se descarta.</span>
+      </div>
+      <ul style="margin:0;padding-left:18px;font-size:13px;line-height:1.5;color:#C9C9CC">
+        <li>Si todas eran iguales, pasa sin aviso.</li>
+        <li>Si eran distintas, se usa la serie 1 y se avisa.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="padding:16px 20px;border-radius:14px;background:#141416;border:1px solid #2A2A2E;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;font-size:13px;line-height:1.45;color:#C9C9CC">
+    <div><b style="display:block;color:#F4F4F2;margin-bottom:4px">Por qué una hoja y no la fila</b>La hoja deja la lista corta y legible, y pone los controles grandes abajo, donde llega el pulgar.</div>
+    <div><b style="display:block;color:#F4F4F2;margin-bottom:4px">+ serie</b>Igual: misma reps. Por serie: copia la última fila. Tope: 12 series.</div>
+    <div><b style="display:block;color:#F4F4F2;margin-bottom:4px">− serie</b>Saca siempre la última. Mínimo 1. Sin confirmación: deshacer = +.</div>
+    <div><b style="display:block;color:#F4F4F2;margin-bottom:4px">Guardado</b>Cada cambio se persiste al instante. «Listo» solo cierra la hoja.</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1340,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

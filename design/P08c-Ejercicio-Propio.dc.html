@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Ejercicio propio en la lista</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#050505}
+.num{font-family:'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer}
+.hs::-webkit-scrollbar{display:none}
+@keyframes toast{0%{opacity:0;transform:translateY(-12px)}100%{opacity:1;transform:none}}
+.toast{animation:toast 260ms cubic-bezier(0.22,1,0.36,1)}
+@keyframes hl{0%{background-color:rgba(255,91,31,0.32)}100%{background-color:rgba(255,91,31,0.10)}}
+.hl{animation:hl 1200ms ease-out}
+@keyframes menuin{0%{opacity:0;transform:scale(0.92) translateY(-6px)}100%{opacity:1;transform:none}}
+.menuin{animation:menuin 180ms cubic-bezier(0.22,1,0.36,1);transform-origin:top right}
+</style>
+</helmet>
+<div style="width:393px;height:852px;box-sizing:border-box;padding-top:50px;background:#0B0B0C;color:#F4F4F2;font-family:'Barlow',sans-serif;position:relative;overflow:hidden">
+
+  <div style="height:44px;padding:0 8px;display:flex;align-items:center">
+    <a href="P07b-Armar-Dia.dc.html" style="height:44px;padding:0 8px;display:flex;align-items:center;color:#FF5B1F;font-size:16px;font-weight:600">Cancelar</a>
+  </div>
+  <h1 class="num" style="margin:4px 16px 0;font-size:38px;line-height:0.95;font-weight:800;text-transform:uppercase">Elegir ejercicio</h1>
+
+  <div style="margin:14px 16px 0;height:48px;padding:0 14px;border-radius:12px;background:#141416;border:1px solid #2A2A2E;display:flex;align-items:center;gap:10px;font-size:16px;color:#7C7C82">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A9A9F" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>Buscar ejercicio
+  </div>
+
+  <div class="hs" style="margin-top:10px;padding:0 16px;display:flex;gap:6px;overflow-x:auto">
+    <span style="flex:none;height:44px;padding:0 14px;border-radius:22px;background:#141416;box-shadow:inset 0 0 0 1px #2A2A2E;color:#C9C9CC;display:flex;align-items:center;font-size:14px;font-weight:700">Todos</span>
+    <span style="flex:none;height:44px;padding:0 14px;border-radius:22px;background:#F4F4F2;color:#0B0B0C;display:flex;align-items:center;font-size:14px;font-weight:700">Piernas</span>
+    <span style="flex:none;height:44px;padding:0 12px;border-radius:22px;background:#141416;box-shadow:inset 0 0 0 1px #2A2A2E;color:#C9C9CC;display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>Propios</span>
+    <span style="flex:none;height:44px;padding:0 14px;border-radius:22px;background:#141416;box-shadow:inset 0 0 0 1px #2A2A2E;color:#C9C9CC;display:flex;align-items:center;font-size:14px;font-weight:700">Espalda</span>
+    <span style="flex:none;height:44px;padding:0 14px;border-radius:22px;background:#141416;box-shadow:inset 0 0 0 1px #2A2A2E;color:#C9C9CC;display:flex;align-items:center;font-size:14px;font-weight:700">Pecho</span>
+  </div>
+
+  <div style="position:absolute;top:262px;left:0;right:0;bottom:0;overflow:hidden;padding:0 16px">
+    <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column">
+      <li style="position:relative">
+        <div class="hl" style="min-height:64px;padding:0 0 0 12px;border-radius:10px;background:rgba(255,91,31,0.10);border-bottom:1px solid #1A1A1D;display:flex;align-items:center;gap:8px">
+          <span style="flex:1;display:flex;flex-direction:column;gap:3px;padding:8px 0">
+            <span style="display:flex;align-items:center;gap:8px;font-size:16px;font-weight:600">Sentadilla con pausa
+              <span style="padding:1px 6px;border-radius:5px;box-shadow:inset 0 0 0 1px #FF5B1F;color:#FF5B1F;font-size:10px;font-weight:800;letter-spacing:0.1em">PROPIO</span>
+            </span>
+            <span style="font-size:13px;color:#9A9A9F">Cuádriceps · Barra · +2 grupos</span>
+          </span>
+          <button onClick="{{toggleMenu}}" aria-label="Opciones de Sentadilla con pausa" aria-expanded="{{menu}}" style="width:44px;height:44px;border:0;border-radius:10px;background:{{menuBg}};color:#F4F4F2;display:flex;align-items:center;justify-content:center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
+          </button>
+          <span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center">
+            <span style="width:28px;height:28px;border-radius:8px;background:#FF5B1F;color:#0B0B0C;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+          </span>
+        </div>
+        <sc-if value="{{menu}}" hint-placeholder-val="{{true}}">
+          <div class="menuin" role="menu" style="position:absolute;z-index:5;top:56px;right:44px;width:230px;padding:6px;border-radius:14px;background:#1C1C1F;border:1px solid #2F2F33;box-shadow:0 18px 40px rgba(0,0,0,0.7);display:flex;flex-direction:column">
+            <a role="menuitem" href="P08b-Crear-Ejercicio.dc.html" style="height:48px;padding:0 12px;border-radius:10px;color:#F4F4F2;display:flex;align-items:center;gap:12px;font-size:16px;font-weight:600">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg>Editar ejercicio</a>
+            <span style="height:1px;margin:4px 8px;background:#2A2A2E"></span>
+            <button role="menuitem" style="height:48px;padding:0 12px;border:0;border-radius:10px;background:transparent;color:#FF4D6A;display:flex;align-items:center;gap:12px;font-size:16px;font-weight:600">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>Eliminar</button>
+            <span style="padding:4px 12px 6px;font-size:12px;line-height:1.35;color:#7C7C82">Si ya lo usaste, se oculta del catálogo pero tu historial queda.</span>
+          </div>
+        </sc-if>
+      </li>
+      <li style="min-height:58px;padding:0 6px 0 12px;border-bottom:1px solid #1A1A1D;display:flex;align-items:center;gap:12px">
+        <span style="flex:1;display:flex;flex-direction:column;gap:1px"><span style="font-size:16px;font-weight:600">Sentadilla búlgara</span><span style="font-size:13px;color:#9A9A9F">Piernas · Mancuernas</span></span>
+        <span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center"><span style="width:28px;height:28px;box-sizing:border-box;border-radius:8px;border:2px solid #3A3A3F"></span></span>
+      </li>
+      <li style="min-height:58px;padding:0 6px 0 12px;border-bottom:1px solid #1A1A1D;display:flex;align-items:center;gap:12px">
+        <span style="flex:1;display:flex;flex-direction:column;gap:1px"><span style="font-size:16px;font-weight:600">Sentadilla frontal</span><span style="font-size:13px;color:#9A9A9F">Piernas · Barra</span></span>
+        <span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center"><span style="width:28px;height:28px;box-sizing:border-box;border-radius:8px;border:2px solid #3A3A3F"></span></span>
+      </li>
+      <li style="min-height:58px;padding:0 6px 0 12px;border-bottom:1px solid #1A1A1D;display:flex;align-items:center;gap:12px">
+        <span style="flex:1;display:flex;flex-direction:column;gap:1px"><span style="font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px">Hack squat <span style="padding:1px 6px;border-radius:5px;box-shadow:inset 0 0 0 1px #FF5B1F;color:#FF5B1F;font-size:10px;font-weight:800;letter-spacing:0.1em">PROPIO</span></span><span style="font-size:13px;color:#9A9A9F">Cuádriceps · Máquina</span></span>
+        <span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:#9A9A9F"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></span>
+        <span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center"><span style="width:28px;height:28px;box-sizing:border-box;border-radius:8px;border:2px solid #3A3A3F"></span></span>
+      </li>
+      <li style="min-height:58px;padding:0 6px 0 12px;border-bottom:1px solid #1A1A1D;display:flex;align-items:center;gap:12px">
+        <span style="flex:1;display:flex;flex-direction:column;gap:1px"><span style="font-size:16px;font-weight:600">Sentadilla trasera</span><span style="font-size:13px;color:#9A9A9F">Piernas · Barra</span></span>
+        <span style="padding:2px 8px;border-radius:6px;background:#1C1C1F;border:1px solid #2A2A2E;font-size:12px;font-weight:600;color:#9A9A9F">En el día</span>
+        <span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center"><span style="width:28px;height:28px;box-sizing:border-box;border-radius:8px;border:2px solid #3A3A3F"></span></span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="toast" role="status" style="position:absolute;left:16px;right:16px;top:58px;min-height:52px;padding:0 6px 0 14px;border-radius:14px;background:#1C1C1F;border:1px solid rgba(61,220,132,0.45);box-shadow:0 16px 40px rgba(0,0,0,0.7);display:flex;align-items:center;gap:10px">
+    <span style="width:24px;height:24px;border-radius:12px;background:#3DDC84;color:#0B0B0C;display:flex;align-items:center;justify-content:center;flex:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+    <span style="flex:1;font-size:14px;font-weight:600">Creado y seleccionado</span>
+    <a href="P08b-Crear-Ejercicio.dc.html" style="height:44px;padding:0 10px;display:flex;align-items:center;color:#FF5B1F;font-size:14px;font-weight:700">Editar</a>
+  </div>
+
+  <div style="position:absolute;left:0;right:0;bottom:0;padding:24px 16px 34px;background:linear-gradient(180deg, rgba(11,11,12,0) 0%, #0B0B0C 34%)">
+    <a href="P07b-Armar-Dia.dc.html" style="height:56px;border-radius:14px;background:#FF5B1F;color:#0B0B0C;display:flex;align-items:center;justify-content:center;gap:8px;font-size:18px;font-weight:800">Agregar <span class="num" style="font-size:22px">(1)</span></a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":393,"height":852}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { menu: true };
+  }
+  renderVals() {
+    const m = this.state.menu;
+    return {
+      menu: m,
+      menuBg: m ? '#2A2A2E' : 'transparent',
+      toggleMenu: () => this.setState({ menu: !m })
+    };
+  }
+}
+</script>
+</body>
+</html>

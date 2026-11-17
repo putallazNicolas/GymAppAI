@@ -45,6 +45,16 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "6697ea23-b360-4bc8-9cb1-74774840fd27"
+      }
+    },
+    "owner": "putallaznicolas",
+    "updates": {
+      "url": "https://u.expo.dev/6697ea23-b360-4bc8-9cb1-74774840fd27"
     }
   }
 }

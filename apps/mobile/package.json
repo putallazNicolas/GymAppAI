@@ -8,6 +8,7 @@
     "ios": "expo start --ios",
     "android": "expo start --android",
     "typecheck": "tsc --noEmit",
+    "test": "jest",
     "doctor": "expo-doctor",
     "export:ios": "expo export --platform ios",
     "update:preview": "eas update --branch preview --environment preview --message \"Update manual desde la PC\"",
@@ -45,7 +46,11 @@
     "react-native-worklets": "0.13.0"
   },
   "devDependencies": {
+    "@jest/globals": "^30.5.2",
+    "@testing-library/react-native": "^14.1.0",
     "@types/react": "~19.3.0",
+    "jest": "^30.5.2",
+    "jest-expo": "~58.0.15",
     "typescript": "~6.0.3"
   }
 }

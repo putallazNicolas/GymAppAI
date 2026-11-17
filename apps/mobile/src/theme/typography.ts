@@ -22,6 +22,8 @@ export const type = {
   title: { fontFamily: fonts.display, fontSize: 28, lineHeight: 32, ...upper },
   numXL: { fontFamily: fonts.displayBold, fontSize: 40, lineHeight: 40, ...tnum },
   numL: { fontFamily: fonts.displayBold, fontSize: 32, lineHeight: 32, ...tnum },
+  /** numL in capitals for words in a numeric readout ("Sin descanso"). */
+  numLCaps: { fontFamily: fonts.displayBold, fontSize: 32, lineHeight: 32, ...upper },
   numM: { fontFamily: fonts.displayBold, fontSize: 25, lineHeight: 28, ...tnum },
   /** Row values (history best set), 22. */
   numRow: { fontFamily: fonts.displayBold, fontSize: 22, lineHeight: 24, ...tnum },
@@ -99,21 +101,31 @@ export const type = {
 } as const;
 
 /**
- * TextInput variants: same font, size and case as the display/body tokens but NO lineHeight.
- * On iOS a single-line TextInput with lineHeight < fontSize (or tight, while editing) clips
- * glyphs that rise above the line box (accents on capitals). Pair with `inputHeight`.
+ * TextInput variants: same font and size as the display/body tokens but NO lineHeight and NO
+ * textTransform.
+ * - lineHeight: on iOS a single-line TextInput with lineHeight < fontSize (or tight, while
+ *   editing) clips glyphs that rise above the line box (accents on capitals). Pair with
+ *   `inputHeight`.
+ * - textTransform: on iOS it rewrites the real value reported by onChangeText and leaves the
+ *   last keystroke untransformed ("HELLO WORLd"). Uppercase is presentation only: apply it on
+ *   the display Text, never on an input. Enforced by `inputType.test.ts`.
  */
-const { lineHeight: _dl, ...displayLInput } = type.displayL;
-const { lineHeight: _tl, ...titleInput } = type.title;
-const { lineHeight: _nm, ...numMInput } = type.numM;
+type InputStyle<T> = Omit<T, 'lineHeight' | 'textTransform'>;
+function toInput<T extends { lineHeight?: number; textTransform?: string }>(t: T): InputStyle<T> {
+  const { lineHeight: _lh, textTransform: _tt, ...rest } = t;
+  return rest;
+}
+const displayLInput = toInput(type.displayL);
+const titleInput = toInput(type.title);
+const numMInput = toInput(type.numM);
 /** Non-numeric reps placeholder ("AMRAP") in the Entrenando set row: 16 so it fits the cell. */
 const numMInputSmall = { ...numMInput, fontSize: 16 };
-const { lineHeight: _bd, ...bodyInput } = type.body;
-const { lineHeight: _bs, ...bodySInput } = type.bodyS;
+const bodyInput = toInput(type.body);
+const bodySInput = toInput(type.bodyS);
 /** Reps inputs of the edit sheet (44 for "same", 26 / 18 inside a per-set row). */
-const repsBigInput = { fontFamily: fonts.display, fontSize: 44, ...tnum, ...upper };
-const repsSetInput = { fontFamily: fonts.display, fontSize: 26, ...tnum, ...upper };
-const repsSetTextInput = { fontFamily: fonts.display, fontSize: 18, ...tnum, ...upper };
+const repsBigInput = { fontFamily: fonts.display, fontSize: 44, ...tnum };
+const repsSetInput = { fontFamily: fonts.display, fontSize: 26, ...tnum };
+const repsSetTextInput = { fontFamily: fonts.display, fontSize: 18, ...tnum };
 export const inputType = {
   displayLInput,
   titleInput,

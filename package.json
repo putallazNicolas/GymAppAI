@@ -25,7 +25,15 @@
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "react-native-worklets": "0.13.0",
-    "react-native-gesture-handler": "~3.3.0"
+    "react-native-gesture-handler": "~3.3.0",
+    "@react-native/jest-preset": {
+      "babel-jest": "^30.5.2",
+      "jest-environment-node": "^30.5.2",
+      "@jest/create-cache-key-function": "^30.5.2"
+    },
+    "jest-environment-jsdom": {
+      "jsdom": "^27.4.0"
+    }
   },
   "allowScripts": {
     "@parcel/watcher": false

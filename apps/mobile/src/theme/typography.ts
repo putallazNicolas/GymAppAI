@@ -106,6 +106,8 @@ export const type = {
 const { lineHeight: _dl, ...displayLInput } = type.displayL;
 const { lineHeight: _tl, ...titleInput } = type.title;
 const { lineHeight: _nm, ...numMInput } = type.numM;
+/** Non-numeric reps placeholder ("AMRAP") in the Entrenando set row: 16 so it fits the cell. */
+const numMInputSmall = { ...numMInput, fontSize: 16 };
 const { lineHeight: _bd, ...bodyInput } = type.body;
 const { lineHeight: _bs, ...bodySInput } = type.bodyS;
 /** Reps inputs of the edit sheet (44 for "same", 26 / 18 inside a per-set row). */
@@ -116,6 +118,7 @@ export const inputType = {
   displayLInput,
   titleInput,
   numMInput,
+  numMInputSmall,
   bodyInput,
   bodySInput,
   repsBigInput,

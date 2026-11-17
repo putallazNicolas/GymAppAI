@@ -18,6 +18,8 @@ export const colors = {
   accentPressed: '#E04A12',
   accentMuted: 'rgba(255,91,31,0.12)',
   accentFaint: 'rgba(255,91,31,0.10)',
+  /** Start of the 1.2 s highlight of a just-saved exercise row (fades to accentFaint). */
+  accentHighlight: 'rgba(255,91,31,0.32)',
   accentBorder: 'rgba(255,91,31,0.45)',
   accentHalo: 'rgba(255,91,31,0.25)',
   onAccent: '#0B0B0C',

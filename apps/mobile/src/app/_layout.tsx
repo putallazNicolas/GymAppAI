@@ -151,6 +151,14 @@ export default function RootLayout() {
               options={{ title: 'Elegir ejercicio', presentation: 'modal', headerShown: false }}
             />
             <Stack.Screen
+              name="ejercicio/nuevo"
+              options={{ title: 'Crear ejercicio', presentation: 'modal', headerShown: false }}
+            />
+            <Stack.Screen
+              name="ejercicio/[exerciseId]/editar"
+              options={{ title: 'Editar ejercicio', presentation: 'modal', headerShown: false }}
+            />
+            <Stack.Screen
               name="elegir-dia"
               options={{ title: 'Elegir día', presentation: 'modal' }}
             />

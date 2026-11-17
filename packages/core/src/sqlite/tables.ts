@@ -14,12 +14,28 @@ export interface TableSpec<T> {
   table: string;
   cols: readonly (keyof T & string)[];
   bools: readonly string[];
+  /** Columns holding JSON text (arrays/objects). Absent = no JSON columns. */
+  json?: readonly string[];
 }
 
 export const EXERCISES: TableSpec<Exercise> = {
   table: 'exercises',
-  cols: ['id', 'name', 'muscleGroup', 'equipment', 'isCustom', 'createdAt', 'ownerId', 'createdBy'],
-  bools: ['isCustom'],
+  cols: [
+    'id',
+    'name',
+    'muscleGroup',
+    'secondaryMuscleGroups',
+    'equipment',
+    'notes',
+    'isCustom',
+    'archived',
+    'createdAt',
+    'updatedAt',
+    'ownerId',
+    'createdBy',
+  ],
+  bools: ['isCustom', 'archived'],
+  json: ['secondaryMuscleGroups'],
 };
 export const ROUTINES: TableSpec<Routine> = {
   table: 'routines',
@@ -33,8 +49,9 @@ export const ROUTINE_DAYS: TableSpec<RoutineDay> = {
 };
 export const PLANNED_EXERCISES: TableSpec<PlannedExercise> = {
   table: 'planned_exercises',
-  cols: ['id', 'dayId', 'exerciseId', 'order', 'sets', 'reps', 'restSeconds', 'notes'],
+  cols: ['id', 'dayId', 'exerciseId', 'order', 'repsMode', 'plannedSets', 'restSeconds', 'notes'],
   bools: [],
+  json: ['plannedSets'],
 };
 export const WORKOUTS: TableSpec<Workout> = {
   table: 'workouts',
@@ -60,11 +77,13 @@ export const WORKOUT_EXERCISES: TableSpec<WorkoutExercise> = {
     'order',
     'plannedSets',
     'plannedReps',
+    'plannedSetReps',
     'restSeconds',
     'notes',
     'skipped',
   ],
   bools: ['skipped'],
+  json: ['plannedSetReps'],
 };
 export const WORKOUT_SETS: TableSpec<WorkoutSet> = {
   table: 'workout_sets',
@@ -78,7 +97,9 @@ export function fromRow<T>(spec: TableSpec<T>, row: Record<string, unknown>): T 
   for (const col of spec.cols) {
     const value = row[col];
     if (value === null || value === undefined) continue;
-    out[col] = spec.bools.includes(col) ? value === 1 || value === true : value;
+    if (spec.bools.includes(col)) out[col] = value === 1 || value === true;
+    else if (spec.json?.includes(col)) out[col] = JSON.parse(String(value));
+    else out[col] = value;
   }
   return out as T;
 }
@@ -89,16 +110,23 @@ function toParams<T>(spec: TableSpec<T>, entity: T): SqlParam[] {
     const value = record[col];
     if (value === undefined || value === null) return null;
     if (typeof value === 'boolean') return value ? 1 : 0;
+    if (spec.json?.includes(col)) return JSON.stringify(value);
     return value as SqlParam;
   });
 }
 
 const q = (name: string): string => `"${name}"`;
 
-export async function insertRow<T>(db: SqlDriver, spec: TableSpec<T>, entity: T): Promise<void> {
+export async function insertRow<T>(
+  db: SqlDriver,
+  spec: TableSpec<T>,
+  entity: T,
+  options: { orIgnore?: boolean } = {},
+): Promise<void> {
   const cols = spec.cols.map(q).join(', ');
   const marks = spec.cols.map(() => '?').join(', ');
-  await db.run(`INSERT INTO ${spec.table} (${cols}) VALUES (${marks})`, toParams(spec, entity));
+  const verb = options.orIgnore ? 'INSERT OR IGNORE' : 'INSERT';
+  await db.run(`${verb} INTO ${spec.table} (${cols}) VALUES (${marks})`, toParams(spec, entity));
 }
 
 /** Overwrites every column of the row with the entity's values (absent optional -> NULL). */

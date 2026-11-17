@@ -1,10 +1,74 @@
+import { legacyPlan, legacyRestSeconds, legacySetReps } from '../legacy';
 import type { SqlDriver } from './driver';
+
+/** A SQL statement, or a function for data conversions that are easier in code than in SQL. */
+export type MigrationStep = string | ((db: SqlDriver) => Promise<void>);
 
 export interface Migration {
   /** Strictly increasing, starting at 1. */
   version: number;
-  /** Statements applied in order. */
-  up: string[];
+  /** Steps applied in order, all inside one transaction together with the version bump. */
+  up: MigrationStep[];
+}
+
+/**
+ * v2 (contracts "Ajustes UX"): per-set plan, editable exercises, snapshot of reps per set.
+ *
+ * Design:
+ * - `exercises`: ADD COLUMN `secondaryMuscleGroups` (JSON text), `notes`, `archived`, `updatedAt`
+ *   (backfilled with `createdAt`).
+ * - `workout_exercises`: ADD COLUMN `plannedSetReps` (JSON array of strings), backfilled with
+ *   `plannedSets` copies of `plannedReps` (capped at MAX_SNAPSHOT_SET_REPS; a set beyond the
+ *   snapshot repeats the last value anyway).
+ * - `planned_exercises`: rebuilt (create new table, convert row by row in code, drop the old one,
+ *   rename) because the old NOT NULL `sets`/`reps` columns must go. `repsMode` TEXT and
+ *   `plannedSets` (JSON array of `{ reps }`) hold the plan: a JSON column is simpler and more
+ *   robust than a child table (the plan is always read and written as a whole, 1..20 entries).
+ *   Every row becomes repsMode "same" with `sets` copies of `reps`; `restSeconds` is rounded to
+ *   the nearest multiple of 15 and clamped to 0..600. Nothing else is touched.
+ * Everything runs in the same transaction as the `user_version` bump, so a failure rolls back.
+ */
+async function convertPlannedExercises(db: SqlDriver): Promise<void> {
+  const rows = await db.all<{
+    id: string;
+    dayId: string;
+    exerciseId: string;
+    order: number;
+    sets: number;
+    reps: string;
+    restSeconds: number | null;
+    notes: string | null;
+  }>('SELECT * FROM planned_exercises ORDER BY rowid');
+  for (const row of rows) {
+    const plan = legacyPlan(row.sets, row.reps);
+    await db.run(
+      `INSERT INTO planned_exercises_v2
+         ("id","dayId","exerciseId","order","repsMode","plannedSets","restSeconds","notes")
+       VALUES (?,?,?,?,?,?,?,?)`,
+      [
+        row.id,
+        row.dayId,
+        row.exerciseId,
+        row.order,
+        plan.repsMode,
+        JSON.stringify(plan.plannedSets),
+        row.restSeconds === null ? null : legacyRestSeconds(row.restSeconds),
+        row.notes,
+      ],
+    );
+  }
+}
+
+async function convertWorkoutExercises(db: SqlDriver): Promise<void> {
+  const rows = await db.all<{ id: string; plannedSets: number; plannedReps: string }>(
+    'SELECT "id","plannedSets","plannedReps" FROM workout_exercises',
+  );
+  for (const row of rows) {
+    await db.run('UPDATE workout_exercises SET "plannedSetReps" = ? WHERE "id" = ?', [
+      JSON.stringify(legacySetReps(row.plannedSets, row.plannedReps)),
+      row.id,
+    ]);
+  }
 }
 
 /**
@@ -100,6 +164,33 @@ export const MIGRATIONS: Migration[] = [
       `CREATE INDEX idx_workout_sets_we ON workout_sets("workoutExerciseId", "setIndex")`,
     ],
   },
+  {
+    version: 2,
+    up: [
+      `ALTER TABLE exercises ADD COLUMN "secondaryMuscleGroups" TEXT`,
+      `ALTER TABLE exercises ADD COLUMN "notes" TEXT`,
+      `ALTER TABLE exercises ADD COLUMN "archived" INTEGER`,
+      `ALTER TABLE exercises ADD COLUMN "updatedAt" TEXT NOT NULL DEFAULT ''`,
+      `UPDATE exercises SET "updatedAt" = "createdAt"`,
+      `ALTER TABLE workout_exercises ADD COLUMN "plannedSetReps" TEXT NOT NULL DEFAULT '[]'`,
+      convertWorkoutExercises,
+      `CREATE TABLE planned_exercises_v2 (
+        "id" TEXT PRIMARY KEY NOT NULL,
+        "dayId" TEXT NOT NULL REFERENCES routine_days("id") ON DELETE CASCADE,
+        "exerciseId" TEXT NOT NULL REFERENCES exercises("id") ON DELETE RESTRICT,
+        "order" INTEGER NOT NULL,
+        "repsMode" TEXT NOT NULL,
+        "plannedSets" TEXT NOT NULL,
+        "restSeconds" INTEGER,
+        "notes" TEXT
+      )`,
+      convertPlannedExercises,
+      `DROP TABLE planned_exercises`,
+      `ALTER TABLE planned_exercises_v2 RENAME TO planned_exercises`,
+      `CREATE INDEX idx_planned_day ON planned_exercises("dayId", "order")`,
+      `CREATE INDEX idx_planned_exercise ON planned_exercises("exerciseId")`,
+    ],
+  },
 ];
 
 export const LATEST_SCHEMA_VERSION = MIGRATIONS[MIGRATIONS.length - 1]?.version ?? 0;
@@ -124,7 +215,10 @@ export async function runMigrations(
   for (const migration of migrations) {
     if (migration.version <= current) continue;
     await db.transaction(async () => {
-      for (const statement of migration.up) await db.run(statement);
+      for (const step of migration.up) {
+        if (typeof step === 'string') await db.run(step);
+        else await step(db);
+      }
       // PRAGMA does not accept bound parameters; version is a trusted integer.
       await db.exec(`PRAGMA user_version = ${Math.trunc(migration.version)}`);
     });

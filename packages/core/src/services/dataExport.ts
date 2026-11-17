@@ -12,6 +12,8 @@ import {
   type Settings,
 } from '../contracts';
 import { buildSeedExercises } from '../memory';
+import { assertRestSeconds, normalizePlan } from '../plan';
+import { assertSetRepsList, normalizeSecondary } from '../rules';
 import { migrateExportPayload } from './exportMigrations';
 
 type Row = Record<string, unknown>;
@@ -29,7 +31,7 @@ class RowReader {
     throw new ValidationError(`${this.where}.${field}: ${why}`);
   }
 
-  private raw(field: string): unknown {
+  raw(field: string): unknown {
     const v = this.row[field];
     return v === null ? undefined : v;
   }
@@ -44,6 +46,20 @@ class RowReader {
 
   optString(field: string): string | undefined {
     return this.raw(field) === undefined ? undefined : this.string(field, { allowEmpty: true });
+  }
+
+  optBool(field: string): boolean | undefined {
+    return this.raw(field) === undefined ? undefined : this.bool(field);
+  }
+
+  /** Runs `read` and prefixes a ValidationError with the field path. */
+  nested<T>(field: string, read: (value: unknown) => T): T {
+    try {
+      return read(this.raw(field));
+    } catch (error) {
+      if (error instanceof ValidationError) this.fail(field, error.message);
+      throw error;
+    }
   }
 
   bool(field: string): boolean {
@@ -169,16 +185,25 @@ export function validateSnapshot(rawData: unknown, options: ValidateOptions): Da
   }
   const data = rawData as Row;
 
-  const exercises = readTable<Exercise>(data, 'exercises', (r) => ({
-    id: r.string('id'),
-    name: r.string('name'),
-    muscleGroup: r.oneOf('muscleGroup', MUSCLE_GROUPS),
-    equipment: r.optOneOf('equipment', EQUIPMENT),
-    isCustom: r.bool('isCustom'),
-    createdAt: r.iso('createdAt'),
-    ownerId: r.string('ownerId'),
-    createdBy: r.string('createdBy'),
-  }));
+  const exercises = readTable<Exercise>(data, 'exercises', (r) => {
+    const muscleGroup = r.oneOf('muscleGroup', MUSCLE_GROUPS);
+    return {
+      id: r.string('id'),
+      name: r.string('name'),
+      muscleGroup,
+      secondaryMuscleGroups: r.nested('secondaryMuscleGroups', (v) =>
+        normalizeSecondary(v, muscleGroup),
+      ),
+      equipment: r.optOneOf('equipment', EQUIPMENT),
+      notes: r.optString('notes'),
+      isCustom: r.bool('isCustom'),
+      archived: r.optBool('archived'),
+      createdAt: r.iso('createdAt'),
+      updatedAt: r.iso('updatedAt'),
+      ownerId: r.string('ownerId'),
+      createdBy: r.string('createdBy'),
+    };
+  });
   const present = new Set(exercises.map((e) => e.id));
   for (const seed of buildSeedExercises(options.seedCreatedAt)) {
     if (!present.has(seed.id)) exercises.push(seed);
@@ -223,9 +248,10 @@ export function validateSnapshot(rawData: unknown, options: ValidateOptions): Da
       dayId: r.string('dayId'),
       exerciseId: r.string('exerciseId'),
       order: r.int('order', 0),
-      sets: r.int('sets', 1),
-      reps: r.string('reps'),
-      restSeconds: r.optInt('restSeconds', 0),
+      ...r.nested('plannedSets', () =>
+        normalizePlan({ repsMode: r.raw('repsMode'), plannedSets: r.raw('plannedSets') }),
+      ),
+      restSeconds: r.nested('restSeconds', () => assertRestSeconds(r.raw('restSeconds'))),
       notes: r.optString('notes'),
     };
     requireRef(dayIds, p.dayId, `plannedExercises[${i}]`, 'dayId', 'routine day');
@@ -259,6 +285,7 @@ export function validateSnapshot(rawData: unknown, options: ValidateOptions): Da
       order: r.int('order', 0),
       plannedSets: r.int('plannedSets', 0),
       plannedReps: r.string('plannedReps', { allowEmpty: true }),
+      plannedSetReps: r.nested('plannedSetReps', assertSetRepsList),
       restSeconds: r.optInt('restSeconds', 0),
       notes: r.optString('notes'),
       skipped: r.bool('skipped'),

@@ -8,7 +8,7 @@ import { createExerciseRepo } from './exercises';
 import { runMigrations } from './migrations';
 import { createRoutineRepo } from './routines';
 import { createSettingsRepo } from './settings';
-import { EXERCISES } from './tables';
+import { EXERCISES, insertRow } from './tables';
 import { createWorkoutRepo } from './workouts';
 
 export interface SqliteRepositoriesOptions {
@@ -19,20 +19,9 @@ export interface SqliteRepositoriesOptions {
 }
 
 async function seedExercises(ctx: SqliteContext): Promise<void> {
-  const cols = EXERCISES.cols.map((c) => `"${c}"`).join(', ');
-  const marks = EXERCISES.cols.map(() => '?').join(', ');
   await inTransaction(ctx.db, async () => {
     for (const e of buildSeedExercises(ctx.now())) {
-      await ctx.db.run(`INSERT OR IGNORE INTO exercises (${cols}) VALUES (${marks})`, [
-        e.id,
-        e.name,
-        e.muscleGroup,
-        e.equipment ?? null,
-        e.isCustom ? 1 : 0,
-        e.createdAt,
-        e.ownerId,
-        e.createdBy,
-      ]);
+      await insertRow(ctx.db, EXERCISES, e, { orIgnore: true });
     }
   });
 }

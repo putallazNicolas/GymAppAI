@@ -23,6 +23,7 @@ export function buildSeedExercises(createdAt: string): Exercise[] {
     equipment: item.equipment,
     isCustom: false,
     createdAt,
+    updatedAt: createdAt,
     ownerId: LOCAL_USER_ID,
     createdBy: LOCAL_USER_ID,
   }));

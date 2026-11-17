@@ -18,6 +18,8 @@ export const type = {
   displayL: { fontFamily: fonts.display, fontSize: 38, lineHeight: 36, ...upper },
   displayM: { fontFamily: fonts.displayBold, fontSize: 27, lineHeight: 28, ...upper },
   displayS: { fontFamily: fonts.displayBold, fontSize: 22, lineHeight: 24, ...upper },
+  /** Editable screen title (design/P06c), 28. */
+  title: { fontFamily: fonts.display, fontSize: 28, lineHeight: 32, ...upper },
   numXL: { fontFamily: fonts.displayBold, fontSize: 40, lineHeight: 40, ...tnum },
   numL: { fontFamily: fonts.displayBold, fontSize: 32, lineHeight: 32, ...tnum },
   numM: { fontFamily: fonts.displayBold, fontSize: 25, lineHeight: 28, ...tnum },
@@ -66,12 +68,13 @@ export const type = {
  * glyphs that rise above the line box (accents on capitals). Pair with `inputHeight`.
  */
 const { lineHeight: _dl, ...displayLInput } = type.displayL;
+const { lineHeight: _tl, ...titleInput } = type.title;
 const { lineHeight: _nm, ...numMInput } = type.numM;
 const { lineHeight: _bd, ...bodyInput } = type.body;
 const { lineHeight: _bs, ...bodySInput } = type.bodyS;
-export const inputType = { displayLInput, numMInput, bodyInput, bodySInput } as const;
+export const inputType = { displayLInput, titleInput, numMInput, bodyInput, bodySInput } as const;
 
 /** Explicit input heights that fit the glyphs (about fontSize x 1.3). */
-export const inputHeight = { displayL: 50, numM: 34, body: 24, bodyS: 20 } as const;
+export const inputHeight = { displayL: 50, title: 38, numM: 34, body: 24, bodyS: 20 } as const;
 
 export type TypeToken = keyof typeof type;

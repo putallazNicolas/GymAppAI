@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Armar día · lista</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#050505}
+.num{font-family:'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer}
+button:disabled{cursor:default;opacity:0.3}
+input{font:inherit;color:inherit;background:none;border:0;outline:none;padding:0;margin:0;width:100%;text-transform:uppercase}
+input::placeholder{color:#5E5E64}
+@keyframes rowin{0%{opacity:0;transform:translateY(-8px)}100%{opacity:1;transform:none}}
+.rowin{animation:rowin 240ms cubic-bezier(0.22,1,0.36,1)}
+</style>
+</helmet>
+<div style="width:393px;height:1180px;box-sizing:border-box;padding-top:50px;background:#0B0B0C;color:#F4F4F2;font-family:'Barlow',sans-serif;position:relative">
+
+  <div style="height:44px;padding:0 8px;display:flex;align-items:center;justify-content:space-between">
+    <a href="P06b-Armar-Rutina.dc.html" style="height:44px;padding:0 8px;display:flex;align-items:center;gap:2px;color:#FF5B1F;font-size:16px;font-weight:600">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Fuerza 4 días
+    </a>
+    <span style="padding:0 10px;display:flex;align-items:center;gap:6px;font-size:13px;color:#9A9A9F">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3DDC84" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Guardado
+    </span>
+  </div>
+
+  <div style="margin:8px 16px 0">
+    <sc-if value="{{notEditing}}" hint-placeholder-val="{{true}}">
+      <button onClick="{{startEdit}}" aria-label="Editar nombre del día: {{name}}" style="width:100%;padding:10px 6px 10px 14px;border-radius:14px;border:0;background:#141416;box-shadow:inset 0 0 0 1px #2A2A2E;color:#F4F4F2;display:flex;align-items:center;gap:8px;text-align:left">
+        <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+          <span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">DÍA 1 · NOMBRE</span>
+          <span class="num" style="font-size:34px;line-height:1.05;font-weight:800;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{name}}</span>
+        </span>
+        <span style="width:44px;height:44px;border-radius:12px;background:#1C1C1F;color:#FF5B1F;display:flex;align-items:center;justify-content:center;flex:none">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>
+        </span>
+      </button>
+    </sc-if>
+    <sc-if value="{{editing}}" hint-placeholder-val="{{false}}">
+      <div style="padding:10px 6px 10px 14px;border-radius:14px;background:#0B0B0C;box-shadow:inset 0 0 0 2px #FF5B1F;display:flex;align-items:center;gap:8px">
+        <label style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+          <span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#FF5B1F">DÍA 1 · NOMBRE</span>
+          <span class="num" style="display:block;font-size:34px;line-height:1.05;font-weight:800">
+            <input type="text" value="{{draft}}" onChange="{{onDraft}}" placeholder="Nombre del día" autoFocus="{{true}}" maxLength="40" aria-label="Nombre del día">
+          </span>
+        </label>
+        <button onClick="{{done}}" style="height:44px;padding:0 14px;border-radius:12px;border:0;background:#FF5B1F;color:#0B0B0C;font-size:15px;font-weight:800;flex:none">Listo</button>
+      </div>
+    </sc-if>
+    <p style="margin:6px 4px 0;min-height:18px;font-size:13px;color:{{helpColor}}" aria-live="polite">{{help}}</p>
+  </div>
+
+  <div style="margin:14px 16px 8px;display:flex;align-items:baseline;justify-content:space-between">
+    <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">EJERCICIOS <span class="num" style="font-size:16px;color:#F4F4F2">{{count}}</span></span>
+    <span style="font-size:12px;color:#7C7C82"><span class="num" style="font-size:15px;color:#C9C9CC">{{totalSets}}</span> series · tocá uno para editarlo</span>
+  </div>
+
+  <ol style="list-style:none;margin:0 16px;padding:0;display:flex;flex-direction:column;gap:8px">
+    <sc-for list="{{items}}" as="it" hint-placeholder-count="5">
+      <li class="{{it.anim}}" style="display:flex;align-items:stretch;border-radius:16px;background:#141416;border:1px solid #2A2A2E;overflow:hidden">
+        <a href="P07c-Editar-Ejercicio.dc.html" aria-label="{{it.aria}}" style="flex:1;min-width:0;display:flex;align-items:stretch">
+          <span class="num" style="width:40px;flex:none;display:flex;align-items:flex-start;justify-content:center;padding-top:12px;font-size:22px;font-weight:800;color:#FF5B1F">{{it.n}}</span>
+          <span style="flex:1;min-width:0;padding:10px 10px 12px 0;display:flex;flex-direction:column;gap:4px">
+            <span class="num" style="font-size:20px;line-height:1.05;font-weight:700;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{it.name}}</span>
+            <span style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <span class="num" style="font-size:26px;line-height:1;font-weight:800">{{it.summary}}</span>
+              <sc-if value="{{it.perSet}}" hint-placeholder-val="{{false}}">
+                <span style="padding:2px 7px;border-radius:6px;box-shadow:inset 0 0 0 1px #3A3A3F;font-size:11px;font-weight:700;letter-spacing:0.1em;color:#C9C9CC">POR SERIE</span>
+              </sc-if>
+            </span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9A9A9F;min-width:0">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M10 2h4"/></svg>
+              <span class="num" style="font-size:15px;font-weight:600;color:#C9C9CC;flex:none">{{it.rest}}</span>
+              <sc-if value="{{it.hasNote}}" hint-placeholder-val="{{false}}">
+                <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">· {{it.note}}</span>
+              </sc-if>
+            </span>
+          </span>
+        </a>
+        <span style="width:48px;flex:none;border-left:1px solid #2A2A2E;display:flex;flex-direction:column">
+          <button onClick="{{it.up}}" disabled="{{it.first}}" aria-label="{{it.upLabel}}" style="flex:1;min-height:44px;border:0;background:transparent;color:#C9C9CC;display:flex;align-items:center;justify-content:center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+          </button>
+          <span style="height:1px;background:#2A2A2E"></span>
+          <button onClick="{{it.down}}" disabled="{{it.last}}" aria-label="{{it.downLabel}}" style="flex:1;min-height:44px;border:0;background:transparent;color:#C9C9CC;display:flex;align-items:center;justify-content:center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+          </button>
+        </span>
+      </li>
+    </sc-for>
+  </ol>
+
+  <a href="P08b-Crear-Ejercicio.dc.html" style="margin:12px 16px 0;height:56px;border-radius:14px;border:1.5px dashed #3A3A3F;color:#F4F4F2;display:flex;align-items:center;justify-content:center;gap:8px;font-size:16px;font-weight:700">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF5B1F" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+    Agregar ejercicio
+  </a>
+  <p style="margin:12px 20px 0;font-size:12px;line-height:1.45;color:#7C7C82;text-align:center">Para quitar un ejercicio, abrilo y tocá «Quitar del día». Así el tacho no queda al lado de las flechas.</p>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":393,"height":1180}}'>
+function restLabel(s) { if (!s) return 'Sin descanso'; var m = Math.floor(s / 60), r = s % 60; return m + ':' + (r < 10 ? '0' : '') + r; }
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: 'Piernas A', draft: '', editing: false, error: false, moved: null,
+      items: [
+        { id: 'sq', name: 'Sentadilla trasera', mode: 'perSet', reps: ['5', '3', '1', 'AMRAP'], rest: 180, note: 'Barra alta, bajo paralelo' },
+        { id: 'rdl', name: 'Peso muerto rumano', mode: 'same', reps: ['8-10', '8-10', '8-10', '8-10'], rest: 120, note: 'Barra, agarre prono' },
+        { id: 'lp', name: 'Prensa 45°', mode: 'perSet', reps: ['12', '10', '8'], rest: 90, note: '' },
+        { id: 'lc', name: 'Camilla femoral', mode: 'same', reps: ['10-12', '10-12', '10-12'], rest: 75, note: 'Bajada en 3 segundos' },
+        { id: 'cf', name: 'Gemelos de pie', mode: 'same', reps: ['15', '15', '15', '15'], rest: 0, note: '' }
+      ]
+    };
+  }
+  move(i, dir) {
+    const items = this.state.items.slice();
+    const j = i + dir;
+    if (j < 0 || j >= items.length) return;
+    const t = items[i]; items[i] = items[j]; items[j] = t;
+    this.setState({ items: items, moved: t.id });
+  }
+  renderVals() {
+    const s = this.state;
+    const items = s.items;
+    let help = 'Tocá el nombre para cambiarlo', helpColor = '#7C7C82';
+    if (s.editing) { help = 'Se guarda al tocar Listo o al salir del campo'; helpColor = '#9A9A9F'; }
+    else if (s.error) { help = 'El nombre no puede quedar vacío. Dejamos «' + s.name + '».'; helpColor = '#FF4D6A'; }
+    return {
+      name: s.name, draft: s.draft, editing: s.editing, notEditing: !s.editing, help: help, helpColor: helpColor,
+      startEdit: () => this.setState({ editing: true, draft: s.name, error: false }),
+      onDraft: (e) => this.setState({ draft: e.target.value }),
+      done: () => { const v = s.draft.trim(); if (!v) this.setState({ editing: false, error: true }); else this.setState({ name: v, editing: false, error: false }); },
+      count: items.length,
+      totalSets: items.reduce((a, x) => a + x.reps.length, 0),
+      items: items.map((x, i) => {
+        const perSet = x.mode === 'perSet';
+        const summary = perSet ? x.reps.join(' · ') : x.reps.length + ' × ' + x.reps[0];
+        return {
+          n: i + 1, name: x.name, summary: summary, perSet: perSet,
+          rest: restLabel(x.rest), note: x.note, hasNote: !!x.note,
+          first: i === 0, last: i === items.length - 1,
+          anim: s.moved === x.id ? 'rowin' : '',
+          aria: 'Editar ' + x.name + ': ' + (perSet ? x.reps.length + ' series, reps ' + x.reps.join(', ') : summary) + ', descanso ' + restLabel(x.rest),
+          upLabel: 'Subir ' + x.name, downLabel: 'Bajar ' + x.name,
+          up: () => this.move(i, -1), down: () => this.move(i, 1)
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

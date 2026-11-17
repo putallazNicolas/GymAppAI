@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Crear ejercicio</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#050505}
+.num{font-family:'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer}
+input,textarea{font:inherit;color:inherit;background:none;border:0;outline:none;padding:0;margin:0;width:100%}
+textarea{resize:none}
+input::placeholder,textarea::placeholder{color:#5E5E64}
+@keyframes open{0%{opacity:0;transform:translateY(-8px)}100%{opacity:1;transform:none}}
+.open{animation:open 240ms cubic-bezier(0.22,1,0.36,1)}
+</style>
+</helmet>
+<div style="width:393px;height:1250px;box-sizing:border-box;padding-top:50px;background:#0B0B0C;color:#F4F4F2;font-family:'Barlow',sans-serif;position:relative;overflow:hidden">
+
+  <div style="height:44px;padding:0 8px;display:flex;align-items:center;justify-content:space-between">
+    <a href="P08-Elegir-Ejercicio.dc.html" style="height:44px;padding:0 8px;display:flex;align-items:center;color:#FF5B1F;font-size:16px;font-weight:600">Cancelar</a>
+  </div>
+  <h1 class="num" style="margin:4px 16px 0;font-size:38px;line-height:0.95;font-weight:800;text-transform:uppercase">Crear ejercicio</h1>
+
+  <div style="padding:16px 16px 130px;display:flex;flex-direction:column;gap:18px">
+
+    <label style="display:flex;flex-direction:column;gap:6px">
+      <span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">NOMBRE <span style="color:#FF5B1F">*</span></span>
+      <span style="height:52px;padding:0 14px;border-radius:12px;background:#141416;box-shadow:inset 0 0 0 {{nameRing}};display:flex;align-items:center;font-size:18px;font-weight:600">
+        <input type="text" value="{{name}}" onChange="{{onName}}" placeholder="Ej.: Sentadilla con pausa" maxLength="50" aria-required="true" aria-label="Nombre del ejercicio">
+      </span>
+    </label>
+
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">GRUPO MUSCULAR PRINCIPAL <span style="color:#FF5B1F">*</span></span>
+      <div role="radiogroup" aria-label="Grupo muscular principal" style="display:flex;flex-wrap:wrap;gap:6px">
+        <sc-for list="{{primary}}" as="c" hint-placeholder-count="13">
+          <button role="radio" aria-checked="{{c.on}}" onClick="{{c.pick}}" style="height:40px;padding:0 12px;border-radius:20px;border:0;background:{{c.bg}};color:{{c.fg}};box-shadow:inset 0 0 0 1px {{c.border}};font-size:14px;font-weight:700">{{c.label}}</button>
+        </sc-for>
+      </div>
+    </div>
+
+    <p style="margin:-4px 0 0;font-size:13px;color:{{readyColor}};display:flex;align-items:center;gap:6px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>{{readyText}}
+    </p>
+
+    <button onClick="{{toggleMore}}" aria-expanded="{{open}}" style="height:52px;padding:0 12px 0 14px;border-radius:12px;border:0;background:#141416;box-shadow:inset 0 0 0 1px #2A2A2E;color:#F4F4F2;display:flex;align-items:center;justify-content:space-between;font-size:15px;font-weight:700">
+      <span>Más detalles <span style="font-weight:500;color:#9A9A9F">· opcional</span></span>
+      <span style="display:flex;align-items:center;gap:8px;color:#9A9A9F;font-size:13px;font-weight:500">{{moreSummary}}
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform:rotate({{chev}}deg);transition:transform 200ms"><path d="M6 9l6 6 6-6"/></svg>
+      </span>
+    </button>
+
+    <sc-if value="{{open}}" hint-placeholder-val="{{true}}">
+      <div class="open" style="display:flex;flex-direction:column;gap:18px">
+
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">GRUPOS SECUNDARIOS</span>
+          <div role="group" aria-label="Grupos secundarios" style="display:flex;flex-wrap:wrap;gap:6px">
+            <sc-for list="{{secondary}}" as="c" hint-placeholder-count="12">
+              <button aria-pressed="{{c.on}}" onClick="{{c.pick}}" style="height:40px;padding:0 12px;border-radius:20px;border:0;background:{{c.bg}};color:{{c.fg}};box-shadow:inset 0 0 0 1px {{c.border}};font-size:14px;font-weight:700">{{c.label}}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">EQUIPAMIENTO</span>
+          <div role="radiogroup" aria-label="Equipamiento" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px">
+            <sc-for list="{{equip}}" as="c" hint-placeholder-count="8">
+              <button role="radio" aria-checked="{{c.on}}" onClick="{{c.pick}}" style="height:48px;padding:0 4px;border-radius:12px;border:0;background:{{c.bg}};color:{{c.fg}};box-shadow:inset 0 0 0 1px {{c.border}};font-size:13px;font-weight:700;line-height:1.1">{{c.label}}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <span style="display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">TIPO DE REGISTRO <span style="padding:1px 6px;border-radius:5px;border:1px dashed #7C7C82;font-size:10px;letter-spacing:0.1em;color:#C9C9CC">PROPUESTA</span></span>
+          <div role="radiogroup" aria-label="Tipo de registro" style="display:flex;flex-direction:column;gap:6px">
+            <sc-for list="{{track}}" as="t" hint-placeholder-count="3">
+              <button role="radio" aria-checked="{{t.on}}" onClick="{{t.pick}}" style="min-height:56px;padding:8px 12px;border-radius:12px;border:0;background:#141416;box-shadow:inset 0 0 0 {{t.ring}};color:#F4F4F2;display:flex;align-items:center;gap:12px;text-align:left">
+                <span style="width:22px;height:22px;box-sizing:border-box;border-radius:11px;border:2px solid {{t.dot}};display:flex;align-items:center;justify-content:center;flex:none"><span style="width:10px;height:10px;border-radius:5px;background:{{t.fill}}"></span></span>
+                <span style="flex:1;display:flex;flex-direction:column;gap:1px"><span style="font-size:15px;font-weight:700">{{t.label}}</span><span style="font-size:12px;color:#9A9A9F">{{t.sub}}</span></span>
+                <span class="num" style="font-size:18px;font-weight:700;color:#9A9A9F">{{t.example}}</span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="min-height:64px;padding:0 6px 0 14px;border-radius:12px;background:#141416;box-shadow:inset 0 0 0 1px #2A2A2E;display:flex;align-items:center;gap:10px">
+          <span style="flex:1;display:flex;flex-direction:column;gap:2px">
+            <span style="display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700">Unilateral <span style="padding:1px 6px;border-radius:5px;border:1px dashed #7C7C82;font-size:10px;letter-spacing:0.1em;font-weight:700;color:#C9C9CC">PROPUESTA</span></span>
+            <span style="font-size:12px;color:#9A9A9F">Se hace de a un lado: las reps se cargan por lado</span>
+          </span>
+          <button role="switch" aria-checked="{{uni}}" aria-label="Unilateral" onClick="{{toggleUni}}" style="width:68px;height:44px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;padding:0">
+            <span style="position:relative;width:52px;height:32px;border-radius:16px;background:{{uniBg}};transition:background-color 200ms">
+              <span style="position:absolute;top:3px;left:{{uniX}}px;width:26px;height:26px;border-radius:13px;background:#F4F4F2;transition:left 220ms cubic-bezier(0.34,1.56,0.64,1)"></span>
+            </span>
+          </button>
+        </div>
+
+        <label style="display:flex;flex-direction:column;gap:6px">
+          <span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">NOTAS Y CUES DE TÉCNICA</span>
+          <span style="display:block;padding:12px 14px;border-radius:12px;background:#141416;box-shadow:inset 0 0 0 1px #2A2A2E;font-size:15px;line-height:1.45">
+            <textarea rows="3" placeholder="Ej.: pausa de 2 s abajo, rodillas afuera" aria-label="Notas y cues de técnica">{{note}}</textarea>
+          </span>
+          <span style="font-size:12px;color:#7C7C82">Se muestran debajo del nombre cuando entrenás este ejercicio.</span>
+        </label>
+      </div>
+    </sc-if>
+  </div>
+
+  <div style="position:absolute;left:0;right:0;bottom:0;padding:20px 16px 34px;background:linear-gradient(180deg, rgba(11,11,12,0) 0%, #0B0B0C 30%);display:flex;flex-direction:column;gap:8px">
+    <a href="P08c-Ejercicio-Propio.dc.html" aria-disabled="{{notReady}}" style="height:56px;border-radius:14px;background:{{saveBg}};color:{{saveFg}};display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;transition:background-color 180ms">Guardar ejercicio</a>
+    <span style="text-align:center;font-size:12px;color:#7C7C82">Solo hacen falta nombre y grupo principal</span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":393,"height":1250}}'>
+var GROUPS = ['Pecho', 'Espalda', 'Hombros', 'Bíceps', 'Tríceps', 'Antebrazos', 'Cuádriceps', 'Isquios', 'Glúteos', 'Gemelos', 'Core', 'Cuerpo completo', 'Cardio'];
+var EQUIP = ['Barra', 'Mancuernas', 'Máquina', 'Polea', 'Peso corporal', 'Banda', 'Kettlebell', 'Otro'];
+var TRACK = [
+  { id: 'wr', label: 'Peso × reps', sub: 'Lo normal: kg y repeticiones', example: '100 × 8' },
+  { id: 'bw', label: 'Peso corporal + lastre', sub: 'Dominadas, fondos: kg extra (o 0)', example: '+10 × 6' },
+  { id: 'time', label: 'Tiempo', sub: 'Plancha, farmer walk: m:ss por serie', example: '0:45' }
+];
+function chip(on) { return { bg: on ? '#F4F4F2' : '#141416', fg: on ? '#0B0B0C' : '#C9C9CC', border: on ? '#F4F4F2' : '#2A2A2E' }; }
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { name: 'Sentadilla con pausa', primary: 'Cuádriceps', secondary: { 'Glúteos': true, 'Core': true }, equip: 'Barra', track: 'wr', uni: false, open: true, note: 'Pausa de 2 s abajo, sin rebote. Barra alta.' };
+  }
+  renderVals() {
+    const s = this.state;
+    const ready = s.name.trim().length > 0 && !!s.primary;
+    const secCount = Object.keys(s.secondary).filter((k) => k !== s.primary).length;
+    const bits = [];
+    if (s.equip) bits.push(s.equip);
+    if (secCount) bits.push('+' + secCount + ' grupos');
+    return {
+      name: s.name,
+      onName: (e) => this.setState({ name: e.target.value }),
+      nameRing: s.name.trim() ? '1px #2A2A2E' : '2px #FF5B1F',
+      primary: GROUPS.map((g) => Object.assign({ label: g, on: g === s.primary, pick: () => this.setState({ primary: g }) }, chip(g === s.primary))),
+      readyColor: ready ? '#3DDC84' : '#7C7C82',
+      readyText: ready ? 'Con esto ya podés guardar' : 'Falta ' + (!s.name.trim() ? 'el nombre' : 'el grupo'),
+      open: s.open,
+      chev: s.open ? 180 : 0,
+      moreSummary: s.open ? '' : bits.join(' · '),
+      toggleMore: () => this.setState({ open: !s.open }),
+      secondary: GROUPS.filter((g) => g !== s.primary).map((g) => {
+        const on = !!s.secondary[g];
+        return Object.assign({ label: g, on: on, pick: () => { const sec = Object.assign({}, s.secondary); if (sec[g]) delete sec[g]; else sec[g] = true; this.setState({ secondary: sec }); } }, chip(on));
+      }),
+      equip: EQUIP.map((g) => Object.assign({ label: g, on: g === s.equip, pick: () => this.setState({ equip: s.equip === g ? '' : g }) }, chip(g === s.equip))),
+      track: TRACK.map((t) => {
+        const on = t.id === s.track;
+        return Object.assign({}, t, { on: on, ring: on ? '2px #FF5B1F' : '1px #2A2A2E', dot: on ? '#FF5B1F' : '#3A3A3F', fill: on ? '#FF5B1F' : 'transparent', pick: () => this.setState({ track: t.id }) });
+      }),
+      uni: s.uni,
+      toggleUni: () => this.setState({ uni: !s.uni }),
+      uniBg: s.uni ? '#FF5B1F' : '#3A3A3F',
+      uniX: s.uni ? 23 : 3,
+      note: s.note,
+      notReady: !ready,
+      saveBg: ready ? '#FF5B1F' : '#1C1C1F',
+      saveFg: ready ? '#0B0B0C' : '#5E5E64'
+    };
+  }
+}
+</script>
+</body>
+</html>

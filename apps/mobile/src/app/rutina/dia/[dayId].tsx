@@ -1,11 +1,12 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Keyboard, ScrollView, StyleSheet, View } from 'react-native';
 import Animated, { LinearTransition, useReducedMotion } from 'react-native-reanimated';
 
 import {
   BackBar,
   DashedAddButton,
+  EditableTitle,
   EmptyState,
   ErrorState,
   LoadingState,
@@ -13,7 +14,6 @@ import {
   SavedIndicator,
   ScreenContainer,
   Text,
-  UnderlineField,
   confirm,
 } from '../../../components';
 import { useRepositories } from '../../../data/DataProvider';
@@ -23,7 +23,7 @@ import { moveId } from '../../../lib/reorder';
 import { motion, space } from '../../../theme';
 
 export default function DayScreen() {
-  const { dayId } = useLocalSearchParams<{ dayId: string }>();
+  const { dayId, isNew } = useLocalSearchParams<{ dayId: string; isNew?: string }>();
   const repos = useRepositories();
   const router = useRouter();
   const reduced = useReducedMotion();
@@ -41,7 +41,6 @@ export default function DayScreen() {
       position: routine ? routine.days.findIndex((d) => d.id === day.id) + 1 : 0,
     };
   }, [dayId]);
-  const [draftName, setDraftName] = useState<string | undefined>(undefined);
   const [saved, setSaved] = useState(0);
 
   if (loading && data === undefined)
@@ -77,11 +76,9 @@ export default function DayScreen() {
     return ok;
   }
 
-  async function saveName() {
-    const name = (draftName ?? day.name).trim();
-    setDraftName(undefined);
-    if (!name || name === day.name) return;
-    await persist(() => repos.routines.updateDay(day.id, { name }));
+  /** The title already validated and trimmed the name. */
+  async function saveName(name: string) {
+    return (await persist(() => repos.routines.updateDay(day.id, { name }))) === true;
   }
 
   async function move(index: number, delta: -1 | 1) {
@@ -106,17 +103,16 @@ export default function DayScreen() {
         automaticallyAdjustKeyboardInsets
         contentContainerStyle={styles.content}
         keyboardShouldPersistTaps="handled"
-        keyboardDismissMode="on-drag"
+        keyboardDismissMode="interactive"
         showsVerticalScrollIndicator={false}
       >
-        <UnderlineField
+        <EditableTitle
           label={position > 0 ? `Día ${position} · nombre` : 'Nombre del día'}
-          value={draftName ?? day.name}
-          onChangeText={setDraftName}
-          onBlur={saveName}
-          onSubmitEditing={saveName}
-          returnKeyType="done"
-          autoCapitalize="words"
+          value={day.name}
+          onCommit={saveName}
+          placeholder="Nombre del día"
+          emptyHelper="Ej.: Piernas A, Torso B, Empuje"
+          autoFocus={isNew === '1'}
         />
 
         <View style={styles.sectionHead}>
@@ -168,7 +164,10 @@ export default function DayScreen() {
 
         <DashedAddButton
           title="Agregar ejercicio"
-          onPress={() => router.push({ pathname: '/elegir-ejercicio', params: { dayId: day.id } })}
+          onPress={() => {
+            Keyboard.dismiss();
+            router.push({ pathname: '/elegir-ejercicio', params: { dayId: day.id } });
+          }}
         />
       </ScrollView>
     </Shell>

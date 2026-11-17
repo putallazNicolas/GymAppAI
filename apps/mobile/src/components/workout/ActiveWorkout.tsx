@@ -1,9 +1,11 @@
-import type {
-  PreviousPerformance,
-  WeightUnit,
-  WorkoutDetail,
-  WorkoutExerciseDetail,
-  WorkoutSet,
+import {
+  plannedRepsForSet,
+  plannedRepsToNumber,
+  type PreviousPerformance,
+  type WeightUnit,
+  type WorkoutDetail,
+  type WorkoutExerciseDetail,
+  type WorkoutSet,
 } from '@gym/core';
 import { useScreenAwake } from '../../lib/useScreenAwake';
 import { useRouter } from 'expo-router';
@@ -41,6 +43,8 @@ import { ProgressSegments, WorkoutStats } from './WorkoutProgress';
 interface ActiveWorkoutProps {
   initial: WorkoutDetail;
   names: Record<string, string>;
+  /** Exercise cues (Exercise.notes) by exercise id; only exercises that have them. */
+  cues?: Record<string, string>;
   previous: Record<string, PreviousPerformance | null>;
   /** Historical best e1RM (kg) per exercise id, from finished workouts (for the live PR badge). */
   bests: Record<string, number>;
@@ -85,6 +89,7 @@ function patchSetIn(w: WorkoutDetail, setId: string, patch: Partial<WorkoutSet>)
 export function ActiveWorkout({
   initial,
   names,
+  cues,
   previous,
   bests,
   routineName,
@@ -112,6 +117,7 @@ export function ActiveWorkout({
   const [rest, setRest] = useState<{ endsAt: number; total: number } | null>(null);
   const [menuId, setMenuId] = useState<string | null>(null);
   const [finishing, setFinishing] = useState(false);
+  const [shake, setShake] = useState<{ setId: string; n: number } | null>(null);
 
   const inputRefs = useRef(new Map<string, TextInputInstance>());
   const pendingFocus = useRef<string | null>(null);
@@ -265,9 +271,18 @@ export function ActiveWorkout({
     const weightKg = inputToKg(input.kg, unit);
     let reps = inputToReps(input.reps);
     if (reps === undefined) {
-      // Empty reps: fall back to the planned number ("10", "8-10" -> 8); AMRAP stays empty.
-      const planned = parseInt(ex.plannedReps, 10);
-      if (Number.isFinite(planned)) reps = planned;
+      // Empty reps: complete with this set's planned number ("10"); a range ("8-10") or AMRAP has
+      // none, so the set is NOT completed: the reps field shakes, gets focus and a warning buzzes.
+      const planned = plannedRepsToNumber(
+        plannedRepsForSet(ex.plannedSetReps, setIdx) || ex.plannedReps,
+      );
+      if (planned === null) {
+        haptics.warning();
+        setShake((s) => ({ setId, n: (s?.n ?? 0) + 1 }));
+        focusKey(`${setId}:reps`);
+        return;
+      }
+      reps = planned;
     }
 
     // Optimistic: the set is completed right now, before anything is saved.
@@ -293,7 +308,9 @@ export function ActiveWorkout({
 
     // Every ✓ (also the last set) starts, or restarts, the rest. The next pending set only gets
     // the visual focus frame (focusSetId); its input is not focused.
-    if (restTimerEnabled) setRest(restFrom(restSecondsFor(ex)));
+    const restFor = restSecondsFor(ex);
+    // "Sin descanso" (0) shows no bar, and drops a bar left over from the previous exercise.
+    if (restTimerEnabled) setRest(restFor > 0 ? restFrom(restFor) : null);
 
     if (!after?.sets.some((s) => !s.completed)) scheduleCollapse(ex.id);
 
@@ -442,6 +459,8 @@ export function ActiveWorkout({
             previous={previous[e.exerciseId]}
             unit={unit}
             inputs={inputs}
+            cues={cues?.[e.exerciseId]}
+            shake={shake}
             prSets={prSetIds(e, bests[e.exerciseId] ?? 0)}
             focusSetId={e.id === expandedId ? focusSetId : null}
             onToggleExpand={() => {

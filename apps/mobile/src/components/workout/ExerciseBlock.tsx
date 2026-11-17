@@ -41,6 +41,10 @@ interface ExerciseBlockProps {
   inputs: Record<string, SetInput>;
   /** Completed sets whose e1RM beats the historical best (gold PR badge). */
   prSets: Set<string>;
+  /** Exercise cues (Exercise.notes), shown in the open card. */
+  cues?: string;
+  /** Shake request for a set's reps field: `n` increments on every request. */
+  shake: { setId: string; n: number } | null;
   /** The set being worked on (first pending one) when the card is open. */
   focusSetId: string | null;
   onToggleExpand: () => void;
@@ -77,6 +81,8 @@ export function ExerciseBlock({
   unit,
   inputs,
   prSets,
+  cues,
+  shake,
   focusSetId,
   onToggleExpand,
   onOpenMenu,
@@ -139,9 +145,11 @@ export function ExerciseBlock({
     );
   } else if (mode === 'expanded') {
     const restLabel =
-      exercise.restSeconds !== undefined
-        ? `Descanso ${formatClock(exercise.restSeconds)}`
-        : undefined;
+      exercise.restSeconds === undefined
+        ? undefined
+        : exercise.restSeconds === 0
+          ? 'Sin descanso'
+          : `Descanso ${formatClock(exercise.restSeconds)}`;
     const caption = [restLabel, exercise.notes].filter(Boolean).join(' · ');
     content = (
       <Animated.View key="open" entering={enter} exiting={exit}>
@@ -172,12 +180,16 @@ export function ExerciseBlock({
           </Pressable>
         </View>
         {caption ? (
-          <Text variant="caption" style={styles.caption}>
+          <Text variant="caption" style={cues ? styles.captionWithCues : styles.caption}>
             {caption}
           </Text>
-        ) : (
-          <View style={styles.captionGap} />
-        )}
+        ) : null}
+        {cues ? (
+          <Text variant="caption" color="textSecondary" style={styles.caption}>
+            {cues}
+          </Text>
+        ) : null}
+        {caption || cues ? null : <View style={styles.captionGap} />}
         <View style={styles.colHeader}>
           <Text variant="label" color="textTertiary" style={styles.colIndex}>
             #
@@ -209,6 +221,7 @@ export function ExerciseBlock({
                 repsPlaceholder={
                   plannedRepsForSet(exercise.plannedSetReps, i) || exercise.plannedReps
                 }
+                shakeSignal={shake?.setId === s.id ? shake.n : 0}
                 completed={s.completed}
                 focused={s.id === focusSetId}
                 pr={prSets.has(s.id)}
@@ -375,6 +388,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   caption: { paddingHorizontal: space.sm - 2, paddingBottom: space.md },
+  captionWithCues: { paddingHorizontal: space.sm - 2, paddingBottom: space.xs },
   captionGap: { height: space.md },
   colHeader: {
     flexDirection: 'row',

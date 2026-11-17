@@ -13,6 +13,7 @@ import {
   type WorkoutSummary,
   type WorkoutSummaryExercise,
 } from '../contracts';
+import { summarizePlannedSets } from '../plan';
 import { buildExportPayload, importResultOf, parseImportPayload } from './dataExport';
 import {
   bestSetOf,
@@ -75,14 +76,16 @@ export const createDomainServices: CreateDomainServices = (repos, options = {}) 
         const previous = await getPreviousPerformance(planned.exerciseId);
         const prevSets = previous?.sets ?? [];
         const sets = [];
-        for (let i = 0; i < planned.sets; i++) {
+        const plannedSetReps = planned.plannedSets.map((set) => set.reps);
+        for (let i = 0; i < plannedSetReps.length; i++) {
           const match = prevSets.find((s) => s.setIndex === i) ?? prevSets[prevSets.length - 1];
           sets.push(match?.weightKg !== undefined ? { weightKg: match.weightKg } : {});
         }
         exercises.push({
           exerciseId: planned.exerciseId,
-          plannedSets: planned.sets,
-          plannedReps: planned.reps,
+          plannedSets: plannedSetReps.length,
+          plannedReps: summarizePlannedSets(planned),
+          plannedSetReps,
           restSeconds: planned.restSeconds,
           notes: planned.notes,
           sets,

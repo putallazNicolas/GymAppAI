@@ -152,7 +152,7 @@ export default function RoutineScreen() {
             </Text>
           ) : null}
           {routine.days.map((day, i) => {
-            const sets = day.exercises.reduce((sum, e) => sum + e.sets, 0);
+            const sets = day.exercises.reduce((sum, e) => sum + e.plannedSets.length, 0);
             return (
               <Animated.View
                 key={day.id}

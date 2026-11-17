@@ -1,4 +1,10 @@
-import type { PreviousPerformance, WeightUnit, WorkoutExerciseDetail } from '@gym/core';
+import {
+  plannedRepsForSet,
+  summarizePlannedSets,
+  type PreviousPerformance,
+  type WeightUnit,
+  type WorkoutExerciseDetail,
+} from '@gym/core';
 import { Pressable, StyleSheet, View, type TextInputInstance } from 'react-native';
 import Animated, {
   FadeIn,
@@ -85,7 +91,15 @@ export function ExerciseBlock({
   const reduced = useReducedMotion();
   const sets = exercise.sets;
   const done = sets.filter((s) => s.completed).length;
-  const planned = `${exercise.plannedSets} × ${exercise.plannedReps}`;
+  const setReps = exercise.plannedSetReps;
+  // plannedReps is already a summary in contracts v2; derive the label from the per-set snapshot.
+  const planned =
+    setReps.length === 0
+      ? `${exercise.plannedSets} × ${exercise.plannedReps}`
+      : summarizePlannedSets({
+          repsMode: setReps.every((r) => r === setReps[0]) ? 'same' : 'perSet',
+          plannedSets: setReps.map((reps) => ({ reps })),
+        });
 
   const layout = reduced
     ? undefined
@@ -192,7 +206,9 @@ export function ExerciseBlock({
                 previousText={previousText(previous, s.setIndex, unit)}
                 kg={input.kg}
                 reps={input.reps}
-                repsPlaceholder={exercise.plannedReps}
+                repsPlaceholder={
+                  plannedRepsForSet(exercise.plannedSetReps, i) || exercise.plannedReps
+                }
                 completed={s.completed}
                 focused={s.id === focusSetId}
                 pr={prSets.has(s.id)}

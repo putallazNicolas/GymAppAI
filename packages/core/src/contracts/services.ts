@@ -107,7 +107,12 @@ export interface WeeklyStat {
 }
 
 export const EXPORT_FORMAT = 'gym-app-export';
-export const EXPORT_VERSION = 1;
+/**
+ * v2 (Ajustes UX): PlannedExercise has repsMode + plannedSets instead of sets + reps; WorkoutExercise
+ * has plannedSetReps; Exercise has updatedAt and optional secondaryMuscleGroups / notes / archived.
+ * importAllData still accepts v1 files and converts them.
+ */
+export const EXPORT_VERSION = 2;
 
 export interface ExportPayload {
   format: typeof EXPORT_FORMAT;
@@ -126,8 +131,8 @@ export interface ImportResult {
 
 export interface DomainServices {
   /**
-   * Creates a workout from a routine day: one WorkoutExercise per planned exercise and
-   * `sets` WorkoutSets each. Each set's weightKg is prefilled from the previous performance
+   * Creates a workout from a routine day: one WorkoutExercise per planned exercise (snapshotting
+   * plannedSets count, a summary in plannedReps and plannedSetReps) and one WorkoutSet per planned set. Each set's weightKg is prefilled from the previous performance
    * of that exercise (same setIndex, else the last previous set); reps are left empty.
    * Rejects with ValidationError if another workout is in progress.
    */

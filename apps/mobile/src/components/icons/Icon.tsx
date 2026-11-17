@@ -97,6 +97,18 @@ const ICONS = {
       <Path d="M5 9v10h14V9M10 13h4" />
     </>
   ),
+  clock: (
+    <>
+      <Circle cx="12" cy="13" r="8" />
+      <Path d="M12 9v4l2.5 2M10 2h4" />
+    </>
+  ),
+  info: (
+    <>
+      <Circle cx="12" cy="12" r="9" />
+      <Path d="M12 8v5M12 16.5v.5" />
+    </>
+  ),
   pencil: <Path d="M4 20h4L19 9l-4-4L4 16z" />,
   empty: (
     <>

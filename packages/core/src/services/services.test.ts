@@ -69,7 +69,12 @@ describe.each(BACKENDS)('domain services on %s', (_name, build) => {
           exercises[name] = (await repos.exercises.create({ name, muscleGroup: 'quads' })).id;
         }
         await repos.routines.addPlannedExercises(day.id, [
-          { exerciseId: exercises[name]!, sets: 3, reps: '8-10', restSeconds: 90, notes: 'n' },
+          {
+            exerciseId: exercises[name]!,
+            plannedSets: [{ reps: '8-10' }, { reps: '8-10' }, { reps: '8-10' }],
+            restSeconds: 90,
+            notes: 'n',
+          },
         ]);
       }
     }
@@ -115,7 +120,8 @@ describe.each(BACKENDS)('domain services on %s', (_name, build) => {
       ]);
       expect(w.exercises[0]).toMatchObject({
         plannedSets: 3,
-        plannedReps: '8-10',
+        plannedReps: '3 × 8-10',
+        plannedSetReps: ['8-10', '8-10', '8-10'],
         restSeconds: 90,
         notes: 'n',
         skipped: false,

@@ -1,10 +1,13 @@
 import type { BackupRepo, DataSnapshot } from '../contracts';
 import { createEmptyState, fullSettings, type MemoryContext } from './state';
 
-const copyAll = <T extends object>(items: Iterable<T>): T[] => [...items].map((i) => ({ ...i }));
+import { cloneExercise, clonePlannedExercise, cloneWorkoutExercise } from '../rules';
 
-function toMap<T extends { id: string }>(items: T[]): Map<string, T> {
-  return new Map(items.map((i) => [i.id, { ...i }]));
+const copyAll = <T extends object>(items: Iterable<T>, clone?: (item: T) => T): T[] =>
+  [...items].map((i) => (clone ? clone(i) : { ...i }));
+
+function toMap<T extends { id: string }>(items: T[], clone?: (item: T) => T): Map<string, T> {
+  return new Map(items.map((i) => [i.id, clone ? clone(i) : { ...i }]));
 }
 
 export function createBackupRepo(ctx: MemoryContext): BackupRepo {
@@ -12,12 +15,12 @@ export function createBackupRepo(ctx: MemoryContext): BackupRepo {
     async snapshot(): Promise<DataSnapshot> {
       const { state } = ctx;
       return {
-        exercises: copyAll(state.exercises.values()),
+        exercises: copyAll(state.exercises.values(), cloneExercise),
         routines: copyAll(state.routines.values()),
         routineDays: copyAll(state.routineDays.values()),
-        plannedExercises: copyAll(state.plannedExercises.values()),
+        plannedExercises: copyAll(state.plannedExercises.values(), clonePlannedExercise),
         workouts: copyAll(state.workouts.values()),
-        workoutExercises: copyAll(state.workoutExercises.values()),
+        workoutExercises: copyAll(state.workoutExercises.values(), cloneWorkoutExercise),
         workoutSets: copyAll(state.workoutSets.values()),
         settings: fullSettings(state.settings),
       };
@@ -26,12 +29,12 @@ export function createBackupRepo(ctx: MemoryContext): BackupRepo {
     async restore(snapshot) {
       // Build the complete new state first so a malformed snapshot cannot leave a half-restore.
       const next = createEmptyState();
-      next.exercises = toMap(snapshot.exercises);
+      next.exercises = toMap(snapshot.exercises, cloneExercise);
       next.routines = toMap(snapshot.routines);
       next.routineDays = toMap(snapshot.routineDays);
-      next.plannedExercises = toMap(snapshot.plannedExercises);
+      next.plannedExercises = toMap(snapshot.plannedExercises, clonePlannedExercise);
       next.workouts = toMap(snapshot.workouts);
-      next.workoutExercises = toMap(snapshot.workoutExercises);
+      next.workoutExercises = toMap(snapshot.workoutExercises, cloneWorkoutExercise);
       next.workoutSets = toMap(snapshot.workoutSets);
       next.settings = { ...snapshot.settings };
       Object.assign(ctx.state, next);

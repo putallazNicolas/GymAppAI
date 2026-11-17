@@ -18,10 +18,18 @@ it('runs the whole V1 flow on SQLite', async () => {
   const dayA = await repos.routines.addDay(routine.id, { name: 'Día A' });
   const dayB = await repos.routines.addDay(routine.id, { name: 'Día B' });
   await repos.routines.addPlannedExercises(dayA.id, [
-    { exerciseId: squat.id, sets: 3, reps: '5', restSeconds: 180 },
+    {
+      exerciseId: squat.id,
+      plannedSets: [{ reps: '5' }, { reps: '5' }, { reps: '5' }],
+      restSeconds: 180,
+    },
   ]);
   await repos.routines.addPlannedExercises(dayB.id, [
-    { exerciseId: bench.id, sets: 2, reps: '8-10' },
+    {
+      exerciseId: bench.id,
+      repsMode: 'perSet',
+      plannedSets: [{ reps: '10' }, { reps: '8-10' }],
+    },
   ]);
   await repos.routines.setActive(routine.id);
 

@@ -51,15 +51,32 @@ export const EQUIPMENT = [
 ] as const;
 export type Equipment = (typeof EQUIPMENT)[number];
 
+/** Max length of user-typed names (routine, day). Names are trimmed and can't be empty. */
+export const NAME_MAX_LENGTH = 40;
+/** Max length of a custom exercise name. */
+export const EXERCISE_NAME_MAX_LENGTH = 60;
+
 export interface Exercise extends Owned {
   id: ID;
   /** Display name, in Spanish for the seeded catalog (e.g. "Sentadilla"). */
   name: string;
   muscleGroup: MuscleGroup;
+  /** Other muscle groups it works (never includes `muscleGroup`). */
+  secondaryMuscleGroups?: MuscleGroup[];
   equipment?: Equipment;
+  /** Technique cues, shown in Entrenando. */
+  notes?: string;
   /** true for exercises created by the user; false for the seeded catalog. */
   isCustom: boolean;
+  /**
+   * Hidden from pickers. Deleting a custom exercise that is already used by a planned exercise or a
+   * workout archives it instead, so history keeps working.
+   */
+  archived?: boolean;
   createdAt: ISODateString;
+  updatedAt: ISODateString;
+  // (propuesta, NOT in V1 until the owner approves) trackingType?: 'weight_reps' | 'bodyweight_load' | 'time';
+  // (propuesta, NOT in V1 until the owner approves) unilateral?: boolean;
 }
 
 export interface Routine extends Owned {
@@ -81,15 +98,45 @@ export interface RoutineDay {
   order: number;
 }
 
+export const REPS_MODES = ['same', 'perSet'] as const;
+/** "same": every set has the same reps. "perSet": each set has its own reps. */
+export type RepsMode = (typeof REPS_MODES)[number];
+
+/** Planned sets per exercise: 1..MAX_PLANNED_SETS. */
+export const MAX_PLANNED_SETS = 20;
+/** Rest is 0..MAX_REST_SECONDS in REST_STEP_SECONDS steps. 0 means "Sin descanso". */
+export const MAX_REST_SECONDS = 600;
+export const REST_STEP_SECONDS = 15;
+
+/** One planned set. */
+export interface PlannedSet {
+  /** Free text on purpose: "5", "8-10", "AMRAP". Normalized: trimmed, uppercase, no spaces around "-". */
+  reps: string;
+  // Reserved for V4 (per-set load planning). V1 never reads or writes it:
+  // load?: PlannedLoad;
+}
+// Reserved for the future (V1 has no RPE or %):
+// export type PlannedLoad =
+//   | { kind: 'kg'; value: number }
+//   | { kind: 'pct1rm'; value: number }
+//   | { kind: 'rpe'; value: number };
+
 export interface PlannedExercise {
   id: ID;
   dayId: ID;
   exerciseId: ID;
   /** 0-based position inside the day. Contiguous after any mutation. */
   order: number;
-  sets: number;
-  /** Free text on purpose: "8", "8-10", "AMRAP". */
-  reps: string;
+  repsMode: RepsMode;
+  /**
+   * One entry per planned set (length 1..MAX_PLANNED_SETS). Replaces the old `sets` + `reps`.
+   * With repsMode "same", every entry has the same `reps`.
+   */
+  plannedSets: PlannedSet[];
+  /**
+   * Rest after each set, in seconds: integer 0..MAX_REST_SECONDS, multiple of REST_STEP_SECONDS.
+   * 0 = "Sin descanso" (no rest timer). Undefined = not set (the app uses its default).
+   */
   restSeconds?: number;
   notes?: string;
 }
@@ -112,9 +159,16 @@ export interface WorkoutExercise {
   exerciseId: ID;
   /** 0-based position inside the workout. */
   order: number;
+  /** Snapshot: number of planned sets when the workout started. */
   plannedSets: number;
+  /** Snapshot: summary label of the plan ("8-10" or "5 · 3 · 1"), for display. */
   plannedReps: string;
-  /** Snapshot of PlannedExercise.restSeconds (drives the rest timer). */
+  /**
+   * Snapshot: planned reps for each set, by setIndex. A rule change in the routine never alters a
+   * workout in progress. A set added beyond the plan uses the last value as its placeholder.
+   */
+  plannedSetReps: string[];
+  /** Snapshot of PlannedExercise.restSeconds (drives the rest timer; 0 = no timer). */
   restSeconds?: number;
   /** Snapshot of PlannedExercise.notes. */
   notes?: string;

@@ -6,13 +6,10 @@ import {
   type ExerciseRepo,
 } from '../contracts';
 import {
-  applyPatch,
-  assertEquipment,
-  assertMuscleGroup,
-  assertName,
-  compact,
+  buildCustomExercise,
   compareExercises,
   matchesExerciseFilter,
+  patchCustomExercise,
 } from '../rules';
 import { newId } from '../utils';
 import type { SqliteContext } from './context';
@@ -23,6 +20,16 @@ export function createExerciseRepo({ db, now }: SqliteContext): ExerciseRepo {
     const found = await selectById(db, EXERCISES, id);
     if (!found) throw new NotFoundError('Exercise', id);
     return found;
+  };
+  const getCustom = async (id: string, action: string): Promise<Exercise> => {
+    const found = await get(id);
+    if (!found.isCustom) throw new ValidationError(`catalog exercises cannot be ${action}`);
+    return found;
+  };
+  const archive = async (current: Exercise): Promise<Exercise> => {
+    const next: Exercise = { ...current, archived: true, updatedAt: now() };
+    await updateRow(db, EXERCISES, next);
+    return next;
   };
 
   return {
@@ -48,44 +55,38 @@ export function createExerciseRepo({ db, now }: SqliteContext): ExerciseRepo {
     },
 
     async create(input) {
-      const exercise: Exercise = compact({
+      const exercise = buildCustomExercise(input, {
         id: newId(),
-        name: assertName(input.name),
-        muscleGroup: assertMuscleGroup(input.muscleGroup),
-        equipment: input.equipment === undefined ? undefined : assertEquipment(input.equipment),
-        isCustom: true,
-        createdAt: now(),
+        now: now(),
         ownerId: LOCAL_USER_ID,
-        createdBy: LOCAL_USER_ID,
       });
       await insertRow(db, EXERCISES, exercise);
       return exercise;
     },
 
     async update(id, patch) {
-      const current = await get(id);
-      if (!current.isCustom) throw new ValidationError('catalog exercises cannot be modified');
-      if (patch.name !== undefined) assertName(patch.name);
-      if (patch.muscleGroup !== undefined) assertMuscleGroup(patch.muscleGroup);
-      if (patch.equipment !== undefined && patch.equipment !== null) {
-        assertEquipment(patch.equipment);
-      }
-      const next = applyPatch(current, patch);
-      next.name = next.name.trim();
+      const next = patchCustomExercise(await get(id), patch, now());
       await updateRow(db, EXERCISES, next);
       return next;
     },
 
+    async archive(id) {
+      return archive(await getCustom(id, 'archived'));
+    },
+
     async delete(id) {
-      const current = await get(id);
-      if (!current.isCustom) throw new ValidationError('catalog exercises cannot be deleted');
+      const current = await getCustom(id, 'deleted');
       const used = await db.first(
         `SELECT 1 AS one FROM planned_exercises WHERE "exerciseId" = ?
          UNION ALL SELECT 1 FROM workout_exercises WHERE "exerciseId" = ? LIMIT 1`,
         [id, id],
       );
-      if (used) throw new ValidationError('exercise is in use by a routine or a workout');
+      if (used) {
+        await archive(current);
+        return 'archived';
+      }
       await db.run('DELETE FROM exercises WHERE "id" = ?', [id]);
+      return 'deleted';
     },
   };
 }

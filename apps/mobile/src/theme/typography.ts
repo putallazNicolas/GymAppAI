@@ -36,6 +36,34 @@ export const type = {
   displayName: { fontFamily: fonts.displayBold, fontSize: 24, lineHeight: 26, ...upper },
   /** kg / lb segmented pill labels, 22. */
   unitPill: { fontFamily: fonts.display, fontSize: 22, lineHeight: 24, ...tnum },
+  /** Rest readout of the RestPicker (design/P07d), 76. */
+  numHero: { fontFamily: fonts.display, fontSize: 76, lineHeight: 70, ...tnum },
+  /** Planned-exercise summary in the closed row ("4 × 8-10"), 26. */
+  numSummary: { fontFamily: fonts.display, fontSize: 26, lineHeight: 28, ...tnum },
+  /** Set number in a PlannedSetRow, 24. */
+  numSet: { fontFamily: fonts.display, fontSize: 24, lineHeight: 26, ...tnum },
+  /** Preset chip figures (reps presets), 19. */
+  chipNum: { fontFamily: fonts.displayBold, fontSize: 19, lineHeight: 22, ...tnum },
+  /** "-15 s" / "+15 s" buttons and the small AMRAP-sized reps, 20. */
+  stepLabel: { fontFamily: fonts.display, fontSize: 20, lineHeight: 22, ...tnum },
+  /** Long preset ("Sin descanso") in the rest grid, 17. */
+  presetSmall: { fontFamily: fonts.display, fontSize: 17, lineHeight: 20, ...upper },
+  /** Non-numeric reps inside a PlannedSetRow ("8-10", "AMRAP"), 18. */
+  repsText: { fontFamily: fonts.display, fontSize: 18, lineHeight: 22, ...tnum },
+  /** Row title of a planned exercise, 20. */
+  rowName: { fontFamily: fonts.displayBold, fontSize: 20, lineHeight: 22, ...upper },
+  /** Sheet title (design/P07c), 27 ExtraBold. */
+  sheetTitle: { fontFamily: fonts.display, fontSize: 27, lineHeight: 28, ...upper },
+  /** "POR SERIE" tag, 11. */
+  tag: {
+    fontFamily: fonts.bodyBold,
+    fontSize: 11,
+    lineHeight: 14,
+    letterSpacing: 1.1,
+    ...upper,
+  },
+  /** Labels of the compact segmented control, 14. */
+  segmentM: { fontFamily: fonts.bodyBold, fontSize: 14, lineHeight: 18 },
   numD: { fontFamily: fonts.display, fontSize: 28, lineHeight: 28, ...tnum },
   numMd: { fontFamily: fonts.displayBold, fontSize: 20, lineHeight: 22, ...tnum },
   badge: { fontFamily: fonts.display, fontSize: 13, lineHeight: 16, ...tnum },
@@ -72,9 +100,30 @@ const { lineHeight: _tl, ...titleInput } = type.title;
 const { lineHeight: _nm, ...numMInput } = type.numM;
 const { lineHeight: _bd, ...bodyInput } = type.body;
 const { lineHeight: _bs, ...bodySInput } = type.bodyS;
-export const inputType = { displayLInput, titleInput, numMInput, bodyInput, bodySInput } as const;
+/** Reps inputs of the edit sheet (44 for "same", 26 / 18 inside a per-set row). */
+const repsBigInput = { fontFamily: fonts.display, fontSize: 44, ...tnum, ...upper };
+const repsSetInput = { fontFamily: fonts.display, fontSize: 26, ...tnum, ...upper };
+const repsSetTextInput = { fontFamily: fonts.display, fontSize: 18, ...tnum, ...upper };
+export const inputType = {
+  displayLInput,
+  titleInput,
+  numMInput,
+  bodyInput,
+  bodySInput,
+  repsBigInput,
+  repsSetInput,
+  repsSetTextInput,
+} as const;
 
 /** Explicit input heights that fit the glyphs (about fontSize x 1.3). */
-export const inputHeight = { displayL: 50, title: 38, numM: 34, body: 24, bodyS: 20 } as const;
+export const inputHeight = {
+  displayL: 50,
+  title: 38,
+  numM: 34,
+  body: 24,
+  bodyS: 20,
+  repsBig: 58,
+  repsSet: 36,
+} as const;
 
 export type TypeToken = keyof typeof type;

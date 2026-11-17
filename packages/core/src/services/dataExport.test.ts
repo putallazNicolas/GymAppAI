@@ -33,7 +33,13 @@ async function populate(repos: Repositories) {
   await repos.routines.setActive(routine.id);
   const day = await repos.routines.addDay(routine.id, { name: 'Día A' });
   await repos.routines.addPlannedExercises(day.id, [
-    { exerciseId: squat!.id, sets: 2, reps: '5', restSeconds: 120, notes: 'pausa' },
+    {
+      exerciseId: squat!.id,
+      repsMode: 'perSet',
+      plannedSets: [{ reps: '5' }, { reps: 'AMRAP' }],
+      restSeconds: 120,
+      notes: 'pausa',
+    },
     { exerciseId: custom.id },
   ]);
   const w = await services.startWorkoutFromDay(day.id);
@@ -114,9 +120,13 @@ function validPayload(): ExportPayload {
         id: 'e1',
         name: 'Custom',
         muscleGroup: 'core',
+        secondaryMuscleGroups: ['biceps'],
         equipment: 'cable',
+        notes: 'cue',
         isCustom: true,
+        archived: true,
         createdAt: ts,
+        updatedAt: ts,
         ...owner,
       },
     ],
@@ -138,8 +148,8 @@ function validPayload(): ExportPayload {
         dayId: 'd1',
         exerciseId: 'e1',
         order: 0,
-        sets: 3,
-        reps: '8-10',
+        repsMode: 'perSet',
+        plannedSets: [{ reps: '10' }, { reps: '8-10' }, { reps: 'AMRAP' }],
         restSeconds: 60,
         notes: 'n',
       },
@@ -162,7 +172,8 @@ function validPayload(): ExportPayload {
         exerciseId: 'e1',
         order: 0,
         plannedSets: 3,
-        plannedReps: '8',
+        plannedReps: '10 · 8-10 · AMRAP',
+        plannedSetReps: ['10', '8-10', 'AMRAP'],
         skipped: false,
       },
     ],
@@ -202,7 +213,11 @@ describe('import validation', () => {
     const result = await svc.importAllData(viaJson(validPayload()));
     expect(result).toEqual({ exercises: 1 + EXERCISE_SEED.length, routines: 1, workouts: 1 });
     const detail = await repos.routines.getActive();
-    expect(detail?.days[0]?.exercises[0]).toMatchObject({ reps: '8-10', restSeconds: 60 });
+    expect(detail?.days[0]?.exercises[0]).toMatchObject({
+      repsMode: 'perSet',
+      plannedSets: [{ reps: '10' }, { reps: '8-10' }, { reps: 'AMRAP' }],
+      restSeconds: 60,
+    });
   });
 
   it('accepts null for optional fields and strips unknown keys', async () => {
@@ -243,14 +258,41 @@ describe('import validation', () => {
       p.data.routineDays[0]!.order = 1.5;
     }, /routineDays\[0\]\.order/);
     await reject((p) => {
-      p.data.plannedExercises[0]!.sets = 0;
-    }, /plannedExercises\[0\]\.sets/);
+      p.data.plannedExercises[0]!.plannedSets = [];
+    }, /plannedExercises\[0\]\.plannedSets/);
     await reject((p) => {
-      p.data.plannedExercises[0]!.reps = 8 as never;
-    }, /plannedExercises\[0\]\.reps/);
+      p.data.plannedExercises[0]!.plannedSets = [{ reps: 8 as never }];
+    }, /plannedExercises\[0\]\.plannedSets/);
+    await reject((p) => {
+      p.data.plannedExercises[0]!.plannedSets = Array.from({ length: 21 }, () => ({ reps: '5' }));
+    }, /plannedExercises\[0\]\.plannedSets/);
+    await reject((p) => {
+      p.data.plannedExercises[0]!.repsMode = 'same'; // sets differ
+    }, /plannedExercises\[0\]\.plannedSets/);
+    await reject((p) => {
+      p.data.plannedExercises[0]!.repsMode = 'weird' as never;
+    }, /plannedExercises\[0\]\.plannedSets/);
     await reject((p) => {
       p.data.plannedExercises[0]!.restSeconds = -5;
     }, /plannedExercises\[0\]\.restSeconds/);
+    await reject((p) => {
+      p.data.plannedExercises[0]!.restSeconds = 100; // not a multiple of 15
+    }, /plannedExercises\[0\]\.restSeconds/);
+    await reject((p) => {
+      p.data.plannedExercises[0]!.restSeconds = 615;
+    }, /plannedExercises\[0\]\.restSeconds/);
+    await reject((p) => {
+      p.data.workoutExercises[0]!.plannedSetReps = 'x' as never;
+    }, /workoutExercises\[0\]\.plannedSetReps/);
+    await reject((p) => {
+      p.data.exercises[0]!.updatedAt = 'ayer';
+    }, /exercises\[0\]\.updatedAt/);
+    await reject((p) => {
+      p.data.exercises[0]!.secondaryMuscleGroups = ['nope' as never];
+    }, /exercises\[0\]\.secondaryMuscleGroups/);
+    await reject((p) => {
+      p.data.exercises[0]!.archived = 'yes' as never;
+    }, /exercises\[0\]\.archived/);
     await reject((p) => {
       p.data.workouts[0]!.startedAt = '';
     }, /workouts\[0\]\.startedAt/);

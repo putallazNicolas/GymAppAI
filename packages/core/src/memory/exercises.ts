@@ -4,16 +4,13 @@ import {
   ValidationError,
   type Exercise,
   type ExerciseRepo,
-  type NewExerciseInput,
 } from '../contracts';
 import {
-  applyPatch,
-  assertEquipment,
-  assertMuscleGroup,
-  assertName,
-  compact,
+  buildCustomExercise,
+  cloneExercise,
   compareExercises,
   matchesExerciseFilter,
+  patchCustomExercise,
 } from '../rules';
 import { newId } from '../utils';
 import type { MemoryContext } from './state';
@@ -24,67 +21,71 @@ export function createExerciseRepo({ state, now }: MemoryContext): ExerciseRepo 
     if (!found) throw new NotFoundError('Exercise', id);
     return found;
   };
+  const getCustom = (id: string, action: string): Exercise => {
+    const found = get(id);
+    if (!found.isCustom) throw new ValidationError(`catalog exercises cannot be ${action}`);
+    return found;
+  };
+  const isUsed = (id: string): boolean =>
+    [...state.plannedExercises.values()].some((p) => p.exerciseId === id) ||
+    [...state.workoutExercises.values()].some((w) => w.exerciseId === id);
+
+  const archive = (current: Exercise): Exercise => {
+    const next: Exercise = { ...current, archived: true, updatedAt: now() };
+    state.exercises.set(next.id, next);
+    return cloneExercise(next);
+  };
 
   return {
     async list(filter) {
       return [...state.exercises.values()]
         .filter((e) => matchesExerciseFilter(e, filter))
         .sort(compareExercises)
-        .map((e) => ({ ...e }));
+        .map(cloneExercise);
     },
 
     async getById(id) {
       const found = state.exercises.get(id);
-      return found ? { ...found } : null;
+      return found ? cloneExercise(found) : null;
     },
 
     async getByIds(ids) {
       const result: Exercise[] = [];
       for (const id of ids) {
         const found = state.exercises.get(id);
-        if (found) result.push({ ...found });
+        if (found) result.push(cloneExercise(found));
       }
       return result;
     },
 
-    async create(input: NewExerciseInput) {
-      const exercise: Exercise = compact({
+    async create(input) {
+      const exercise = buildCustomExercise(input, {
         id: newId(),
-        name: assertName(input.name),
-        muscleGroup: assertMuscleGroup(input.muscleGroup),
-        equipment: input.equipment === undefined ? undefined : assertEquipment(input.equipment),
-        isCustom: true,
-        createdAt: now(),
+        now: now(),
         ownerId: LOCAL_USER_ID,
-        createdBy: LOCAL_USER_ID,
       });
       state.exercises.set(exercise.id, exercise);
-      return { ...exercise };
+      return cloneExercise(exercise);
     },
 
     async update(id, patch) {
-      const current = get(id);
-      if (!current.isCustom) throw new ValidationError('catalog exercises cannot be modified');
-      if (patch.name !== undefined) assertName(patch.name);
-      if (patch.muscleGroup !== undefined) assertMuscleGroup(patch.muscleGroup);
-      if (patch.equipment !== undefined && patch.equipment !== null) {
-        assertEquipment(patch.equipment);
-      }
-      const next = applyPatch(current, patch);
-      next.name = next.name.trim();
+      const next = patchCustomExercise(get(id), patch, now());
       state.exercises.set(id, next);
-      return { ...next };
+      return cloneExercise(next);
+    },
+
+    async archive(id) {
+      return archive(getCustom(id, 'archived'));
     },
 
     async delete(id) {
-      const current = get(id);
-      if (!current.isCustom) throw new ValidationError('catalog exercises cannot be deleted');
-      const inPlan = [...state.plannedExercises.values()].some((p) => p.exerciseId === id);
-      const inWorkout = [...state.workoutExercises.values()].some((w) => w.exerciseId === id);
-      if (inPlan || inWorkout) {
-        throw new ValidationError('exercise is in use by a routine or a workout');
+      const current = getCustom(id, 'deleted');
+      if (isUsed(id)) {
+        archive(current);
+        return 'archived';
       }
       state.exercises.delete(id);
+      return 'deleted';
     },
   };
 }

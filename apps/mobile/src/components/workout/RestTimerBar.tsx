@@ -114,64 +114,67 @@ export function RestTimerBar({ endsAt, totalSeconds, onAddTime, onDismiss }: Res
 
   return (
     <GestureDetector gesture={swipe}>
+      {/* Layout animations and the drag transform live on separate views (Reanimated requirement). */}
       <Animated.View
         entering={reduced ? undefined : SlideInDown.duration(260).easing(motion.easeOut)}
         exiting={FadeOut.duration(reduced ? motion.reduced : motion.base)}
-        style={[styles.wrap, dragStyle]}
+        style={styles.wrap}
         pointerEvents="box-none"
       >
-        <View
-          style={[styles.bar, done && styles.barDone]}
-          accessibilityLiveRegion="polite"
-          accessibilityLabel={done ? 'Descanso terminado, a la barra' : 'Descanso'}
-        >
-          <Svg width={RING} height={RING} accessibilityElementsHidden>
-            <Circle
-              cx={RING / 2}
-              cy={RING / 2}
-              r={RING_R}
-              fill="none"
-              stroke={colors.borderRaised}
-              strokeWidth={RING_STROKE}
-            />
-            <AnimatedCircle
-              cx={RING / 2}
-              cy={RING / 2}
-              r={RING_R}
-              fill="none"
-              stroke={tint}
-              strokeWidth={RING_STROKE}
-              strokeLinecap="round"
-              strokeDasharray={[RING_LEN, RING_LEN]}
-              animatedProps={ringProps}
-              transform={`rotate(-90 ${RING / 2} ${RING / 2})`}
-            />
-          </Svg>
-          <View style={styles.texts}>
-            <Text variant="label" color={done ? 'success' : 'textSecondary'}>
-              {done ? 'A la barra' : 'Descanso'}
-            </Text>
-            <Animated.View style={[styles.timeWrap, bumpStyle]}>
-              <Text variant="numL">{formatClock(remaining)}</Text>
-            </Animated.View>
+        <Animated.View style={dragStyle} pointerEvents="box-none">
+          <View
+            style={[styles.bar, done && styles.barDone]}
+            accessibilityLiveRegion="polite"
+            accessibilityLabel={done ? 'Descanso terminado, a la barra' : 'Descanso'}
+          >
+            <Svg width={RING} height={RING} accessibilityElementsHidden>
+              <Circle
+                cx={RING / 2}
+                cy={RING / 2}
+                r={RING_R}
+                fill="none"
+                stroke={colors.borderRaised}
+                strokeWidth={RING_STROKE}
+              />
+              <AnimatedCircle
+                cx={RING / 2}
+                cy={RING / 2}
+                r={RING_R}
+                fill="none"
+                stroke={tint}
+                strokeWidth={RING_STROKE}
+                strokeLinecap="round"
+                strokeDasharray={[RING_LEN, RING_LEN]}
+                animatedProps={ringProps}
+                transform={`rotate(-90 ${RING / 2} ${RING / 2})`}
+              />
+            </Svg>
+            <View style={styles.texts}>
+              <Text variant="label" color={done ? 'success' : 'textSecondary'}>
+                {done ? 'A la barra' : 'Descanso'}
+              </Text>
+              <Animated.View style={[styles.timeWrap, bumpStyle]}>
+                <Text variant="numL">{formatClock(remaining)}</Text>
+              </Animated.View>
+            </View>
+            <PressableScale
+              accessibilityRole="button"
+              accessibilityLabel="Sumar 15 segundos de descanso"
+              onPress={addTime}
+              style={styles.add}
+            >
+              <Text variant="buttonS">+15 s</Text>
+            </PressableScale>
+            <PressableScale
+              accessibilityRole="button"
+              accessibilityLabel="Descartar descanso"
+              onPress={onDismiss}
+              style={styles.close}
+            >
+              <Icon name="close" size={20} color="textSecondary" strokeWidth={2.4} />
+            </PressableScale>
           </View>
-          <PressableScale
-            accessibilityRole="button"
-            accessibilityLabel="Sumar 15 segundos de descanso"
-            onPress={addTime}
-            style={styles.add}
-          >
-            <Text variant="buttonS">+15 s</Text>
-          </PressableScale>
-          <PressableScale
-            accessibilityRole="button"
-            accessibilityLabel="Descartar descanso"
-            onPress={onDismiss}
-            style={styles.close}
-          >
-            <Icon name="close" size={20} color="textSecondary" strokeWidth={2.4} />
-          </PressableScale>
-        </View>
+        </Animated.View>
       </Animated.View>
     </GestureDetector>
   );

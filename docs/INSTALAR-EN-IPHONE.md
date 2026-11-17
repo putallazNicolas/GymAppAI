@@ -7,8 +7,8 @@ Hay dos caminos. El repo ya está preparado para los dos:
 - **Parte B · TestFlight (más adelante):** un build real de la app, instalado desde TestFlight. Necesita
   la cuenta paga de Apple Developer.
 
-Todos los comandos se corren en la PC con Windows (PowerShell o la terminal de VS Code), con Node.js 22
-instalado y el repo clonado.
+Todos los comandos se corren en la PC con Windows (PowerShell o la terminal de VS Code), con **Node.js 26
+LTS** instalado (la versión está fijada en `.nvmrc`) y el repo clonado.
 
 ---
 
@@ -79,11 +79,25 @@ secret, ese workflow se saltea solo y no pone nada en rojo.
 
 - **Tus datos viven dentro de Expo Go.** Si borrás Expo Go (o sus datos), se pierden. Usá **Perfil →
   Exportar datos** seguido y guardá el archivo (por ejemplo en iCloud Drive).
-- **Expo Go solo abre proyectos de su SDK.** Cuando Expo publica un SDK nuevo y el App Store actualiza
-  Expo Go, esta app (SDK 57) deja de abrir hasta que se actualice el proyecto al SDK nuevo. Antes de
-  actualizar Expo Go, exportá tus datos. Si podés, desactivá las actualizaciones automáticas de apps en el
-  iPhone.
+- **Tené Expo Go actualizado.** La versión de la App Store solo abre proyectos de la **última SDK** de Expo.
+  El proyecto está en la SDK 58.
 - En Expo Go la app no tiene ícono propio en la pantalla de inicio: se abre desde Expo Go.
+
+### A5. Si Expo Go dice "Project is incompatible with this version of Expo Go"
+
+Eso significa que Expo publicó una SDK nueva, el App Store actualizó Expo Go y el proyecto quedó en la
+anterior. **No se arregla en el teléfono:** hay que actualizar el proyecto a la SDK nueva (es la tarea "Actualizar a
+la última versión de Expo SDK", la misma que llevó el proyecto a la SDK 58). Una vez mergeada, el workflow publica
+solo un update nuevo en `preview`.
+
+Para volver a abrir la app después de una actualización:
+
+1. Actualizá Expo Go desde el App Store.
+2. En [expo.dev](https://expo.dev) → **gym-app** → **Updates**, abrí el update **más nuevo** del branch
+   `preview` (debe decir la SDK nueva) y tocá **Preview**.
+3. Escaneá el QR con la cámara del iPhone. Si Expo Go abre una versión vieja desde el historial, cerrala y
+   volvé a escanear el QR del update nuevo.
+4. Tus datos siguen ahí si no borraste Expo Go. Igual, exportalos antes de actualizar, por las dudas.
 
 ---
 

@@ -18,7 +18,7 @@ const BAR_HEIGHT = hit.cta;
 const INDICATOR_WIDTH = 28;
 
 /** Bottom tab bar per P01: accent indicator bar, accent icon + primary label when active. */
-export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
+export function TabBar({ state, descriptors, emitter, navigateToTab }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
   return (
     <View
@@ -29,12 +29,12 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
         const title = descriptors[route.key]?.options.title;
         const label = typeof title === 'string' ? title : route.name;
         const onPress = () => {
-          const event = navigation.emit({
+          const event = emitter.emit({
             type: 'tabPress',
             target: route.key,
             canPreventDefault: true,
           });
-          if (!focused && !event.defaultPrevented) navigation.navigate(route.name, route.params);
+          if (!focused && !event.defaultPrevented) navigateToTab(route.key);
         };
         return (
           <Pressable
@@ -43,7 +43,7 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
             accessibilityLabel={label}
             accessibilityState={{ selected: focused }}
             onPress={onPress}
-            onLongPress={() => navigation.emit({ type: 'tabLongPress', target: route.key })}
+            onLongPress={() => emitter.emit({ type: 'tabLongPress', target: route.key })}
             style={styles.tab}
           >
             {focused ? <View style={styles.indicator} /> : null}

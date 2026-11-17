@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type Ref } from 'react';
-import { StyleSheet, TextInput, View } from 'react-native';
+import { StyleSheet, TextInput, View, type TextInputInstance } from 'react-native';
 import Animated, {
   interpolateColor,
   useAnimatedStyle,
@@ -34,8 +34,8 @@ interface SetRowProps {
   onChangeKg: (value: string) => void;
   onChangeReps: (value: string) => void;
   onToggleComplete: () => void;
-  kgInputRef?: Ref<TextInput>;
-  repsInputRef?: Ref<TextInput>;
+  kgInputRef?: Ref<TextInputInstance>;
+  repsInputRef?: Ref<TextInputInstance>;
   /** Called when the keyboard "next" key is pressed on the kg input. */
   onSubmitKg?: () => void;
   onSubmitReps?: () => void;

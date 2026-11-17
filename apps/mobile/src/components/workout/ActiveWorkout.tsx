@@ -5,10 +5,19 @@ import type {
   WorkoutExerciseDetail,
   WorkoutSet,
 } from '@gym/core';
-import { useKeepAwake } from 'expo-keep-awake';
+import { useScreenAwake } from '../../lib/useScreenAwake';
 import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { AppState, Keyboard, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import {
+  AppState,
+  Keyboard,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  View,
+  type ScrollViewInstance,
+  type TextInputInstance,
+} from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { useRepositories, useServices } from '../../data/DataProvider';
@@ -82,7 +91,7 @@ export function ActiveWorkout({
   unit,
   restTimerEnabled,
 }: ActiveWorkoutProps) {
-  useKeepAwake();
+  useScreenAwake();
   const repos = useRepositories();
   const services = useServices();
   const router = useRouter();
@@ -104,9 +113,9 @@ export function ActiveWorkout({
   const [menuId, setMenuId] = useState<string | null>(null);
   const [finishing, setFinishing] = useState(false);
 
-  const inputRefs = useRef(new Map<string, TextInput>());
+  const inputRefs = useRef(new Map<string, TextInputInstance>());
   const pendingFocus = useRef<string | null>(null);
-  const scrollRef = useRef<ScrollView>(null);
+  const scrollRef = useRef<ScrollViewInstance>(null);
   const blockY = useRef(new Map<string, number>());
   const collapseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   /** Saves run one after another, in tap order. */
@@ -146,7 +155,7 @@ export function ActiveWorkout({
     [],
   );
 
-  function registerRef(key: string, el: TextInput | null) {
+  function registerRef(key: string, el: TextInputInstance | null) {
     if (!el) {
       inputRefs.current.delete(key);
       return;

@@ -12,7 +12,7 @@ import {
   useFonts,
 } from '@expo-google-fonts/barlow';
 import { DarkTheme, Stack, ThemeProvider } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
+import { hideAsync, preventAutoHideAsync } from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import type { Repositories } from '@gym/core';
 import { useCallback, useEffect, useState } from 'react';
@@ -26,7 +26,7 @@ import { colors, fonts } from '../theme';
 
 export { ErrorBoundary } from 'expo-router';
 
-SplashScreen.preventAutoHideAsync().catch(() => undefined);
+preventAutoHideAsync().catch(() => undefined);
 
 const navigationTheme = {
   ...DarkTheme,
@@ -79,7 +79,7 @@ export default function RootLayout() {
   }, []);
 
   useEffect(() => {
-    if (fontsReady) SplashScreen.hideAsync().catch(() => undefined);
+    if (fontsReady) hideAsync().catch(() => undefined);
   }, [fontsReady]);
 
   // The native splash stays up until the fonts are ready.

@@ -2,7 +2,7 @@
   "expo": {
     "name": "Gym App",
     "slug": "gym-app",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "runtimeVersion": {
       "policy": "appVersion"
     },
@@ -30,7 +30,8 @@
     },
     "web": {
       "bundler": "metro",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/favicon.png",
+      "output": "single"
     },
     "plugins": [
       "expo-router",

@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Editar ejercicio · hoja</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#050505}
+.num{font-family:'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer}
+button:disabled{cursor:default;opacity:0.3}
+input{font:inherit;color:inherit;background:none;border:0;outline:none;padding:0;margin:0;width:100%}
+input::placeholder{color:#5E5E64}
+.sc::-webkit-scrollbar{display:none}
+@keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.16)}100%{transform:scale(1)}}
+.bump{animation:bump 200ms cubic-bezier(0.34,1.56,0.64,1)}
+@keyframes rowin{0%{opacity:0;transform:translateY(-10px)}100%{opacity:1;transform:none}}
+.rowin{animation:rowin 220ms cubic-bezier(0.22,1,0.36,1)}
+@keyframes sheetin{0%{transform:translateY(60px);opacity:0.6}100%{transform:none;opacity:1}}
+.sheetin{animation:sheetin 320ms cubic-bezier(0.22,1,0.36,1)}
+@keyframes fade{0%{opacity:0}100%{opacity:1}}
+.fade{animation:fade 200ms ease-out}
+</style>
+</helmet>
+<div style="width:393px;height:852px;box-sizing:border-box;background:#0B0B0C;color:#F4F4F2;font-family:'Barlow',sans-serif;position:relative;overflow:hidden">
+
+  <div aria-hidden="true" style="position:absolute;inset:0;padding:58px 16px 0;box-sizing:border-box">
+    <div class="num" style="font-size:34px;font-weight:800;text-transform:uppercase;color:#F4F4F2">Piernas A</div>
+    <div style="margin-top:20px;height:92px;border-radius:16px;background:#141416"></div>
+    <div style="margin-top:8px;height:92px;border-radius:16px;background:#141416"></div>
+  </div>
+  <div aria-hidden="true" style="position:absolute;inset:0;background:rgba(0,0,0,0.66)"></div>
+
+  <section class="sheetin" role="dialog" aria-label="Editar Peso muerto rumano" style="position:absolute;left:0;right:0;top:84px;bottom:0;border-radius:24px 24px 0 0;background:#1C1C1F;box-shadow:0 -1px 0 #2F2F33;display:flex;flex-direction:column">
+    <div style="display:flex;justify-content:center;padding-top:8px" aria-hidden="true"><span style="width:36px;height:5px;border-radius:3px;background:#3A3A3F"></span></div>
+
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:8px 8px 10px 16px;border-bottom:1px solid #2A2A2E">
+      <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+        <span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">EJERCICIO 2 DE 5 · PIERNAS · BARRA</span>
+        <h2 class="num" style="margin:0;font-size:27px;line-height:1.02;font-weight:800;text-transform:uppercase">Peso muerto rumano</h2>
+      </div>
+      <a href="P07b-Armar-Dia.dc.html" style="height:44px;padding:0 10px;display:flex;align-items:center;color:#FF5B1F;font-size:16px;font-weight:700;flex:none">Listo</a>
+    </div>
+
+    <div class="sc" style="flex:1;overflow-y:auto;padding:14px 16px 28px;display:flex;flex-direction:column;gap:18px">
+
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">SERIES</span>
+        <div style="display:flex;align-items:center;gap:6px">
+          <button onClick="{{decSets}}" disabled="{{minSets}}" aria-label="Una serie menos" style="width:56px;height:56px;border-radius:14px;border:0;background:#2A2A2E;color:#F4F4F2;display:flex;align-items:center;justify-content:center">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg>
+          </button>
+          <span aria-live="polite" class="num {{setsBump}}" style="width:64px;text-align:center;font-size:46px;line-height:1;font-weight:800">{{sets}}</span>
+          <button onClick="{{incSets}}" disabled="{{maxSets}}" aria-label="Una serie más" style="width:56px;height:56px;border-radius:14px;border:0;background:rgba(255,91,31,0.16);color:#FF5B1F;display:flex;align-items:center;justify-content:center">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">REPS</span>
+          <div role="radiogroup" aria-label="Modo de reps" style="position:relative;width:230px;padding:3px;border-radius:12px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))">
+            <span aria-hidden="true" style="position:absolute;top:3px;bottom:3px;left:{{pillLeft}};width:calc(50% - 3px);border-radius:9px;background:#F4F4F2;transition:left 220ms cubic-bezier(0.22,1,0.36,1)"></span>
+            <button role="radio" aria-checked="{{isSame}}" onClick="{{toSame}}" style="position:relative;height:40px;border:0;background:transparent;color:{{sameFg}};font-size:14px;font-weight:700;transition:color 200ms">Igual en todas</button>
+            <button role="radio" aria-checked="{{isPer}}" onClick="{{toPer}}" style="position:relative;height:40px;border:0;background:transparent;color:{{perFg}};font-size:14px;font-weight:700;transition:color 200ms">Por serie</button>
+          </div>
+        </div>
+
+        <sc-if value="{{hasNotice}}" hint-placeholder-val="{{false}}">
+          <div class="fade" role="status" style="padding:10px 12px;border-radius:12px;background:rgba(255,91,31,0.12);box-shadow:inset 0 0 0 1px rgba(255,91,31,0.45);display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.4;color:#E4E4E2">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF5B1F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none;margin-top:1px"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/></svg>
+            <span>{{notice}}</span>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{isSame}}" hint-placeholder-val="{{true}}">
+          <div class="fade" style="display:flex;flex-direction:column;gap:10px">
+            <label style="height:72px;border-radius:14px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;display:flex;align-items:center;gap:12px;padding:0 16px">
+              <span class="num" style="font-size:22px;font-weight:700;color:#9A9A9F;flex:none">{{sets}} ×</span>
+              <span class="num" style="flex:1;font-size:44px;line-height:1;font-weight:800">
+                <input type="text" value="{{same}}" onChange="{{onSame}}" placeholder="8-10" aria-label="Reps en todas las series" style="text-transform:uppercase">
+              </span>
+              <span style="font-size:12px;color:#7C7C82;flex:none;text-align:right">tocá para<br>escribir</span>
+            </label>
+            <div style="display:flex;flex-wrap:wrap;gap:6px" role="group" aria-label="Reps frecuentes">
+              <sc-for list="{{presets}}" as="p" hint-placeholder-count="7">
+                <button onClick="{{p.pick}}" aria-pressed="{{p.on}}" class="num" style="height:44px;min-width:52px;padding:0 12px;border-radius:22px;border:0;background:{{p.bg}};color:{{p.fg}};box-shadow:inset 0 0 0 1px {{p.border}};font-size:19px;font-weight:700;transition:background-color 160ms">{{p.label}}</button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{isPer}}" hint-placeholder-val="{{false}}">
+          <div class="fade" style="display:flex;flex-direction:column;gap:6px">
+            <div class="sc" style="display:flex;gap:6px;overflow-x:auto;margin:0 -16px;padding:0 16px 4px">
+              <button onClick="{{fillFirst}}" style="flex:none;height:40px;padding:0 12px;border-radius:20px;border:0;background:#141416;box-shadow:inset 0 0 0 1px #2A2A2E;color:#C9C9CC;font-size:13px;font-weight:700">Igualar a la serie 1</button>
+              <button onClick="{{fillStair}}" style="flex:none;height:40px;padding:0 12px;border-radius:20px;border:0;background:#141416;box-shadow:inset 0 0 0 1px #2A2A2E;color:#C9C9CC;font-size:13px;font-weight:700">Escalera −2</button>
+              <button onClick="{{fill531}}" style="flex:none;height:40px;padding:0 12px;border-radius:20px;border:0;background:#141416;box-shadow:inset 0 0 0 1px #2A2A2E;color:#C9C9CC;font-size:13px;font-weight:700">5 · 3 · 1</button>
+            </div>
+            <div style="display:grid;grid-template-columns:52px minmax(0,1fr) 58px;gap:8px;padding:0 4px;font-size:11px;font-weight:700;letter-spacing:0.12em;color:#7C7C82">
+              <span>SERIE</span><span style="text-align:center">REPS</span><span style="text-align:center">CARGA</span>
+            </div>
+            <sc-for list="{{rows}}" as="r" hint-placeholder-count="4">
+              <div class="{{r.anim}}" style="display:grid;grid-template-columns:52px minmax(0,1fr) 58px;gap:8px;align-items:center;min-height:56px;padding:0 4px;border-radius:12px;background:#141416">
+                <span class="num" style="font-size:24px;font-weight:800;color:#FF5B1F;text-align:center">{{r.n}}</span>
+                <span style="display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;height:48px;border-radius:10px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E">
+                  <button onClick="{{r.dec}}" disabled="{{r.fixed}}" aria-label="{{r.decLabel}}" style="height:48px;border:0;background:transparent;color:#C9C9CC;display:flex;align-items:center;justify-content:center">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg>
+                  </button>
+                  <span class="num" style="font-size:{{r.size}}px;font-weight:800;text-align:center">
+                    <input type="text" value="{{r.v}}" onChange="{{r.onV}}" aria-label="{{r.label}}" style="text-align:center;text-transform:uppercase">
+                  </span>
+                  <button onClick="{{r.inc}}" disabled="{{r.fixed}}" aria-label="{{r.incLabel}}" style="height:48px;border:0;background:transparent;color:#FF5B1F;display:flex;align-items:center;justify-content:center">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                  </button>
+                </span>
+                <span aria-hidden="true" style="height:40px;border-radius:10px;border:1.5px dashed #3A3A3F;display:flex;align-items:center;justify-content:center;font-size:12px;color:#5E5E64">—</span>
+              </div>
+            </sc-for>
+            <span style="padding:2px 4px 0;font-size:12px;line-height:1.4;color:#7C7C82">Tocá el número para escribir rangos («8-10») o AMRAP. La columna CARGA queda reservada para más adelante.</span>
+          </div>
+        </sc-if>
+      </div>
+
+      <a href="P07d-Descanso.dc.html" style="min-height:60px;padding:0 8px 0 14px;border-radius:14px;background:#141416;box-shadow:inset 0 0 0 1px #2A2A2E;display:flex;align-items:center;gap:12px">
+        <span style="flex:1;display:flex;flex-direction:column;gap:1px">
+          <span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">DESCANSO</span>
+          <span style="font-size:13px;color:#9A9A9F">Arranca solo al tildar cada serie</span>
+        </span>
+        <span class="num" style="font-size:30px;font-weight:800">2:00</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A9A9F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+      </a>
+
+      <label style="display:flex;flex-direction:column;gap:6px">
+        <span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">NOTAS · OPCIONAL</span>
+        <span style="min-height:48px;padding:0 12px;border-radius:12px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;display:flex;align-items:center;gap:8px;font-size:15px;color:#E4E4E2">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7C7C82" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg>
+          <input type="text" value="{{note}}" onChange="{{onNote}}" placeholder="Cues de técnica, agarre, tempo…" aria-label="Notas del ejercicio">
+        </span>
+      </label>
+
+      <button style="height:48px;border:0;border-radius:12px;background:transparent;color:#FF4D6A;display:flex;align-items:center;justify-content:center;gap:8px;font-size:15px;font-weight:700">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>
+        Quitar del día
+      </button>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":393,"height":852}}'>
+var PRESETS = ['5', '6-8', '8-10', '10-12', '12-15', '15-20', 'AMRAP'];
+function shift(v, d) {
+  var s = String(v).trim();
+  var m = /^(\d+)$/.exec(s);
+  if (m) return String(Math.max(1, parseInt(m[1], 10) + d));
+  m = /^(\d+)\s*-\s*(\d+)$/.exec(s);
+  if (m) { var a = parseInt(m[1], 10) + d, b = parseInt(m[2], 10) + d; if (a < 1) return s; return a + '-' + b; }
+  return s;
+}
+function stepable(v) { return /^(\d+)$|^(\d+)\s*-\s*(\d+)$/.test(String(v).trim()); }
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { sets: 4, mode: 'same', same: '8-10', per: [], backup: null, notice: '', bump: 0, added: -1, note: 'Barra, agarre prono' };
+  }
+  setSets(n) {
+    const s = this.state;
+    n = Math.max(1, Math.min(12, n));
+    if (n === s.sets) return;
+    let per = s.per.slice();
+    if (s.mode === 'perSet') {
+      if (n > per.length) per.push(per[per.length - 1] || s.same); else per = per.slice(0, n);
+    }
+    this.setState({ sets: n, per: per, bump: s.bump + 1, added: n > s.sets ? n - 1 : -1, backup: null, notice: '' });
+  }
+  toPer() {
+    const s = this.state;
+    if (s.mode === 'perSet') return;
+    const per = s.backup && s.backup.length === s.sets ? s.backup : Array(s.sets).fill(s.same || '8-10');
+    this.setState({ mode: 'perSet', per: per, backup: null, notice: '', added: -1 });
+  }
+  toSame() {
+    const s = this.state;
+    if (s.mode === 'same') return;
+    const first = s.per[0] || s.same;
+    const allEqual = s.per.every((v) => v === first);
+    this.setState({
+      mode: 'same', same: first,
+      backup: allEqual ? null : s.per.slice(),
+      notice: allEqual ? '' : 'Las series tenían reps distintas: quedó «' + first + '» en todas. Volvé a «Por serie» para recuperar ' + s.per.join(' · ') + '.'
+    });
+  }
+  setPer(i, v) { const per = this.state.per.slice(); per[i] = v; this.setState({ per: per, added: -1 }); }
+  renderVals() {
+    const s = this.state;
+    const isSame = s.mode === 'same';
+    const sameNorm = String(s.same).trim().toUpperCase();
+    return {
+      sets: s.sets,
+      setsBump: s.bump % 2 ? 'bump' : '',
+      minSets: s.sets <= 1, maxSets: s.sets >= 12,
+      decSets: () => this.setSets(s.sets - 1),
+      incSets: () => this.setSets(s.sets + 1),
+      isSame: isSame, isPer: !isSame,
+      pillLeft: isSame ? '3px' : '50%',
+      sameFg: isSame ? '#0B0B0C' : '#9A9A9F',
+      perFg: isSame ? '#9A9A9F' : '#0B0B0C',
+      toSame: () => this.toSame(),
+      toPer: () => this.toPer(),
+      hasNotice: !!s.notice, notice: s.notice,
+      same: s.same,
+      onSame: (e) => this.setState({ same: e.target.value, backup: null, notice: '' }),
+      presets: PRESETS.map((p) => {
+        const on = p === sameNorm;
+        return { label: p, on: on, bg: on ? '#F4F4F2' : '#141416', fg: on ? '#0B0B0C' : '#C9C9CC', border: on ? '#F4F4F2' : '#2A2A2E', pick: () => this.setState({ same: p, backup: null, notice: '' }) };
+      }),
+      rows: s.per.map((v, i) => ({
+        n: i + 1, v: v,
+        size: /^[0-9\s-]+$/.test(v) ? 26 : 18,
+        fixed: !stepable(v),
+        anim: s.added === i ? 'rowin' : '',
+        label: 'Reps de la serie ' + (i + 1),
+        decLabel: 'Menos reps en la serie ' + (i + 1), incLabel: 'Más reps en la serie ' + (i + 1),
+        dec: () => this.setPer(i, shift(v, -1)),
+        inc: () => this.setPer(i, shift(v, 1)),
+        onV: (e) => this.setPer(i, e.target.value)
+      })),
+      fillFirst: () => this.setState({ per: s.per.map(() => s.per[0]) }),
+      fillStair: () => {
+        const base = parseInt(s.per[0], 10);
+        const start = isNaN(base) ? 12 : base;
+        this.setState({ per: s.per.map((_, i) => String(Math.max(1, start - 2 * i))) });
+      },
+      fill531: () => this.setState({ per: s.per.map((_, i) => ['5', '3', '1'][i] || 'AMRAP') }),
+      note: s.note,
+      onNote: (e) => this.setState({ note: e.target.value })
+    };
+  }
+}
+</script>
+</body>
+</html>

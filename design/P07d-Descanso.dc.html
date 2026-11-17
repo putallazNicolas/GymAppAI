@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Selector de descanso</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#050505}
+.num{font-family:'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer}
+button:disabled{cursor:default;opacity:0.3}
+@keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.08)}100%{transform:scale(1)}}
+.bump{animation:bump 180ms cubic-bezier(0.34,1.56,0.64,1)}
+@keyframes sheetin{0%{transform:translateY(80px)}100%{transform:none}}
+.sheetin{animation:sheetin 300ms cubic-bezier(0.22,1,0.36,1)}
+</style>
+</helmet>
+<div style="width:393px;height:852px;box-sizing:border-box;background:#0B0B0C;color:#F4F4F2;font-family:'Barlow',sans-serif;position:relative;overflow:hidden">
+
+  <div aria-hidden="true" style="position:absolute;inset:0;background:rgba(0,0,0,0.66)"></div>
+  <div aria-hidden="true" style="position:absolute;left:0;right:0;top:84px;bottom:0;border-radius:24px 24px 0 0;background:#1C1C1F;padding:22px 16px 0;box-sizing:border-box">
+    <div class="num" style="font-size:27px;font-weight:800;text-transform:uppercase;color:#7C7C82">Peso muerto rumano</div>
+    <div style="margin-top:18px;height:56px;border-radius:14px;background:#141416"></div>
+    <div style="margin-top:12px;height:120px;border-radius:14px;background:#141416"></div>
+  </div>
+  <div aria-hidden="true" style="position:absolute;inset:0;background:rgba(0,0,0,0.5)"></div>
+
+  <section class="sheetin" role="dialog" aria-label="Elegir descanso" style="position:absolute;left:0;right:0;bottom:0;top:372px;border-radius:24px 24px 0 0;background:#1C1C1F;box-shadow:0 -1px 0 #2F2F33;display:flex;flex-direction:column">
+    <div style="display:flex;justify-content:center;padding-top:8px" aria-hidden="true"><span style="width:36px;height:5px;border-radius:3px;background:#3A3A3F"></span></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px 0 16px">
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">DESCANSO · PESO MUERTO RUMANO</span>
+        <span style="font-size:13px;color:#9A9A9F">Arranca solo al tildar cada serie</span>
+      </div>
+      <a href="P07c-Editar-Ejercicio.dc.html" style="height:44px;padding:0 10px;display:flex;align-items:center;color:#FF5B1F;font-size:16px;font-weight:700">Listo</a>
+    </div>
+
+    <div style="margin:12px 16px 0;display:grid;grid-template-columns:72px minmax(0,1fr) 72px;align-items:center;gap:8px">
+      <button onClick="{{minus}}" disabled="{{atMin}}" aria-label="Restar 15 segundos" class="num" style="height:60px;border-radius:14px;border:0;background:#2A2A2E;color:#F4F4F2;font-size:20px;font-weight:800">−15 s</button>
+      <div aria-live="polite" style="height:96px;display:flex;flex-direction:column;align-items:center;justify-content:center">
+        <sc-if value="{{hasRest}}" hint-placeholder-val="{{true}}">
+          <span class="num {{bump}}" style="font-size:76px;line-height:0.9;font-weight:800">{{label}}</span>
+        </sc-if>
+        <sc-if value="{{noRest}}" hint-placeholder-val="{{false}}">
+          <span class="num {{bump}}" style="font-size:32px;line-height:1;font-weight:800;text-transform:uppercase;color:#C9C9CC">Sin descanso</span>
+        </sc-if>
+        <span style="font-size:12px;color:#7C7C82;margin-top:4px">{{sub}}</span>
+      </div>
+      <button onClick="{{plus}}" disabled="{{atMax}}" aria-label="Sumar 15 segundos" class="num" style="height:60px;border-radius:14px;border:0;background:rgba(255,91,31,0.16);color:#FF5B1F;font-size:20px;font-weight:800">+15 s</button>
+    </div>
+
+    <div role="radiogroup" aria-label="Descansos frecuentes" style="margin:14px 16px 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px">
+      <sc-for list="{{presets}}" as="p" hint-placeholder-count="7">
+        <button role="radio" aria-checked="{{p.on}}" onClick="{{p.pick}}" class="num" style="grid-column:{{p.span}};height:52px;border-radius:12px;border:0;background:{{p.bg}};color:{{p.fg}};box-shadow:inset 0 0 0 1px {{p.border}};font-size:{{p.size}}px;font-weight:800;transition:background-color 160ms">{{p.label}}</button>
+      </sc-for>
+    </div>
+    <p style="margin:12px 16px 0;font-size:12px;line-height:1.4;color:#7C7C82">Siempre en minutos y segundos. Pasos de 15 s, de 0:15 a 10:00. Mantené apretado ± para avanzar rápido.</p>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":393,"height":852}}'>
+var PRE = [45, 60, 90, 120, 180, 300, 0];
+function lab(s) { if (!s) return 'Sin descanso'; var m = Math.floor(s / 60), r = s % 60; return m + ':' + (r < 10 ? '0' : '') + r; }
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { s: 120, n: 0 };
+  }
+  set(v) { this.setState({ s: Math.max(0, Math.min(600, v)), n: this.state.n + 1 }); }
+  renderVals() {
+    const s = this.state.s;
+    const m = Math.floor(s / 60), r = s % 60;
+    return {
+      hasRest: s > 0, noRest: s === 0,
+      label: lab(s),
+      sub: s === 0 ? 'No aparece el temporizador' : (m ? m + ' min ' : '') + (r ? r + ' s' : ''),
+      bump: this.state.n % 2 ? 'bump' : '',
+      atMin: s === 0, atMax: s >= 600,
+      minus: () => this.set(s - 15),
+      plus: () => this.set(s + 15),
+      presets: PRE.map((v) => {
+        const on = v === s;
+        return {
+          label: lab(v), on: on,
+          span: v === 0 ? 'span 2' : 'auto',
+          size: v === 0 ? 17 : 22,
+          bg: on ? '#F4F4F2' : '#141416', fg: on ? '#0B0B0C' : '#E4E4E2', border: on ? '#F4F4F2' : '#2A2A2E',
+          pick: () => this.set(v)
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

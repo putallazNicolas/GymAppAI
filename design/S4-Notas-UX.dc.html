@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Notas UX para el desarrollador</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.num{font-family:'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums}
+pre,code{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace}
+code{color:#F4F4F2;font-size:12.5px}
+</style>
+</helmet>
+<div style="width:1100px;height:2700px;box-sizing:border-box;padding:48px;background:#0B0B0C;color:#F4F4F2;font-family:'Barlow',sans-serif;display:flex;flex-direction:column;gap:34px">
+
+  <header style="display:flex;flex-direction:column;gap:6px">
+    <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#FF5B1F">S4 · AJUSTES UX · ARMAR RUTINAS Y EJERCICIOS</span>
+    <h1 class="num" style="margin:0;font-size:56px;line-height:0.92;font-weight:800;text-transform:uppercase">Notas para el desarrollador</h1>
+    <span style="font-size:15px;color:#9A9A9F">El estilo visual no cambia: tokens de S1, componentes de S2. Todo lo de abajo corre en Expo Go.</span>
+  </header>
+
+  <section style="display:flex;flex-direction:column;gap:10px">
+    <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">DECISIONES EN UNA LÍNEA</span>
+    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;font-size:14px;line-height:1.45;color:#C9C9CC">
+      <div style="padding:14px 16px;border-radius:12px;background:#141416;border:1px solid #2A2A2E"><b style="color:#F4F4F2">Editar en una hoja, no en la fila:</b> la lista de 5–6 ejercicios queda corta y escaneable, y los controles grandes quedan abajo, al alcance del pulgar.</div>
+      <div style="padding:14px 16px;border-radius:12px;background:#141416;border:1px solid #2A2A2E"><b style="color:#F4F4F2">El tacho pasa a la hoja</b> («Quitar del día»): en la fila quedan solo ↑/↓ y se evitan borrados sin querer.</div>
+      <div style="padding:14px 16px;border-radius:12px;background:#141416;border:1px solid #2A2A2E"><b style="color:#F4F4F2">Descanso con presets + ±15 s, sin rueda:</b> un toque resuelve el 90 % de los casos y el ±15 s es más preciso con el pulgar que una rueda. La rueda queda como alternativa (abajo).</div>
+      <div style="padding:14px 16px;border-radius:12px;background:#141416;border:1px solid #2A2A2E"><b style="color:#F4F4F2">Reps: presets primero, teclado después.</b> El teclado solo aparece si tocás el número, y trae una barra con «AMRAP», «–» y «Siguiente».</div>
+      <div style="padding:14px 16px;border-radius:12px;background:#141416;border:1px solid #2A2A2E"><b style="color:#F4F4F2">Título editable = campo visible:</b> caja, label, lápiz y estado de edición con «Listo». Se mantiene el título grande en mayúsculas.</div>
+      <div style="padding:14px 16px;border-radius:12px;background:#141416;border:1px solid #2A2A2E"><b style="color:#F4F4F2">Crear ejercicio progresivo:</b> nombre + grupo y ya se guarda. El resto va dentro de «Más detalles» (cerrado por defecto en la app).</div>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:10px">
+    <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">COMPONENTES NUEVOS O QUE CAMBIAN RESPECTO DE S2</span>
+    <div style="border-radius:14px;border:1px solid #2A2A2E;overflow:hidden;font-size:13.5px;line-height:1.45">
+      <div style="display:grid;grid-template-columns:200px 90px 150px minmax(0,1fr);gap:16px;padding:10px 16px;background:#1C1C1F;font-size:11px;font-weight:700;letter-spacing:0.12em;color:#9A9A9F"><span>COMPONENTE</span><span>ESTADO</span><span>DÓNDE</span><span>QUÉ HACE / QUÉ CAMBIA</span></div>
+      <div style="display:grid;grid-template-columns:200px 90px 150px minmax(0,1fr);gap:16px;padding:11px 16px;border-top:1px solid #1F1F22;background:#141416"><b>EditableTitle</b><span style="color:#FF5B1F">Reemplaza</span><span style="color:#9A9A9F">P06b, P07b</span><span style="color:#C9C9CC">Reemplaza a <code>UnderlineField</code> en los títulos. Tiene 4 estados: normal (lápiz), editando (borde de 2 px, «Listo»), vacío (placeholder) y error al salir vacío. Máximo 40 caracteres.</span></div>
+      <div style="display:grid;grid-template-columns:200px 90px 150px minmax(0,1fr);gap:16px;padding:11px 16px;border-top:1px solid #1F1F22;background:#141416"><b>PlannedExerciseRow</b><span style="color:#FF5B1F">Reemplaza</span><span style="color:#9A9A9F">P07b</span><span style="color:#C9C9CC">Reemplaza a <code>PlannedExerciseCard</code>. Ya no lleva inputs: muestra el resumen («4 × 8-10» o «5 · 3 · 1» + POR SERIE), el descanso y la nota. Lleva ↑/↓ apilados y abre la hoja al tocarla.</span></div>
+      <div style="display:grid;grid-template-columns:200px 90px 150px minmax(0,1fr);gap:16px;padding:11px 16px;border-top:1px solid #1F1F22;background:#141416"><b>Sheet</b><span style="color:#3DDC84">Nuevo</span><span style="color:#9A9A9F">P07c, P07d</span><span style="color:#C9C9CC">Hoja inferior con grabber, título y «Listo». Fondo <code>surfaceRaised</code>, radio 24 arriba, scrim de S1.</span></div>
+      <div style="display:grid;grid-template-columns:200px 90px 150px minmax(0,1fr);gap:16px;padding:11px 16px;border-top:1px solid #1F1F22;background:#141416"><b>Stepper (L)</b><span style="color:#FF5B1F">Cambia</span><span style="color:#9A9A9F">P07c</span><span style="color:#C9C9CC">Botones de 56 pt, número 46 pt. − en <code>border</code>, + en <code>accentMuted</code>. Mantener apretado repite. La variante chica (44 pt) es la de cada serie.</span></div>
+      <div style="display:grid;grid-template-columns:200px 90px 150px minmax(0,1fr);gap:16px;padding:11px 16px;border-top:1px solid #1F1F22;background:#141416"><b>RepsModeToggle</b><span style="color:#3DDC84">Nuevo</span><span style="color:#9A9A9F">P07c</span><span style="color:#C9C9CC">Es el <code>SegmentedControl</code> de S2 con dos opciones: «Igual en todas» y «Por serie».</span></div>
+      <div style="display:grid;grid-template-columns:200px 90px 150px minmax(0,1fr);gap:16px;padding:11px 16px;border-top:1px solid #1F1F22;background:#141416"><b>PresetChips</b><span style="color:#3DDC84">Nuevo</span><span style="color:#9A9A9F">P07c, P07d</span><span style="color:#C9C9CC">Chip de S2 en cifras (Barlow Condensed). Reps: 5 · 6-8 · 8-10 · 10-12 · 12-15 · 15-20 · AMRAP. Descanso: grilla de 4 columnas.</span></div>
+      <div style="display:grid;grid-template-columns:200px 90px 150px minmax(0,1fr);gap:16px;padding:11px 16px;border-top:1px solid #1F1F22;background:#141416"><b>PlannedSetRow</b><span style="color:#3DDC84">Nuevo</span><span style="color:#9A9A9F">P07c (Por serie)</span><span style="color:#C9C9CC">Fila con n.º de serie, stepper chico de reps (también editable como texto) y una celda CARGA punteada, reservada y sin función.</span></div>
+      <div style="display:grid;grid-template-columns:200px 90px 150px minmax(0,1fr);gap:16px;padding:11px 16px;border-top:1px solid #1F1F22;background:#141416"><b>RestPicker</b><span style="color:#3DDC84">Nuevo</span><span style="color:#9A9A9F">P07d</span><span style="color:#C9C9CC">Lectura en m:ss (76 pt) entre los botones −15 s y +15 s, con presets debajo. «Sin descanso» se guarda como 0.</span></div>
+      <div style="display:grid;grid-template-columns:200px 90px 150px minmax(0,1fr);gap:16px;padding:11px 16px;border-top:1px solid #1F1F22;background:#141416"><b>NumericAccessoryBar</b><span style="color:#3DDC84">Nuevo</span><span style="color:#9A9A9F">P07c</span><span style="color:#C9C9CC">Barra arriba del teclado con «AMRAP», «–» y «Siguiente».</span></div>
+      <div style="display:grid;grid-template-columns:200px 90px 150px minmax(0,1fr);gap:16px;padding:11px 16px;border-top:1px solid #1F1F22;background:#141416"><b>CreateExerciseScreen</b><span style="color:#FF5B1F">Reemplaza</span><span style="color:#9A9A9F">P08b</span><span style="color:#C9C9CC">Reemplaza a <code>CreateExerciseDialog</code>. Pantalla con: nombre, grupo, «Más detalles» desplegable y botón Guardar fijo abajo, deshabilitado hasta que sea válido.</span></div>
+      <div style="display:grid;grid-template-columns:200px 90px 150px minmax(0,1fr);gap:16px;padding:11px 16px;border-top:1px solid #1F1F22;background:#141416"><b>Tag «PROPIO»</b><span style="color:#3DDC84">Nuevo</span><span style="color:#9A9A9F">P08c</span><span style="color:#C9C9CC">Contorno <code>accent</code> de 1 px y texto de 10 pt. Las filas propias suman un menú ⋯ (Editar / Eliminar) y aparece el chip de filtro «Propios».</span></div>
+      <div style="display:grid;grid-template-columns:200px 90px 150px minmax(0,1fr);gap:16px;padding:11px 16px;border-top:1px solid #1F1F22;background:#141416"><b>SetRow</b><span style="color:#FF5B1F">Cambia</span><span style="color:#9A9A9F">P03b</span><span style="color:#C9C9CC">El placeholder de reps es lo planificado <i>para esa serie</i>. Si no es numérico (AMRAP), se muestra a 16 pt.</span></div>
+      <div style="display:grid;grid-template-columns:200px 90px 150px minmax(0,1fr);gap:16px;padding:11px 16px;border-top:1px solid #1F1F22;background:#141416"><b>Toast</b><span style="color:#3DDC84">Nuevo</span><span style="color:#9A9A9F">P08c</span><span style="color:#C9C9CC">Aparece arriba con borde <code>successBorder</code> y acción «Editar». Se cierra solo a los 3 s.</span></div>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:10px">
+    <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">CÓMO SE IMPLEMENTA CADA INTERACCIÓN (EXPO GO, SIN MÓDULOS NATIVOS EXTRA)</span>
+    <div style="border-radius:14px;border:1px solid #2A2A2E;overflow:hidden;font-size:13.5px;line-height:1.5">
+      <div style="display:grid;grid-template-columns:200px minmax(0,1fr);gap:16px;padding:12px 16px;background:#141416"><b>Hojas P07c / P07d</b><span style="color:#C9C9CC">Rutas de expo-router con <code>presentation: 'formSheet'</code>, <code>sheetAllowedDetents: [0.92]</code> (descanso: <code>[0.5]</code>) y <code>sheetGrabberVisible: true</code>. Vienen en react-native-screens, incluido en Expo Go. Swipe hacia abajo = cerrar. Alternativa sin router: <code>Modal</code> de RN con <code>presentationStyle="pageSheet"</code>.</span></div>
+      <div style="display:grid;grid-template-columns:200px minmax(0,1fr);gap:16px;padding:12px 16px;border-top:1px solid #1F1F22;background:#141416"><b>Stepper con repetición</b><span style="color:#C9C9CC">Un <code>Pressable</code> que en <code>onPressIn</code> aplica un paso, espera 400 ms y después repite cada 90 ms con <code>setInterval</code>. <code>onPressOut</code> limpia los timers. En cada paso, <code>Haptics.selectionAsync()</code>, y el número hace un «bump» con Reanimated (escala 1 → 1,16 → 1, 200 ms). En los topes, el botón se deshabilita y suena <code>notificationAsync(Warning)</code> una sola vez.</span></div>
+      <div style="display:grid;grid-template-columns:200px minmax(0,1fr);gap:16px;padding:12px 16px;border-top:1px solid #1F1F22;background:#141416"><b>Igual en todas ↔ Por serie</b><span style="color:#C9C9CC">El estado vive en la hoja y se persiste en cada cambio. Las filas por serie entran con <code>FadeIn</code> y se reordenan con <code>LinearTransition</code> (Reanimated). La copia de respaldo al volver a «Igual» vive en un <code>useRef</code>: no se persiste y se descarta al cerrar la hoja, al tocar ±series o al editar las reps.</span></div>
+      <div style="display:grid;grid-template-columns:200px minmax(0,1fr);gap:16px;padding:12px 16px;border-top:1px solid #1F1F22;background:#141416"><b>Teclado de reps</b><span style="color:#C9C9CC">Usar <code>keyboardType="numbers-and-punctuation"</code>, porque el teclado numérico (<code>number-pad</code>) no tiene «–». Mejor: <code>number-pad</code> + <code>InputAccessoryView</code> (core de RN en iOS) con «AMRAP», «–» y «Siguiente», como en P07c2. «Siguiente» hace <code>ref.focus()</code> sobre la fila que sigue. Al salir del campo se normaliza: trim, mayúsculas y «8 - 10» → «8-10». Si queda vacío, vuelve al valor anterior.</span></div>
+      <div style="display:grid;grid-template-columns:200px minmax(0,1fr);gap:16px;padding:12px 16px;border-top:1px solid #1F1F22;background:#141416"><b>Selector de descanso</b><span style="color:#C9C9CC">Los presets son <code>Pressable</code> en grilla y el ±15 s usa el mismo stepper con repetición. Rango: 0 a 600 s, en pasos de 15. Formato: <code>m + ':' + ss</code>. Si preferís rueda: un <code>ScrollView</code> por columna (min 0–10, seg 00/15/30/45) con <code>snapToInterval={44}</code>, <code>decelerationRate="fast"</code>, índice calculado en <code>onMomentumScrollEnd</code>, haptic al cambiar de índice y bordes con <code>expo-linear-gradient</code>. <code>@react-native-picker/picker</code> también viene en Expo Go si se quiere la rueda nativa (instalar con <code>npx expo install</code>).</span></div>
+      <div style="display:grid;grid-template-columns:200px minmax(0,1fr);gap:16px;padding:12px 16px;border-top:1px solid #1F1F22;background:#141416"><b>Título editable</b><span style="color:#C9C9CC">El <code>TextInput</code> está siempre montado, con estilo de título. El estado «editando» sale de <code>onFocus</code>/<code>onBlur</code>. El lápiz y la caja hacen <code>inputRef.current.focus()</code>. «Listo» hace <code>blur()</code>. Guardar en <b>un solo</b> callback: <code>onEndEditing</code> (ver bug abajo). Al crear un día: <code>autoFocus</code> + <code>selectTextOnFocus</code>.</span></div>
+      <div style="display:grid;grid-template-columns:200px minmax(0,1fr);gap:16px;padding:12px 16px;border-top:1px solid #1F1F22;background:#141416"><b>Crear ejercicio</b><span style="color:#C9C9CC">Ruta con <code>presentation: 'modal'</code>. «Más detalles» se despliega con render condicional + <code>LinearTransition</code>. Al guardar: <code>router.back()</code> con el id nuevo como parámetro, y la lista lo pre-selecciona, hace <code>scrollToIndex</code> y lo resalta 1,2 s (accentMuted 32 % → 10 %). Editar reutiliza la misma pantalla con los datos cargados.</span></div>
+      <div style="display:grid;grid-template-columns:200px minmax(0,1fr);gap:16px;padding:12px 16px;border-top:1px solid #1F1F22;background:#141416"><b>Entrenando con reps por serie</b><span style="color:#C9C9CC">El placeholder de reps de cada fila es <code>plannedSetReps[i]</code>. Al tocar ✓ sin escribir: si el valor es numérico, se carga ese número. Si es un rango o AMRAP, no se completa: el campo de reps tiembla (2 × 240 ms), recibe el foco y suena <code>notificationAsync(Warning)</code>.</span></div>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:10px">
+    <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">QUÉ DATOS NUEVOS NECESITA CADA PANTALLA</span>
+    <span style="font-size:13px;color:#9A9A9F">Referencia: <code>packages/core/src/contracts/entities.ts</code>. Los contratos los cambia solo el orquestador: esto es la lista para pedírselo, no un diseño de base.</span>
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start">
+      <div style="display:flex;flex-direction:column;gap:10px;font-size:13.5px;line-height:1.5;color:#C9C9CC">
+        <div style="padding:14px 16px;border-radius:12px;background:#141416;border:1px solid #2A2A2E"><b style="color:#F4F4F2">P06b / P07b · títulos</b><br>Sin datos nuevos. Validación: <code>trim()</code>, no vacío, máximo 40 caracteres.</div>
+        <div style="padding:14px 16px;border-radius:12px;background:#141416;border:1px solid #2A2A2E"><b style="color:#F4F4F2">P07c · series y reps</b><br><code>PlannedExercise</code> hoy guarda <code>sets: number</code> + <code>reps: string</code>. Necesita:<br>• <code>repsMode: 'same' | 'perSet'</code><br>• una lista de series planificadas, cada una con sus <code>reps: string</code><br>• un lugar reservado para la carga por serie (sin usar en V1).<br>Migración: <code>repsMode = 'same'</code> y la lista se llena con <code>sets</code> copias de <code>reps</code>.</div>
+        <div style="padding:14px 16px;border-radius:12px;background:#141416;border:1px solid #2A2A2E"><b style="color:#F4F4F2">P07d · descanso</b><br>Sigue siendo <code>restSeconds</code> en segundos. Nuevo: <code>0</code> significa explícitamente «Sin descanso» (no muestra el temporizador). Valores en múltiplos de 15, de 0 a 600.</div>
+        <div style="padding:14px 16px;border-radius:12px;background:#141416;border:1px solid #2A2A2E"><b style="color:#F4F4F2">P03b · Entrenando</b><br><code>WorkoutExercise</code> hoy copia <code>plannedReps: string</code>. Necesita copiar también las reps por serie (<code>plannedSetReps: string[]</code>), para que un cambio en la rutina no altere un entreno en curso. Si se agrega una serie de más durante el entreno, su placeholder repite el último valor.</div>
+        <div style="padding:14px 16px;border-radius:12px;background:#141416;border:1px solid #2A2A2E"><b style="color:#F4F4F2">P08b / P08c · crear y editar ejercicio</b><br><code>Exercise</code> ya tiene <code>muscleGroup</code>, <code>equipment?</code> e <code>isCustom</code>. Suma:<br>• <code>secondaryMuscleGroups?: MuscleGroup[]</code><br>• <code>notes?: string</code> (cues; se muestran en Entrenando)<br>• <code>updatedAt</code> (para editar)<br>• <code>archived?: boolean</code> (eliminar uno ya usado lo oculta en lugar de borrarlo)<br>• <span style="color:#F4F4F2">(propuesta)</span> <code>trackingType?: 'weight_reps' | 'bodyweight_load' | 'time'</code><br>• <span style="color:#F4F4F2">(propuesta)</span> <code>unilateral?: boolean</code><br>Si se aprueba «Tiempo», <code>WorkoutSet</code> necesita <code>durationSeconds?</code>. «Corporal + lastre» reutiliza <code>weightKg</code> como lastre. Repos: <code>exercises.update</code> y <code>exercises.archive</code>.</div>
+      </div>
+      <pre style="margin:0;padding:18px;border-radius:14px;background:#141416;border:1px solid #2A2A2E;font-size:12px;line-height:1.6;color:#E4E4E2;white-space:pre">// Boceto orientativo, a decidir por el orquestador
+
+interface PlannedExercise {
+  id: ID;
+  dayId: ID;
+  exerciseId: ID;
+  order: number;
+  repsMode: 'same' | 'perSet';      // nuevo
+  plannedSets: PlannedSet[];        // reemplaza sets + reps
+  restSeconds?: number;             // 0 = sin descanso
+  notes?: string;
+}
+
+interface PlannedSet {
+  reps: string;                     // "5" · "8-10" · "AMRAP"
+  // load?: PlannedLoad;            // reservado, NO en V1
+}
+
+// Reservado para el futuro (V1 no usa RPE ni %):
+// type PlannedLoad =
+//   | { kind: 'kg'; value: number }
+//   | { kind: 'pct1rm'; value: number }
+//   | { kind: 'rpe'; value: number };
+
+interface WorkoutExercise {
+  // ...lo actual
+  plannedSetReps: string[];         // nuevo snapshot
+}
+
+interface Exercise {
+  // ...lo actual
+  secondaryMuscleGroups?: MuscleGroup[];
+  notes?: string;
+  archived?: boolean;
+  updatedAt: ISODateString;
+  trackingType?: 'weight_reps'
+    | 'bodyweight_load' | 'time';   // (propuesta)
+  unilateral?: boolean;             // (propuesta)
+}
+
+// Alternativa de menor migración:
+// mantener sets + reps y sumar
+// repsPerSet?: string[] (largo === sets
+// cuando repsMode === 'perSet').</pre>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:10px">
+    <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#FF4D6A">«A VECES SE BUGEA CUANDO TERMINO DE ESCRIBIR EL TÍTULO» · LO QUE VI EN EL FLUJO</span>
+    <div style="padding:16px 18px;border-radius:14px;background:#141416;border:1px solid rgba(255,77,106,0.45);display:flex;flex-direction:column;gap:10px;font-size:14px;line-height:1.5;color:#C9C9CC">
+      <span>En <code>app/rutina/[routineId].tsx</code> y <code>app/rutina/dia/[dayId].tsx</code>, el campo llama a <code>saveName</code> desde <b>dos</b> lugares: <code>onSubmitEditing</code> y <code>onBlur</code>. Son hipótesis para que las verifique el desarrollador:</span>
+      <span><b style="color:#F4F4F2">1. Doble guardado.</b> Al tocar «done» se dispara <code>onSubmitEditing</code> y enseguida <code>onBlur</code>. La segunda llamada ve un <code>draftName</code> viejo (closure) o ya <code>undefined</code>, y compara contra un <code>routine.name</code> que todavía no se recargó. Resultado: dos <code>update</code> y dos <code>reload()</code> en carrera.</span>
+      <span><b style="color:#F4F4F2">2. Parpadeo al nombre viejo.</b> <code>setDraftName(undefined)</code> corre <i>antes</i> de que termine el <code>persist</code>. Mientras tanto, el campo muestra <code>routine.name</code> (el anterior) y después salta al nuevo. Parece que «no guardó».</span>
+      <span><b style="color:#F4F4F2">3. Recarga mientras escribís.</b> Otro <code>reload()</code> (por ejemplo, al reordenar días) puede pisar el valor si el borrador se limpió.</span>
+      <span><b style="color:#F4F4F2">4. Blur involuntario.</b> <code>keyboardDismissMode="on-drag"</code> en el ScrollView cierra el teclado (y dispara <code>onBlur</code> → guarda) apenas el dedo arrastra un poco mientras escribís.</span>
+      <span style="color:#F4F4F2"><b>Sugerencia:</b> un solo commit en <code>onEndEditing</code> (que dispara una vez, tanto con «done» como al salir). Mantener el borrador hasta que el <code>update</code> resuelva. Ignorar recargas mientras el campo tiene foco. Si queda vacío, restaurar el nombre anterior y avisar (estado 4 de P06c).</span>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1100,"height":2700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

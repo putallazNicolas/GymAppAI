@@ -27,6 +27,8 @@ jobs:
 
   mobile-bundle:
     name: expo-doctor · ios bundle
+    # Runs after `checks`: reuses its npm cache instead of racing to save the same key.
+    needs: checks
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7

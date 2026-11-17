@@ -62,7 +62,8 @@ export default function ProgresoScreen() {
 
   const base = useFocusAsync(async () => {
     const [exercises, weekly, active] = await Promise.all([
-      repos.exercises.list(),
+      // Archived exercises keep their history, so they stay selectable here (never in pickers).
+      repos.exercises.list({ includeArchived: true }),
       services.getWeeklyStats(WEEKS),
       repos.routines.getActive(),
     ]);
@@ -74,7 +75,7 @@ export default function ProgresoScreen() {
       for (const e of d?.exercises ?? [])
         if (e.sets.some((s) => s.completed)) withIds.add(e.exerciseId);
     const withHistory = exercises.filter((e) => withIds.has(e.id));
-    const others = exercises.filter((e) => !withIds.has(e.id));
+    const others = exercises.filter((e) => !withIds.has(e.id) && !e.archived);
     const dayNames = new Map(finished.map((w) => [w.id, w.dayNameSnapshot]));
     return {
       ordered: [...withHistory, ...others],
@@ -489,7 +490,11 @@ function ExercisePicker({
                 <Text variant="bodyStrong" numberOfLines={1}>
                   {item.e.name}
                 </Text>
-                {item.hasHistory ? <Text variant="caption">Con historial</Text> : null}
+                {item.hasHistory ? (
+                  <Text variant="caption">
+                    {item.e.archived ? 'Con historial · oculto de la lista' : 'Con historial'}
+                  </Text>
+                ) : null}
               </View>
               {item.e.id === selectedId ? <Icon name="check" size={20} color="accent" /> : null}
             </PressableScale>

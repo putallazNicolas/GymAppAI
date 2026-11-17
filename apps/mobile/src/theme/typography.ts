@@ -62,6 +62,14 @@ export const type = {
     letterSpacing: 1.1,
     ...upper,
   },
+  /** "PROPIO" tag of custom exercises (design/P08c), 10. */
+  tagSmall: {
+    fontFamily: fonts.bodyHeavy,
+    fontSize: 10,
+    lineHeight: 12,
+    letterSpacing: 1,
+    ...upper,
+  },
   /** Labels of the compact segmented control, 14. */
   segmentM: { fontFamily: fonts.bodyBold, fontSize: 14, lineHeight: 18 },
   numD: { fontFamily: fonts.display, fontSize: 28, lineHeight: 28, ...tnum },

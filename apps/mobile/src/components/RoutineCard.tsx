@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View, type ViewInstance } from 'react-native';
 
 import { colors, hit, radii, space, stroke } from '../theme';
 
@@ -33,7 +33,7 @@ export function RoutineCard({
   onPress,
   onMenu,
 }: RoutineCardProps) {
-  const menuRef = useRef<View>(null);
+  const menuRef = useRef<ViewInstance>(null);
   return (
     <View>
       <PressableScale

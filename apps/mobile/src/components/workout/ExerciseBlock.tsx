@@ -1,5 +1,5 @@
 import type { PreviousPerformance, WeightUnit, WorkoutExerciseDetail } from '@gym/core';
-import { Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { Pressable, StyleSheet, View, type TextInputInstance } from 'react-native';
 import Animated, {
   FadeIn,
   FadeInDown,
@@ -44,7 +44,7 @@ interface ExerciseBlockProps {
   onBlurSet: (setId: string) => void;
   onToggleComplete: (setId: string) => void;
   /** Registers/unregisters a TextInput under a key like `${setId}:kg`. */
-  registerRef: (key: string, el: TextInput | null) => void;
+  registerRef: (key: string, el: TextInputInstance | null) => void;
   focusKey: (key: string) => void;
   /** Reports the block's y offset inside the scroll content (to scroll the next one into view). */
   onBlockLayout: (y: number) => void;

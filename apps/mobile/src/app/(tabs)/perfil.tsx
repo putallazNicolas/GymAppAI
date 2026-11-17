@@ -4,7 +4,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import { File, Paths } from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { useState } from 'react';
-import { Alert, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, Platform, ScrollView, StyleSheet, View } from 'react-native';
 
 import {
   Button,
@@ -29,8 +29,12 @@ import { colors, hit, radii, space, stroke } from '../../theme';
 const UNITS: WeightUnit[] = ['kg', 'lb'];
 const LAST_EXPORT_FILE = 'last-export.txt';
 
-/** When the data was last exported; kept in a tiny local file (no settings contract field for it). */
+/**
+ * When the data was last exported; kept in a tiny local file (no settings contract field for it).
+ * expo-file-system has no web implementation, so the web preview simply doesn't show the hint.
+ */
 async function readLastExport(): Promise<Date | undefined> {
+  if (Platform.OS === 'web') return undefined;
   try {
     const file = new File(Paths.document, LAST_EXPORT_FILE);
     if (!file.exists) return undefined;
@@ -41,11 +45,12 @@ async function readLastExport(): Promise<Date | undefined> {
   }
 }
 
-function writeLastExport(date: Date): void {
+async function writeLastExport(date: Date): Promise<void> {
+  if (Platform.OS === 'web') return;
   try {
     const file = new File(Paths.document, LAST_EXPORT_FILE);
     file.create({ overwrite: true });
-    file.write(date.toISOString());
+    await file.write(date.toISOString());
   } catch {
     // Best effort: the hint just won't show.
   }
@@ -99,7 +104,7 @@ export default function PerfilScreen() {
       const payload = await services.exportAllData({ appVersion: version });
       const file = new File(Paths.cache, exportFileName(new Date()));
       file.create({ overwrite: true });
-      file.write(JSON.stringify(payload));
+      await file.write(JSON.stringify(payload));
       if (!(await Sharing.isAvailableAsync())) {
         Alert.alert('No se pudo compartir', 'Este dispositivo no permite compartir archivos.');
         return;
@@ -110,7 +115,7 @@ export default function PerfilScreen() {
         UTI: 'public.json',
       });
       const now = new Date();
-      writeLastExport(now);
+      await writeLastExport(now);
       setExportedAt(now);
     } catch (e) {
       Alert.alert('No se pudo exportar', e instanceof Error ? e.message : 'Probá de nuevo.');

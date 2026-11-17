@@ -7,8 +7,8 @@ import { Text } from '../Text';
 
 export interface TodayExercise {
   name: string;
-  sets: number;
-  reps: string;
+  /** "4 × 8-10" or "5 · 3 · 1" (summarizePlannedSets). */
+  summary: string;
 }
 
 interface TodayCardProps {
@@ -79,9 +79,7 @@ export function TodayCard({
               <Text variant="bodyM" numberOfLines={1} style={styles.itemName}>
                 {e.name}
               </Text>
-              <Text variant="numMd">
-                {e.sets} × {e.reps}
-              </Text>
+              <Text variant="numMd">{e.summary}</Text>
             </View>
           ))}
         </View>

@@ -28,8 +28,9 @@ interface SegmentedControlProps<T extends string> {
   /**
    * `unit` = full-width white pill with big labels (Perfil, role radio).
    * `range` = compact 44x32 segments with a raised pill (chart ranges).
+   * `mode` = equal-width 40 pt segments with small labels (RepsModeToggle, design/P07c).
    */
-  variant: 'unit' | 'range';
+  variant: 'unit' | 'range' | 'mode';
 }
 
 const RANGE_SEG_W = 44;
@@ -38,6 +39,8 @@ const RANGE_PAD = 3;
 const UNIT_PAD = 4;
 const UNIT_GAP = 4;
 const UNIT_H = 48;
+const MODE_PAD = 3;
+const MODE_H = 40;
 
 /**
  * Segmented control whose pill slides to the selected option (220 ms easeOut, design/S3).
@@ -50,7 +53,9 @@ export function SegmentedControl<T extends string>({
   accessibilityLabel,
   variant,
 }: SegmentedControlProps<T>) {
-  const isUnit = variant === 'unit';
+  const isMode = variant === 'mode';
+  /** Equal-width segments with radio semantics (unit and mode). */
+  const isUnit = variant !== 'range';
   const reduced = useReducedMotion();
   const [width, setWidth] = useState(0);
   const index = Math.max(
@@ -59,8 +64,8 @@ export function SegmentedControl<T extends string>({
   );
   const pos = useSharedValue(index);
 
-  const pad = isUnit ? UNIT_PAD : RANGE_PAD;
-  const gap = isUnit ? UNIT_GAP : 0;
+  const pad = isMode ? MODE_PAD : isUnit ? UNIT_PAD : RANGE_PAD;
+  const gap = isUnit && !isMode ? UNIT_GAP : 0;
   const segW = isUnit
     ? Math.max(0, (width - pad * 2 - gap * (options.length - 1)) / options.length)
     : RANGE_SEG_W;
@@ -81,14 +86,17 @@ export function SegmentedControl<T extends string>({
       accessibilityRole={isUnit ? 'radiogroup' : undefined}
       accessibilityLabel={accessibilityLabel}
       onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
-      style={[styles.track, isUnit ? styles.unitTrack : styles.rangeTrack]}
+      style={[
+        styles.track,
+        isMode ? styles.modeTrack : isUnit ? styles.unitTrack : styles.rangeTrack,
+      ]}
     >
       {segW > 0 ? (
         <Animated.View
           pointerEvents="none"
           style={[
             styles.pill,
-            isUnit ? styles.unitPill : styles.rangePill,
+            isMode ? styles.modePill : isUnit ? styles.unitPill : styles.rangePill,
             { left: pad, top: pad, width: segW },
             pill,
           ]}
@@ -114,9 +122,9 @@ export function SegmentedControl<T extends string>({
             else haptics.selection();
             onChange(o.value);
           }}
-          style={isUnit ? styles.unitSeg : styles.rangeSeg}
+          style={isMode ? styles.modeSeg : isUnit ? styles.unitSeg : styles.rangeSeg}
         >
-          <SegmentLabel label={o.label} index={i} pos={pos} isUnit={isUnit} />
+          <SegmentLabel label={o.label} index={i} pos={pos} variant={variant} />
         </PressableScale>
       ))}
     </View>
@@ -127,13 +135,14 @@ function SegmentLabel({
   label,
   index,
   pos,
-  isUnit,
+  variant,
 }: {
   label: string;
   index: number;
   pos: SharedValue<number>;
-  isUnit: boolean;
+  variant: 'unit' | 'range' | 'mode';
 }) {
+  const isUnit = variant !== 'range';
   const style = useAnimatedStyle(() => {
     const t = Math.max(0, 1 - Math.abs(pos.value - index));
     return {
@@ -145,8 +154,14 @@ function SegmentLabel({
     };
   });
   return (
-    <Animated.Text style={[isUnit ? type.unitPill : type.segment, styles.label, style]}>
-      {isUnit ? label.toUpperCase() : label}
+    <Animated.Text
+      style={[
+        variant === 'unit' ? type.unitPill : variant === 'mode' ? type.segmentM : type.segment,
+        styles.label,
+        style,
+      ]}
+    >
+      {variant === 'unit' ? label.toUpperCase() : label}
     </Animated.Text>
   );
 }
@@ -158,6 +173,13 @@ const styles = StyleSheet.create({
     gap: UNIT_GAP,
     borderRadius: radii.lg,
     backgroundColor: colors.surface,
+    borderWidth: stroke.hairline,
+    borderColor: colors.border,
+  },
+  modeTrack: {
+    padding: MODE_PAD,
+    borderRadius: radii.lg - 2,
+    backgroundColor: colors.background,
     borderWidth: stroke.hairline,
     borderColor: colors.border,
   },
@@ -174,12 +196,18 @@ const styles = StyleSheet.create({
     borderRadius: radii.md,
     backgroundColor: colors.textPrimary,
   },
+  modePill: {
+    height: MODE_H,
+    borderRadius: radii.md - 1,
+    backgroundColor: colors.textPrimary,
+  },
   rangePill: {
     height: RANGE_SEG_H,
     borderRadius: radii.sm,
     backgroundColor: colors.border,
   },
   unitSeg: { flex: 1, height: UNIT_H, alignItems: 'center', justifyContent: 'center' },
+  modeSeg: { flex: 1, height: MODE_H, alignItems: 'center', justifyContent: 'center' },
   rangeSeg: {
     width: RANGE_SEG_W,
     height: RANGE_SEG_H,

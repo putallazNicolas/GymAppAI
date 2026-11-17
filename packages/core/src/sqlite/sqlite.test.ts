@@ -141,7 +141,15 @@ describe('sqlite integrity', () => {
     const e = (await a.exercises.list({ search: 'sentadilla' }))[0]!;
     const w = await a.workouts.create({
       dayNameSnapshot: 'D',
-      exercises: [{ exerciseId: e.id, plannedSets: 1, plannedReps: '5', sets: [{ weightKg: 20 }] }],
+      exercises: [
+        {
+          exerciseId: e.id,
+          plannedSets: 1,
+          plannedReps: '1 × 5',
+          plannedSetReps: ['5'],
+          sets: [{ weightKg: 20 }],
+        },
+      ],
     });
     const b = await createSqliteRepositories(driver);
     expect((await b.workouts.getInProgress())?.id).toBe(w.id);

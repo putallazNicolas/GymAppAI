@@ -14,6 +14,8 @@ import {
   assertNonNegativeInt,
   assertNonNegativeNumber,
   assertPositiveInt,
+  assertSetRepsList,
+  cloneWorkoutExercise,
   compact,
 } from '../rules';
 import { newId } from '../utils';
@@ -49,7 +51,7 @@ export function createWorkoutRepo({ state, now }: MemoryContext): WorkoutRepo {
   const detail = (workout: Workout): WorkoutDetail => ({
     ...workout,
     exercises: exercisesOf(workout.id).map((e) => ({
-      ...e,
+      ...cloneWorkoutExercise(e),
       sets: setsOf(e.id).map((s) => ({ ...s })),
     })),
   });
@@ -74,6 +76,7 @@ export function createWorkoutRepo({ state, now }: MemoryContext): WorkoutRepo {
       for (const e of input.exercises) {
         if (!state.exercises.has(e.exerciseId)) throw new NotFoundError('Exercise', e.exerciseId);
         assertNonNegativeInt(e.plannedSets, 'plannedSets');
+        assertSetRepsList(e.plannedSetReps);
         if (e.restSeconds !== undefined) assertNonNegativeInt(e.restSeconds, 'restSeconds');
         for (const s of e.sets) {
           if (s.weightKg !== undefined) assertNonNegativeNumber(s.weightKg, 'weightKg');
@@ -100,6 +103,7 @@ export function createWorkoutRepo({ state, now }: MemoryContext): WorkoutRepo {
           order,
           plannedSets: e.plannedSets,
           plannedReps: e.plannedReps,
+          plannedSetReps: [...e.plannedSetReps],
           restSeconds: e.restSeconds,
           notes: e.notes,
           skipped: false,
@@ -165,7 +169,7 @@ export function createWorkoutRepo({ state, now }: MemoryContext): WorkoutRepo {
     async updateWorkoutExercise(id, patch) {
       const we = getWorkoutExercise(id);
       if (patch.skipped !== undefined) we.skipped = patch.skipped;
-      return { ...we };
+      return cloneWorkoutExercise(we);
     },
 
     async addSet(workoutExerciseId) {
@@ -220,7 +224,7 @@ export function createWorkoutRepo({ state, now }: MemoryContext): WorkoutRepo {
           if (we.exerciseId !== exerciseId) continue;
           entries.push({
             workout: { ...workout },
-            workoutExercise: { ...we },
+            workoutExercise: cloneWorkoutExercise(we),
             sets: setsOf(we.id).map((s) => ({ ...s })),
           });
         }

@@ -11,12 +11,12 @@ import {
   type RoutineRepo,
 } from '../contracts';
 import {
-  applyPatch,
-  assertName,
-  assertNonNegativeInt,
-  assertPositiveInt,
+  assertRoutineName,
   assertSameIds,
+  buildPlannedFields,
   compact,
+  copyName,
+  patchPlannedExercise,
 } from '../rules';
 import { newId } from '../utils';
 import type { SqliteContext } from './context';
@@ -112,7 +112,7 @@ export function createRoutineRepo({ db, now }: SqliteContext): RoutineRepo {
       const ts = now();
       const routine: Routine = {
         id: newId(),
-        name: assertName(input.name),
+        name: assertRoutineName(input.name),
         isActive: false,
         archived: false,
         createdAt: ts,
@@ -126,7 +126,7 @@ export function createRoutineRepo({ db, now }: SqliteContext): RoutineRepo {
 
     async update(id, patch) {
       const routine = await getRoutine(id);
-      if (patch.name !== undefined) routine.name = assertName(patch.name);
+      if (patch.name !== undefined) routine.name = assertRoutineName(patch.name);
       if (patch.archived !== undefined) {
         routine.archived = patch.archived;
         if (patch.archived) routine.isActive = false;
@@ -152,7 +152,7 @@ export function createRoutineRepo({ db, now }: SqliteContext): RoutineRepo {
       const copy: Routine = {
         ...source,
         id: newId(),
-        name: `${source.name} (copia)`,
+        name: copyName(source.name),
         isActive: false,
         archived: false,
         createdAt: ts,
@@ -186,7 +186,7 @@ export function createRoutineRepo({ db, now }: SqliteContext): RoutineRepo {
 
     async addDay(routineId, input) {
       await getRoutine(routineId);
-      const name = assertName(input.name);
+      const name = assertRoutineName(input.name);
       return inTransaction(db, async () => {
         const day: RoutineDay = {
           id: newId(),
@@ -202,7 +202,7 @@ export function createRoutineRepo({ db, now }: SqliteContext): RoutineRepo {
 
     async updateDay(dayId, patch) {
       const day = await getDayRow(dayId);
-      if (patch.name !== undefined) day.name = assertName(patch.name);
+      if (patch.name !== undefined) day.name = assertRoutineName(patch.name);
       await inTransaction(db, async () => {
         await updateRow(db, ROUTINE_DAYS, day);
         await touch(day.routineId);
@@ -238,29 +238,26 @@ export function createRoutineRepo({ db, now }: SqliteContext): RoutineRepo {
     async addPlannedExercises(dayId, inputs) {
       const day = await getDayRow(dayId);
       // Validate everything before writing so the call is all-or-nothing.
-      const rows: { input: NewPlannedExerciseInput; sets: number; reps: string }[] = [];
+      const rows: {
+        input: NewPlannedExerciseInput;
+        fields: ReturnType<typeof buildPlannedFields>;
+      }[] = [];
       for (const input of inputs) {
         if (!(await exists(db, 'exercises', input.exerciseId))) {
           throw new NotFoundError('Exercise', input.exerciseId);
         }
-        const reps = input.reps ?? '10';
-        if (reps.trim() === '') assertName(reps, 'reps');
-        if (input.restSeconds !== undefined) assertNonNegativeInt(input.restSeconds, 'restSeconds');
-        rows.push({ input, sets: assertPositiveInt(input.sets ?? 3, 'sets'), reps });
+        rows.push({ input, fields: buildPlannedFields(input) });
       }
       return inTransaction(db, async () => {
         const start = (await plannedOf(dayId)).length;
         const created: PlannedExercise[] = [];
-        for (const [i, { input, sets, reps }] of rows.entries()) {
+        for (const [i, { input, fields }] of rows.entries()) {
           const planned: PlannedExercise = compact({
             id: newId(),
             dayId,
             exerciseId: input.exerciseId,
             order: start + i,
-            sets,
-            reps,
-            restSeconds: input.restSeconds,
-            notes: input.notes,
+            ...fields,
           });
           await insertRow(db, PLANNED_EXERCISES, planned);
           created.push(planned);
@@ -275,12 +272,7 @@ export function createRoutineRepo({ db, now }: SqliteContext): RoutineRepo {
       if (patch.exerciseId !== undefined && !(await exists(db, 'exercises', patch.exerciseId))) {
         throw new NotFoundError('Exercise', patch.exerciseId);
       }
-      if (patch.sets !== undefined) assertPositiveInt(patch.sets, 'sets');
-      if (patch.reps !== undefined) assertName(patch.reps, 'reps');
-      if (patch.restSeconds !== undefined && patch.restSeconds !== null) {
-        assertNonNegativeInt(patch.restSeconds, 'restSeconds');
-      }
-      const next = applyPatch(current, patch);
+      const next = patchPlannedExercise(current, patch);
       const day = await selectById(db, ROUTINE_DAYS, next.dayId);
       await inTransaction(db, async () => {
         await updateRow(db, PLANNED_EXERCISES, next);

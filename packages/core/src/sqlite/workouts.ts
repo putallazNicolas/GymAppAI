@@ -14,6 +14,7 @@ import {
   assertNonNegativeInt,
   assertNonNegativeNumber,
   assertPositiveInt,
+  assertSetRepsList,
   compact,
 } from '../rules';
 import { newId } from '../utils';
@@ -86,6 +87,7 @@ export function createWorkoutRepo({ db, now }: SqliteContext): WorkoutRepo {
           throw new NotFoundError('Exercise', e.exerciseId);
         }
         assertNonNegativeInt(e.plannedSets, 'plannedSets');
+        assertSetRepsList(e.plannedSetReps);
         if (e.restSeconds !== undefined) assertNonNegativeInt(e.restSeconds, 'restSeconds');
         for (const s of e.sets) {
           if (s.weightKg !== undefined) assertNonNegativeNumber(s.weightKg, 'weightKg');
@@ -112,6 +114,7 @@ export function createWorkoutRepo({ db, now }: SqliteContext): WorkoutRepo {
             order,
             plannedSets: e.plannedSets,
             plannedReps: e.plannedReps,
+            plannedSetReps: [...e.plannedSetReps],
             restSeconds: e.restSeconds,
             notes: e.notes,
             skipped: false,

@@ -142,37 +142,143 @@ export function describeRepositoriesContract(name: string, factory: Repositories
           ValidationError,
         );
         await expect(r.exercises.delete(squat!.id)).rejects.toBeInstanceOf(ValidationError);
+        await expect(r.exercises.archive(squat!.id)).rejects.toBeInstanceOf(ValidationError);
+        expect((await r.exercises.getById(squat!.id))?.archived).toBeUndefined();
       });
 
       it('delete removes unused custom exercises and rejects unknown ids', async () => {
         const r = await make();
         const e = await r.exercises.create({ name: 'A', muscleGroup: 'core' });
-        await r.exercises.delete(e.id);
+        expect(await r.exercises.delete(e.id)).toBe('deleted');
         expect(await r.exercises.getById(e.id)).toBeNull();
         await expect(r.exercises.delete(e.id)).rejects.toBeInstanceOf(NotFoundError);
       });
 
-      it('delete rejects exercises used by a planned exercise or a workout', async () => {
+      it('delete archives exercises used by a planned exercise or a workout', async () => {
         const r = await make();
         const inPlan = await r.exercises.create({ name: 'P', muscleGroup: 'core' });
         const inWorkout = await r.exercises.create({ name: 'W', muscleGroup: 'core' });
         const routine = await r.routines.create({ name: 'R' });
         const day = await r.routines.addDay(routine.id, { name: 'D' });
-        const [planned] = await r.routines.addPlannedExercises(day.id, [{ exerciseId: inPlan.id }]);
-        await expect(r.exercises.delete(inPlan.id)).rejects.toBeInstanceOf(ValidationError);
-        await r.routines.deletePlannedExercise(planned!.id);
-        await r.exercises.delete(inPlan.id);
+        await r.routines.addPlannedExercises(day.id, [{ exerciseId: inPlan.id }]);
+        expect(await r.exercises.delete(inPlan.id)).toBe('archived');
+        expect(await r.exercises.getById(inPlan.id)).toMatchObject({ archived: true });
+        expect((await r.routines.getDay(day.id))?.exercises).toHaveLength(1);
 
-        const w = await r.workouts.create(workoutInput([inWorkout.id]));
-        await expect(r.exercises.delete(inWorkout.id)).rejects.toBeInstanceOf(ValidationError);
-        await r.workouts.delete(w.id);
-        await r.exercises.delete(inWorkout.id);
+        await r.workouts.create(workoutInput([inWorkout.id]));
+        expect(await r.exercises.delete(inWorkout.id)).toBe('archived');
+        expect((await r.exercises.getByIds([inWorkout.id]))[0]?.archived).toBe(true);
+      });
+
+      it('delete removes a custom exercise once nothing references it', async () => {
+        const r = await make();
+        const e = await r.exercises.create({ name: 'P', muscleGroup: 'core' });
+        const routine = await r.routines.create({ name: 'R' });
+        const day = await r.routines.addDay(routine.id, { name: 'D' });
+        const [planned] = await r.routines.addPlannedExercises(day.id, [{ exerciseId: e.id }]);
+        await r.routines.deletePlannedExercise(planned!.id);
+        expect(await r.exercises.delete(e.id)).toBe('deleted');
+        expect(await r.exercises.getById(e.id)).toBeNull();
+      });
+
+      it('create sets updatedAt = createdAt and stores the v2 fields', async () => {
+        const r = await make();
+        const e = await r.exercises.create({
+          name: 'Curl',
+          muscleGroup: 'biceps',
+          secondaryMuscleGroups: ['forearms', 'biceps', 'forearms', 'back'],
+          notes: '  codos pegados  ',
+        });
+        expect(e.updatedAt).toBe(e.createdAt);
+        expect(e.secondaryMuscleGroups).toEqual(['forearms', 'back']);
+        expect(e.notes).toBe('codos pegados');
+        expect(e.archived).toBeUndefined();
+        expect(await r.exercises.getById(e.id)).toEqual(e);
+        const plain = await r.exercises.create({ name: 'Plain', muscleGroup: 'core' });
+        expect('secondaryMuscleGroups' in plain).toBe(false);
+        expect('notes' in plain).toBe(false);
+      });
+
+      it('update edits the v2 fields, bumps updatedAt and keeps createdAt', async () => {
+        const r = await make();
+        const e = await r.exercises.create({
+          name: 'Curl',
+          muscleGroup: 'biceps',
+          secondaryMuscleGroups: ['forearms'],
+          notes: 'a',
+        });
+        const u1 = await r.exercises.update(e.id, {
+          secondaryMuscleGroups: ['back', 'back'],
+          notes: 'b',
+        });
+        expect(u1.updatedAt > e.updatedAt).toBe(true);
+        expect(u1.createdAt).toBe(e.createdAt);
+        expect(u1.secondaryMuscleGroups).toEqual(['back']);
+        expect(u1.notes).toBe('b');
+        // changing the primary group drops it from the secondary ones
+        const u2 = await r.exercises.update(e.id, { muscleGroup: 'back' });
+        expect(u2.secondaryMuscleGroups).toBeUndefined();
+        const u3 = await r.exercises.update(e.id, { secondaryMuscleGroups: ['core'], notes: null });
+        expect(u3.secondaryMuscleGroups).toEqual(['core']);
+        expect(u3.notes).toBeUndefined();
+        const u4 = await r.exercises.update(e.id, { secondaryMuscleGroups: null });
+        expect('secondaryMuscleGroups' in u4).toBe(false);
+        await expect(
+          r.exercises.update(e.id, { secondaryMuscleGroups: ['nope' as never] }),
+        ).rejects.toBeInstanceOf(ValidationError);
+      });
+
+      it('validates the exercise name length (<= 60)', async () => {
+        const r = await make();
+        const ok = await r.exercises.create({ name: 'x'.repeat(60), muscleGroup: 'core' });
+        await expect(
+          r.exercises.create({ name: 'x'.repeat(61), muscleGroup: 'core' }),
+        ).rejects.toBeInstanceOf(ValidationError);
+        await expect(r.exercises.update(ok.id, { name: 'y'.repeat(61) })).rejects.toBeInstanceOf(
+          ValidationError,
+        );
+        expect((await r.exercises.update(ok.id, { name: `  ${'y'.repeat(60)}  ` })).name).toBe(
+          'y'.repeat(60),
+        );
+      });
+
+      it('archive hides the exercise from list but keeps getById/getByIds', async () => {
+        const r = await make();
+        const a = await r.exercises.create({ name: 'A', muscleGroup: 'core' });
+        const b = await r.exercises.create({ name: 'B', muscleGroup: 'core' });
+        const archived = await r.exercises.archive(a.id);
+        expect(archived.archived).toBe(true);
+        expect(archived.updatedAt > a.updatedAt).toBe(true);
+        expect((await r.exercises.list()).map((e) => e.name)).toEqual(['B']);
+        expect((await r.exercises.list({ includeArchived: true })).map((e) => e.name)).toEqual([
+          'A',
+          'B',
+        ]);
+        expect((await r.exercises.list({ search: 'a' })).map((e) => e.name)).toEqual([]);
+        expect((await r.exercises.getById(a.id))?.archived).toBe(true);
+        expect((await r.exercises.getByIds([b.id, a.id])).map((e) => e.name)).toEqual(['B', 'A']);
+        await expect(r.exercises.archive('nope')).rejects.toBeInstanceOf(NotFoundError);
+        await expect(r.exercises.delete('nope')).rejects.toBeInstanceOf(NotFoundError);
+        // archived exercises can still be edited
+        expect((await r.exercises.update(a.id, { name: 'A2' })).archived).toBe(true);
+      });
+
+      it('list customOnly returns only user exercises', async () => {
+        const r = await make(true);
+        await r.exercises.create({ name: 'Mi ejercicio', muscleGroup: 'core' });
+        const mine = await r.exercises.list({ customOnly: true });
+        expect(mine.map((e) => e.name)).toEqual(['Mi ejercicio']);
+        expect((await r.exercises.list({ customOnly: true, muscleGroup: 'chest' })).length).toBe(0);
+        const all = await r.exercises.list();
+        expect(all.length).toBeGreaterThan(40);
+        expect(all.filter((e) => !e.isCustom).every((e) => e.updatedAt === e.createdAt)).toBe(true);
       });
 
       it('returned objects are copies', async () => {
         const r = await make();
         const e = await r.exercises.create({ name: 'A', muscleGroup: 'core' });
         e.name = 'mutated';
+        e.secondaryMuscleGroups = ['back'];
         (await r.exercises.list())[0]!.name = 'mutated';
         (await r.exercises.getById(e.id))!.name = 'mutated';
         expect((await r.exercises.getById(e.id))?.name).toBe('A');
@@ -219,6 +325,59 @@ export function describeRepositoriesContract(name: string, factory: Repositories
         await r.routines.addDay(a.id, { name: 'D1' });
         await r.routines.addDay(a.id, { name: 'D2' });
         expect((await r.routines.list())[0]?.dayCount).toBe(2);
+      });
+
+      it('validates routine and day names (trim, non-empty, <= 40)', async () => {
+        const r = await make();
+        const forty = 'n'.repeat(40);
+        const routine = await r.routines.create({ name: `  ${forty}  ` });
+        expect(routine.name).toBe(forty);
+        const tooLong = 'n'.repeat(41);
+        await expect(r.routines.create({ name: tooLong })).rejects.toBeInstanceOf(ValidationError);
+        await expect(r.routines.update(routine.id, { name: tooLong })).rejects.toBeInstanceOf(
+          ValidationError,
+        );
+        await expect(r.routines.addDay(routine.id, { name: tooLong })).rejects.toBeInstanceOf(
+          ValidationError,
+        );
+        const day = await r.routines.addDay(routine.id, { name: forty });
+        await expect(r.routines.updateDay(day.id, { name: tooLong })).rejects.toBeInstanceOf(
+          ValidationError,
+        );
+        await expect(r.routines.updateDay(day.id, { name: '   ' })).rejects.toBeInstanceOf(
+          ValidationError,
+        );
+        expect((await r.routines.updateDay(day.id, { name: '  Pecho ' })).name).toBe('Pecho');
+        expect((await r.routines.getById(routine.id))?.name).toBe(forty);
+      });
+
+      it('duplicate truncates a long name so "(copia)" still fits 40 characters', async () => {
+        const r = await make();
+        const long = await r.routines.create({ name: 'n'.repeat(40) });
+        const copy = await r.routines.duplicate(long.id);
+        expect(copy.name).toBe(`${'n'.repeat(32)} (copia)`);
+        expect(copy.name.length).toBeLessThanOrEqual(40);
+        const again = await r.routines.duplicate(copy.id);
+        expect(again.name.length).toBeLessThanOrEqual(40);
+        expect(again.name.endsWith(' (copia)')).toBe(true);
+      });
+
+      it('duplicate copies the plan without aliasing the original', async () => {
+        const r = await make();
+        const e = await r.exercises.create({ name: 'E', muscleGroup: 'core' });
+        const src = await r.routines.create({ name: 'R' });
+        const d = await r.routines.addDay(src.id, { name: 'D' });
+        await r.routines.addPlannedExercises(d.id, [
+          { exerciseId: e.id, repsMode: 'perSet', plannedSets: [{ reps: '5' }, { reps: '3' }] },
+        ]);
+        const copy = await r.routines.duplicate(src.id);
+        const copied = (await r.routines.getById(copy.id))!.days[0]!.exercises[0]!;
+        await r.routines.updatePlannedExercise(copied.id, {
+          plannedSets: [{ reps: '12' }, { reps: '12' }],
+          repsMode: 'same',
+        });
+        const original = (await r.routines.getById(src.id))!.days[0]!.exercises[0]!;
+        expect(original.plannedSets.map((s) => s.reps)).toEqual(['5', '3']);
       });
 
       it('update changes name/archived and validates', async () => {
@@ -333,13 +492,23 @@ export function describeRepositoriesContract(name: string, factory: Repositories
         const day = await r.routines.addDay(routine.id, { name: 'D' });
         const created = await r.routines.addPlannedExercises(day.id, [
           { exerciseId: e1.id },
-          { exerciseId: e2.id, sets: 5, reps: '8-10', restSeconds: 90, notes: 'slow' },
+          {
+            exerciseId: e2.id,
+            plannedSets: [{ reps: '8 - 10' }, { reps: '8-10' }, { reps: '8-10' }],
+            restSeconds: 90,
+            notes: 'slow',
+          },
         ]);
-        expect(created[0]).toMatchObject({ exerciseId: e1.id, sets: 3, reps: '10', order: 0 });
+        expect(created[0]).toMatchObject({
+          exerciseId: e1.id,
+          repsMode: 'same',
+          plannedSets: [{ reps: '10' }, { reps: '10' }, { reps: '10' }],
+          order: 0,
+        });
         expect(created[0]?.restSeconds).toBeUndefined();
         expect(created[1]).toMatchObject({
-          sets: 5,
-          reps: '8-10',
+          repsMode: 'same',
+          plannedSets: [{ reps: '8-10' }, { reps: '8-10' }, { reps: '8-10' }],
           restSeconds: 90,
           notes: 'slow',
           order: 1,
@@ -362,12 +531,21 @@ export function describeRepositoriesContract(name: string, factory: Repositories
         await expect(
           r.routines.addPlannedExercises(day.id, [{ exerciseId: e1.id }, { exerciseId: 'nope' }]),
         ).rejects.toBeInstanceOf(NotFoundError);
-        await expect(
-          r.routines.addPlannedExercises(day.id, [{ exerciseId: e1.id, sets: 0 }]),
-        ).rejects.toBeInstanceOf(ValidationError);
-        await expect(
-          r.routines.addPlannedExercises(day.id, [{ exerciseId: e1.id, reps: ' ' }]),
-        ).rejects.toBeInstanceOf(ValidationError);
+        for (const bad of [
+          { plannedSets: [] },
+          { plannedSets: Array.from({ length: 21 }, () => ({ reps: '5' })) },
+          { plannedSets: [{ reps: ' ' }] },
+          { plannedSets: [{ reps: '5' }, { reps: '6' }] }, // "same" with different reps
+          { repsMode: 'weird' as never },
+          { restSeconds: 100 },
+          { restSeconds: -15 },
+          { restSeconds: 615 },
+          { restSeconds: 7.5 },
+        ]) {
+          await expect(
+            r.routines.addPlannedExercises(day.id, [{ exerciseId: e1.id, ...bad }]),
+          ).rejects.toBeInstanceOf(ValidationError);
+        }
         await expect(
           r.routines.addPlannedExercises('nope', [{ exerciseId: e1.id }]),
         ).rejects.toBeInstanceOf(NotFoundError);
@@ -383,26 +561,57 @@ export function describeRepositoriesContract(name: string, factory: Repositories
         const [p] = await r.routines.addPlannedExercises(day.id, [
           { exerciseId: e1.id, restSeconds: 60, notes: 'n' },
         ]);
-        const u1 = await r.routines.updatePlannedExercise(p!.id, { sets: 4, notes: null });
-        expect(u1).toMatchObject({ sets: 4, reps: '10', restSeconds: 60 });
+        const four = [{ reps: '10' }, { reps: '10' }, { reps: '10' }, { reps: '10' }];
+        const u1 = await r.routines.updatePlannedExercise(p!.id, {
+          plannedSets: four,
+          notes: null,
+        });
+        expect(u1).toMatchObject({ repsMode: 'same', plannedSets: four, restSeconds: 60 });
         expect(u1.notes).toBeUndefined();
         const u2 = await r.routines.updatePlannedExercise(p!.id, {
           exerciseId: e2.id,
-          reps: 'AMRAP',
+          plannedSets: [
+            { reps: 'amrap' },
+            { reps: 'AMRAP' },
+            { reps: ' amrap ' },
+            { reps: 'AMRAP' },
+          ],
           restSeconds: null,
         });
-        expect(u2).toMatchObject({ exerciseId: e2.id, reps: 'AMRAP', sets: 4 });
+        expect(u2.exerciseId).toBe(e2.id);
+        expect(u2.plannedSets.map((s) => s.reps)).toEqual(['AMRAP', 'AMRAP', 'AMRAP', 'AMRAP']);
         expect(u2.restSeconds).toBeUndefined();
 
-        await expect(r.routines.updatePlannedExercise(p!.id, { sets: 0 })).rejects.toBeInstanceOf(
-          ValidationError,
-        );
+        // switching to per-set keeps the sets and lets them differ
+        const u3 = await r.routines.updatePlannedExercise(p!.id, {
+          repsMode: 'perSet',
+          plannedSets: [{ reps: '5' }, { reps: '3' }, { reps: '1' }],
+          restSeconds: 0,
+        });
+        expect(u3).toMatchObject({ repsMode: 'perSet', restSeconds: 0 });
+        expect(u3.plannedSets.map((s) => s.reps)).toEqual(['5', '3', '1']);
+        // ...but going back to "same" with different reps is invalid and changes nothing
+        await expect(
+          r.routines.updatePlannedExercise(p!.id, { repsMode: 'same' }),
+        ).rejects.toBeInstanceOf(ValidationError);
+        expect((await r.routines.getDay(day.id))!.exercises[0]).toEqual(u3);
+
+        for (const bad of [
+          { plannedSets: [] },
+          { plannedSets: [{ reps: '' }] },
+          { restSeconds: 100 },
+          { restSeconds: 601 },
+        ]) {
+          await expect(r.routines.updatePlannedExercise(p!.id, bad)).rejects.toBeInstanceOf(
+            ValidationError,
+          );
+        }
         await expect(
           r.routines.updatePlannedExercise(p!.id, { exerciseId: 'nope' }),
         ).rejects.toBeInstanceOf(NotFoundError);
-        await expect(r.routines.updatePlannedExercise('nope', { sets: 2 })).rejects.toBeInstanceOf(
-          NotFoundError,
-        );
+        await expect(
+          r.routines.updatePlannedExercise('nope', { notes: 'x' }),
+        ).rejects.toBeInstanceOf(NotFoundError);
       });
 
       it('deletePlannedExercise and reorderPlannedExercises keep order contiguous', async () => {
@@ -463,7 +672,13 @@ export function describeRepositoriesContract(name: string, factory: Repositories
         const d1 = await r.routines.addDay(src.id, { name: 'D1' });
         const d2 = await r.routines.addDay(src.id, { name: 'D2' });
         await r.routines.addPlannedExercises(d1.id, [
-          { exerciseId: e.id, sets: 4, reps: '6', restSeconds: 120, notes: 'x' },
+          {
+            exerciseId: e.id,
+            repsMode: 'perSet',
+            plannedSets: [{ reps: '6' }, { reps: '4' }],
+            restSeconds: 120,
+            notes: 'x',
+          },
           { exerciseId: e.id },
         ]);
         await r.routines.addPlannedExercises(d2.id, [{ exerciseId: e.id }]);
@@ -482,7 +697,14 @@ export function describeRepositoriesContract(name: string, factory: Repositories
         ]);
         const strip = (x: typeof original) =>
           x.days.flatMap((d) =>
-            d.exercises.map((p) => [p.exerciseId, p.order, p.sets, p.reps, p.restSeconds, p.notes]),
+            d.exercises.map((p) => [
+              p.exerciseId,
+              p.order,
+              p.repsMode,
+              p.plannedSets,
+              p.restSeconds,
+              p.notes,
+            ]),
           );
         expect(strip(dup)).toEqual(strip(original));
         const ids = new Set(original.days.flatMap((d) => [d.id, ...d.exercises.map((p) => p.id)]));
@@ -543,6 +765,21 @@ export function describeRepositoriesContract(name: string, factory: Repositories
         expect(await r.workouts.getById(w.id)).not.toBeNull();
       });
 
+      it('returned planned exercises are copies (plannedSets included)', async () => {
+        const r = await make();
+        const e = await r.exercises.create({ name: 'E', muscleGroup: 'core' });
+        const routine = await r.routines.create({ name: 'R' });
+        const day = await r.routines.addDay(routine.id, { name: 'D' });
+        const [p] = await r.routines.addPlannedExercises(day.id, [{ exerciseId: e.id }]);
+        p!.plannedSets[0]!.reps = 'mutated';
+        p!.plannedSets.pop();
+        const fromDay = (await r.routines.getDay(day.id))!.exercises[0]!;
+        expect(fromDay.plannedSets).toEqual([{ reps: '10' }, { reps: '10' }, { reps: '10' }]);
+        fromDay.plannedSets[1]!.reps = 'mutated';
+        const fromRoutine = (await r.routines.getById(routine.id))!.days[0]!.exercises[0]!;
+        expect(fromRoutine.plannedSets[1]?.reps).toBe('10');
+      });
+
       it('returned routine objects are copies', async () => {
         const r = await make();
         const routine = await r.routines.create({ name: 'A' });
@@ -580,11 +817,18 @@ export function describeRepositoriesContract(name: string, factory: Repositories
               exerciseId: e1.id,
               plannedSets: 2,
               plannedReps: '8-10',
+              plannedSetReps: ['10', '8'],
               restSeconds: 90,
               notes: 'tempo',
               sets: [{ weightKg: 50 }, { weightKg: 52.5, reps: 8 }],
             },
-            { exerciseId: e2.id, plannedSets: 3, plannedReps: '12', sets: [] },
+            {
+              exerciseId: e2.id,
+              plannedSets: 3,
+              plannedReps: '12',
+              plannedSetReps: ['12', '12', '12'],
+              sets: [],
+            },
           ],
         });
         expect(w).toMatchObject({
@@ -605,7 +849,9 @@ export function describeRepositoriesContract(name: string, factory: Repositories
           plannedReps: '8-10',
           restSeconds: 90,
           notes: 'tempo',
+          plannedSetReps: ['10', '8'],
         });
+        expect(w.exercises[1]!.plannedSetReps).toEqual(['12', '12', '12']);
         const sets = w.exercises[0]!.sets;
         expect(sets.map((s) => [s.setIndex, s.weightKg, s.reps, s.completed])).toEqual([
           [0, 50, undefined, false],
@@ -614,6 +860,63 @@ export function describeRepositoriesContract(name: string, factory: Repositories
         expect(w.exercises[1]!.sets).toEqual([]);
         expect(await r.workouts.getById(w.id)).toEqual(w);
         expect(await r.workouts.getById('nope')).toBeNull();
+      });
+
+      it('plannedSetReps is a snapshot: later plan changes do not alter the workout', async () => {
+        const { r, e1 } = await setup();
+        const routine = await r.routines.create({ name: 'R' });
+        const day = await r.routines.addDay(routine.id, { name: 'D' });
+        const [p] = await r.routines.addPlannedExercises(day.id, [
+          {
+            exerciseId: e1.id,
+            repsMode: 'perSet',
+            plannedSets: [{ reps: '5' }, { reps: 'AMRAP' }],
+          },
+        ]);
+        const w = await r.workouts.create({
+          dayNameSnapshot: 'D',
+          exercises: [
+            {
+              exerciseId: e1.id,
+              plannedSets: 2,
+              plannedReps: '5 · AMRAP',
+              plannedSetReps: p!.plannedSets.map((s) => s.reps),
+              sets: [{}, {}],
+            },
+          ],
+        });
+        await r.routines.updatePlannedExercise(p!.id, {
+          repsMode: 'same',
+          plannedSets: [{ reps: '12' }],
+        });
+        const again = await r.workouts.getById(w.id);
+        expect(again?.exercises[0]?.plannedSetReps).toEqual(['5', 'AMRAP']);
+        again!.exercises[0]!.plannedSetReps.push('mutated');
+        expect((await r.workouts.getById(w.id))?.exercises[0]?.plannedSetReps).toEqual([
+          '5',
+          'AMRAP',
+        ]);
+        const history = await r.workouts.getExerciseHistory(e1.id, { includeInProgress: true });
+        expect(history[0]?.workoutExercise.plannedSetReps).toEqual(['5', 'AMRAP']);
+      });
+
+      it('create rejects a malformed plannedSetReps', async () => {
+        const { r, e1 } = await setup();
+        await expect(
+          r.workouts.create({
+            dayNameSnapshot: 'D',
+            exercises: [
+              {
+                exerciseId: e1.id,
+                plannedSets: 1,
+                plannedReps: '5',
+                plannedSetReps: [5 as never],
+                sets: [],
+              },
+            ],
+          }),
+        ).rejects.toBeInstanceOf(ValidationError);
+        expect(await r.workouts.getInProgress()).toBeNull();
       });
 
       it('create defaults startedAt to now and rejects unknown references', async () => {
@@ -729,7 +1032,13 @@ export function describeRepositoriesContract(name: string, factory: Repositories
         const w = await r.workouts.create({
           ...workoutInput([e1.id]),
           exercises: [
-            { exerciseId: e1.id, plannedSets: 1, plannedReps: '5', sets: [{ weightKg: 10 }] },
+            {
+              exerciseId: e1.id,
+              plannedSets: 1,
+              plannedReps: '5',
+              plannedSetReps: ['5'],
+              sets: [{ weightKg: 10 }],
+            },
           ],
         });
         await r.workouts.delete(w.id);
@@ -767,12 +1076,19 @@ export function describeRepositoriesContract(name: string, factory: Repositories
               exerciseId: e1.id,
               plannedSets: 2,
               plannedReps: '5',
+              plannedSetReps: ['5'],
               sets: [
                 { weightKg: 40, reps: 5 },
                 { weightKg: 45, reps: 4 },
               ],
             },
-            { exerciseId: e1.id, plannedSets: 1, plannedReps: '5', sets: [] },
+            {
+              exerciseId: e1.id,
+              plannedSets: 1,
+              plannedReps: '5',
+              plannedSetReps: ['5'],
+              sets: [],
+            },
           ],
         });
         const [withSets, empty] = w.exercises;
@@ -795,7 +1111,13 @@ export function describeRepositoriesContract(name: string, factory: Repositories
         const w = await r.workouts.create({
           ...workoutInput([e1.id]),
           exercises: [
-            { exerciseId: e1.id, plannedSets: 1, plannedReps: '5', sets: [{ weightKg: 40 }] },
+            {
+              exerciseId: e1.id,
+              plannedSets: 1,
+              plannedReps: '5',
+              plannedSetReps: ['5'],
+              sets: [{ weightKg: 40 }],
+            },
           ],
         });
         const we = w.exercises[0]!;
@@ -812,6 +1134,7 @@ export function describeRepositoriesContract(name: string, factory: Repositories
               exerciseId: e1.id,
               plannedSets: 3,
               plannedReps: '5',
+              plannedSetReps: ['5'],
               sets: [{ weightKg: 10 }, { weightKg: 20 }, { weightKg: 30 }],
             },
           ],
@@ -835,6 +1158,7 @@ export function describeRepositoriesContract(name: string, factory: Repositories
               exerciseId: e1.id,
               plannedSets: 1,
               plannedReps: '5',
+              plannedSetReps: ['5'],
               sets: [{ weightKg: 40, reps: 5 }],
             },
           ],
@@ -885,6 +1209,7 @@ export function describeRepositoriesContract(name: string, factory: Repositories
                 exerciseId,
                 plannedSets: 1,
                 plannedReps: '5',
+                plannedSetReps: ['5'],
                 sets: [{ weightKg: 10, reps: 5 }, { weightKg: 20 }],
               },
             ],
@@ -932,7 +1257,13 @@ export function describeRepositoriesContract(name: string, factory: Repositories
         const w = await r.workouts.create({
           ...workoutInput([e1.id]),
           exercises: [
-            { exerciseId: e1.id, plannedSets: 1, plannedReps: '5', sets: [{ weightKg: 10 }] },
+            {
+              exerciseId: e1.id,
+              plannedSets: 1,
+              plannedReps: '5',
+              plannedSetReps: ['5'],
+              sets: [{ weightKg: 10 }],
+            },
           ],
         });
         w.dayNameSnapshot = 'mutated';
@@ -1012,13 +1343,34 @@ export function describeRepositoriesContract(name: string, factory: Repositories
         const routine = await a.routines.create({ name: 'R' });
         await a.routines.setActive(routine.id);
         const day = await a.routines.addDay(routine.id, { name: 'D' });
-        await a.routines.addPlannedExercises(day.id, [{ exerciseId: e.id, notes: 'n' }]);
+        await a.routines.addPlannedExercises(day.id, [
+          {
+            exerciseId: e.id,
+            notes: 'n',
+            repsMode: 'perSet',
+            plannedSets: [{ reps: '5' }, { reps: '3' }, { reps: 'AMRAP' }],
+            restSeconds: 0,
+          },
+        ]);
+        const archivedEx = await a.exercises.create({
+          name: 'Hidden',
+          muscleGroup: 'back',
+          secondaryMuscleGroups: ['biceps'],
+          notes: 'cue',
+        });
+        await a.exercises.archive(archivedEx.id);
         const w = await a.workouts.create({
           ...workoutInput([e.id]),
           routineId: routine.id,
           dayId: day.id,
           exercises: [
-            { exerciseId: e.id, plannedSets: 1, plannedReps: '5', sets: [{ weightKg: 10 }] },
+            {
+              exerciseId: e.id,
+              plannedSets: 1,
+              plannedReps: '5',
+              plannedSetReps: ['5'],
+              sets: [{ weightKg: 10 }],
+            },
           ],
         });
         await a.settings.update({ unit: 'lb' });
@@ -1031,8 +1383,17 @@ export function describeRepositoriesContract(name: string, factory: Repositories
 
         expect(await b.backup.snapshot()).toEqual(snap);
         expect((await b.exercises.list()).map((x) => x.id)).toEqual([e.id]);
+        expect(await b.exercises.list({ includeArchived: true })).toHaveLength(2);
         expect((await b.routines.list()).map((x) => x.name)).toEqual(['R']);
-        expect((await b.routines.getActive())?.days[0]?.exercises[0]?.notes).toBe('n');
+        expect((await b.routines.getActive())?.days[0]?.exercises[0]).toMatchObject({
+          notes: 'n',
+          repsMode: 'perSet',
+          plannedSets: [{ reps: '5' }, { reps: '3' }, { reps: 'AMRAP' }],
+          restSeconds: 0,
+        });
+        expect(await b.exercises.getById(archivedEx.id)).toEqual(
+          await a.exercises.getById(archivedEx.id),
+        );
         expect(await b.workouts.getById(w.id)).toEqual(await a.workouts.getById(w.id));
         expect(await b.settings.get()).toEqual({ unit: 'lb', restTimerEnabled: true });
       });
@@ -1081,6 +1442,7 @@ function workoutInput(exerciseIds: string[]): NewWorkoutInput {
       exerciseId,
       plannedSets: 3,
       plannedReps: '10',
+      plannedSetReps: ['10', '10', '10'],
       sets: [],
     })),
   };

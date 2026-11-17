@@ -11,12 +11,13 @@ import {
   type RoutineRepo,
 } from '../contracts';
 import {
-  applyPatch,
-  assertName,
-  assertNonNegativeInt,
-  assertPositiveInt,
+  assertRoutineName,
   assertSameIds,
+  buildPlannedFields,
+  clonePlannedExercise,
   compact,
+  copyName,
+  patchPlannedExercise,
 } from '../rules';
 import { newId } from '../utils';
 import type { MemoryContext } from './state';
@@ -55,7 +56,7 @@ export function createRoutineRepo({ state, now }: MemoryContext): RoutineRepo {
 
   const dayDetail = (day: RoutineDay): RoutineDayDetail => ({
     ...day,
-    exercises: plannedOf(day.id).map((p) => ({ ...p })),
+    exercises: plannedOf(day.id).map(clonePlannedExercise),
   });
 
   const detail = (routine: Routine): RoutineDetail => ({
@@ -111,7 +112,7 @@ export function createRoutineRepo({ state, now }: MemoryContext): RoutineRepo {
       const ts = now();
       const routine: Routine = {
         id: newId(),
-        name: assertName(input.name),
+        name: assertRoutineName(input.name),
         isActive: false,
         archived: false,
         createdAt: ts,
@@ -125,7 +126,7 @@ export function createRoutineRepo({ state, now }: MemoryContext): RoutineRepo {
 
     async update(id, patch) {
       const routine = getRoutine(id);
-      if (patch.name !== undefined) routine.name = assertName(patch.name);
+      if (patch.name !== undefined) routine.name = assertRoutineName(patch.name);
       if (patch.archived !== undefined) {
         routine.archived = patch.archived;
         if (patch.archived) routine.isActive = false;
@@ -151,7 +152,7 @@ export function createRoutineRepo({ state, now }: MemoryContext): RoutineRepo {
       const copy: Routine = {
         ...source,
         id: newId(),
-        name: `${source.name} (copia)`,
+        name: copyName(source.name),
         isActive: false,
         archived: false,
         createdAt: ts,
@@ -162,7 +163,11 @@ export function createRoutineRepo({ state, now }: MemoryContext): RoutineRepo {
         const dayCopy: RoutineDay = { ...day, id: newId(), routineId: copy.id };
         state.routineDays.set(dayCopy.id, dayCopy);
         for (const planned of plannedOf(day.id)) {
-          const plannedCopy: PlannedExercise = { ...planned, id: newId(), dayId: dayCopy.id };
+          const plannedCopy: PlannedExercise = {
+            ...clonePlannedExercise(planned),
+            id: newId(),
+            dayId: dayCopy.id,
+          };
           state.plannedExercises.set(plannedCopy.id, plannedCopy);
         }
       }
@@ -188,7 +193,7 @@ export function createRoutineRepo({ state, now }: MemoryContext): RoutineRepo {
       const day: RoutineDay = {
         id: newId(),
         routineId,
-        name: assertName(input.name),
+        name: assertRoutineName(input.name),
         order: daysOf(routineId).length,
       };
       state.routineDays.set(day.id, day);
@@ -198,7 +203,7 @@ export function createRoutineRepo({ state, now }: MemoryContext): RoutineRepo {
 
     async updateDay(dayId, patch) {
       const day = getDayRow(dayId);
-      if (patch.name !== undefined) day.name = assertName(patch.name);
+      if (patch.name !== undefined) day.name = assertRoutineName(patch.name);
       touch(day.routineId);
       return { ...day };
     },
@@ -232,28 +237,22 @@ export function createRoutineRepo({ state, now }: MemoryContext): RoutineRepo {
         if (!state.exercises.has(input.exerciseId)) {
           throw new NotFoundError('Exercise', input.exerciseId);
         }
-        const reps = input.reps ?? '10';
-        if (reps.trim() === '') assertName(reps, 'reps');
-        if (input.restSeconds !== undefined) assertNonNegativeInt(input.restSeconds, 'restSeconds');
-        return { input, sets: assertPositiveInt(input.sets ?? 3, 'sets'), reps };
+        return { input, fields: buildPlannedFields(input) };
       });
       const start = plannedOf(dayId).length;
-      const created = rows.map(({ input, sets, reps }, i): PlannedExercise => {
+      const created = rows.map(({ input, fields }, i): PlannedExercise => {
         const planned: PlannedExercise = compact({
           id: newId(),
           dayId,
           exerciseId: input.exerciseId,
           order: start + i,
-          sets,
-          reps,
-          restSeconds: input.restSeconds,
-          notes: input.notes,
+          ...fields,
         });
         state.plannedExercises.set(planned.id, planned);
         return planned;
       });
       touch(day.routineId);
-      return created.map((p) => ({ ...p }));
+      return created.map(clonePlannedExercise);
     },
 
     async updatePlannedExercise(id, patch) {
@@ -261,16 +260,11 @@ export function createRoutineRepo({ state, now }: MemoryContext): RoutineRepo {
       if (patch.exerciseId !== undefined && !state.exercises.has(patch.exerciseId)) {
         throw new NotFoundError('Exercise', patch.exerciseId);
       }
-      if (patch.sets !== undefined) assertPositiveInt(patch.sets, 'sets');
-      if (patch.reps !== undefined) assertName(patch.reps, 'reps');
-      if (patch.restSeconds !== undefined && patch.restSeconds !== null) {
-        assertNonNegativeInt(patch.restSeconds, 'restSeconds');
-      }
-      const next = applyPatch(current, patch);
+      const next = patchPlannedExercise(current, patch);
       state.plannedExercises.set(id, next);
       const day = state.routineDays.get(next.dayId);
       if (day) touch(day.routineId);
-      return { ...next };
+      return clonePlannedExercise(next);
     },
 
     async deletePlannedExercise(id) {

@@ -1,5 +1,52 @@
 # Progreso
 
+## Ajustes UX (2026-11-17)
+
+Diseño aprobado en `design/` (P06b, P06c, P07b, P07c, P07c2, P07d, P08b, P08c, P03b, S4). PRs #29 (diseño + spec), #31
+(parches de Expo), #32 (UF1), #30 (contratos v2, con UB1 #33 y UF2 #34 adentro), #35 (UF4) y #36 (UF3).
+
+**Qué cambió en cada pantalla**
+
+- **Día de rutina:** el nombre del día es un campo editable (se toca y se escribe; "Listo", tocar afuera o volver
+  guarda). La lista de ejercicios queda cerrada: cada fila muestra el plan ("4 × 8-10", "5 · 3 · 1 · AMRAP", "Por
+  serie") y el descanso; tocarla abre la hoja del ejercicio.
+- **Hoja del ejercicio (nueva):** stepper de series (mantenido acelera), "Igual en todas" / "Por serie", reps con
+  presets antes que teclado (8-10, AMRAP, …), en "Por serie" una fila por serie con ±, rangos o AMRAP y chips "Igualar
+  a la serie 1", "Escalera −2", "5 · 3 · 1". La columna CARGA se ve pero queda reservada. Notas del ejercicio y
+  "Quitar del día" están acá (ya no hay tacho al lado de las flechas).
+- **Descanso (nueva hoja):** presets 0:45…5:00, ±15 s (mantenido acelera) y "Sin descanso" (no aparece la barra).
+  Sin valor se muestra 2:00 atenuado, el default.
+- **Elegir ejercicio:** "Crear ejercicio", chip "Propios", etiqueta PROPIO y menú ⋯ (Editar / Eliminar). Al guardar
+  vuelve con el ejercicio preseleccionado y resaltado y un toast con "Editar". Eliminar uno ya usado lo archiva: deja
+  de aparecer para agregar pero sigue en Progreso y en el historial.
+- **Crear / editar ejercicio (nueva):** nombre + grupo; "Más detalles" abre equipo, músculos secundarios y notas o
+  cues de técnica.
+- **Entrenando:** placeholder de reps por serie (5, 3, 1, AMRAP), AMRAP a 16 pt, las cues debajo del nombre. ✓ con
+  reps vacías: si el plan es un número lo carga; si es rango o AMRAP no completa la serie (el campo tiembla, toma el
+  foco y vibra).
+
+**El bug del título:** eran reales 3 de las 4 hipótesis: el doble guardado (`onSubmitEditing` + `onBlur` con un valor
+viejo), el parpadeo al nombre anterior (se limpiaba el borrador antes de guardar) y el blur involuntario al
+scrollear (`keyboardDismissMode="on-drag"`). La 3 (recarga pisando lo escrito) no ocurría así, pero quedó protegida.
+
+**Cómo se migraron los datos:** la base pasa a la versión 2 al abrir la app, en una transacción. Cada ejercicio de
+un día se convierte a una lista de series (`4 × "8 - 10"` → cuatro series "8-10"), con las reps normalizadas, las
+vacías en "10", las series entre 1 y 20 y el descanso redondeado a pasos de 15 s (0 sigue siendo "Sin descanso";
+uno positivo nunca pasa a 0). Los entrenamientos pasados no se tocan. Los backups viejos se importan convertidos.
+Probado con datos reales de la versión anterior: Sentadilla 4 × "8 - 10" con 1:40 y nota pasó a 4 × 8-10 con 1:45 y
+la nota intacta; el entrenamiento terminado siguió igual.
+
+**Qué tenés que probar en el iPhone** (el navegador no lo puede validar):
+
+- Las hojas: que abran a la altura correcta, que se cierren deslizando hacia abajo y que "Listo" guarde.
+- El teclado numérico de reps con la barra de arriba (AMRAP, "–" para rangos, Siguiente).
+- Mantener apretado ± en series, reps y descanso: que acelere y vibre suave.
+- ✓ con un rango y reps vacías: que el campo tiemble, vibre y se abra el teclado en esa serie.
+- El título del día: escribir y salir con "Listo", tocando afuera, scrolleando y con "atrás"; nunca debería
+  volver al nombre viejo ni guardarse dos veces.
+- Crear un ejercicio: el teclado en el formulario y el toast (que no tape el botón "Agregar").
+- Nombres largos: que se corten con "…" sin romper las filas.
+
 ## SDK 58 (2026-11-17)
 
 **Expo SDK 58** · React Native **0.88.1** · React 19.3 · TypeScript 6.0 · Node **26 LTS**. Versión de la app

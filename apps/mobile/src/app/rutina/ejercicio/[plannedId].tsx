@@ -8,21 +8,29 @@ import {
 } from '@gym/core';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useRef, useState } from 'react';
-import { Alert, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import {
+  Alert,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  View,
+  type ScrollViewInstance,
+} from 'react-native';
 import Animated, { FadeIn, useReducedMotion } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
+  Bump,
   EmptyState,
   ErrorState,
   Icon,
   LoadingState,
-  NumericAccessoryBar,
   PlannedSetHeader,
   PlannedSetRow,
   PresetChips,
   PressableScale,
   RepsInput,
+  RepsKeyboardBar,
   SegmentedControl,
   SheetHeader,
   Stepper,
@@ -120,6 +128,9 @@ function Editor({ data, dayId }: { data: Loaded; dayId: string }) {
   const [notes, setNotes] = useState(planned.notes ?? '');
   /** The per-set values to bring back when returning to "Por serie" (design/S4). Not persisted. */
   const backup = useRef<string[] | null>(null);
+  const scrollRef = useRef<ScrollViewInstance>(null);
+  /** Bumps the series stepper when the "N ×" of "Igual en todas" is tapped. */
+  const [stepperPulse, setStepperPulse] = useState(0);
 
   function showPlan(next: Plan) {
     planRef.current = next;
@@ -234,10 +245,28 @@ function Editor({ data, dayId }: { data: Loaded; dayId: string }) {
     .join(' · ');
   const presetValue = REPS_PRESETS.find((p) => p === first) ?? '';
 
+  /** Current scroll offset, to scroll a field out from behind the keyboard bar. */
+  const scrollY = useRef(0);
+  function scrollBy(dy: number) {
+    scrollRef.current?.scrollTo({ y: scrollY.current + dy, animated: !reduced });
+  }
+
+  function goToStepper() {
+    scrollRef.current?.scrollTo({ y: 0, animated: !reduced });
+    setStepperPulse((n) => n + 1);
+  }
+
   return (
     <>
       <SheetHeader eyebrow={eyebrow} title={exercise?.name ?? 'Ejercicio'} bordered />
       <ScrollView
+        ref={scrollRef}
+        style={styles.scroll}
+        contentInsetAdjustmentBehavior="never"
+        onScroll={(e) => {
+          scrollY.current = e.nativeEvent.contentOffset.y;
+        }}
+        scrollEventThrottle={16}
         automaticallyAdjustKeyboardInsets
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="interactive"
@@ -246,15 +275,17 @@ function Editor({ data, dayId }: { data: Loaded; dayId: string }) {
       >
         <View style={styles.rowBetween}>
           <Text variant="label">Series</Text>
-          <Stepper
-            value={sets}
-            min={1}
-            max={MAX_PLANNED_SETS}
-            onChange={changeSets}
-            decLabel="Una serie menos"
-            incLabel="Una serie más"
-            valueLabel={`${sets} ${sets === 1 ? 'serie' : 'series'}`}
-          />
+          <Bump trigger={stepperPulse}>
+            <Stepper
+              value={sets}
+              min={1}
+              max={MAX_PLANNED_SETS}
+              onChange={changeSets}
+              decLabel="Una serie menos"
+              incLabel="Una serie más"
+              valueLabel={`${sets} ${sets === 1 ? 'serie' : 'series'}`}
+            />
+          </Bump>
         </View>
 
         <View style={styles.group}>
@@ -291,9 +322,18 @@ function Editor({ data, dayId }: { data: Loaded; dayId: string }) {
               style={styles.group}
             >
               <View style={styles.sameBox}>
-                <Text variant="numRow" color="textSecondary">
-                  {sets} ×
-                </Text>
+                <PressableScale
+                  accessibilityRole="button"
+                  accessibilityLabel={`${sets} ${sets === 1 ? 'serie' : 'series'}. Cambiar cantidad`}
+                  accessibilityHint="Lleva al control de series"
+                  onPress={goToStepper}
+                  hitSlop={space.sm}
+                  style={styles.sameSets}
+                >
+                  <Text variant="numRow" color="accent">
+                    {sets} ×
+                  </Text>
+                </PressableScale>
                 <View style={styles.sameInput}>
                   <RepsInput
                     value={first}
@@ -345,6 +385,38 @@ function Editor({ data, dayId }: { data: Loaded; dayId: string }) {
                   bar={bar}
                 />
               ))}
+              <View style={styles.setActions}>
+                <PressableScale
+                  accessibilityRole="button"
+                  accessibilityLabel="Quitar la última serie"
+                  accessibilityState={{ disabled: sets <= 1 }}
+                  disabled={sets <= 1}
+                  onPress={() => changeSets(sets - 1)}
+                  style={[styles.setAction, sets <= 1 && styles.setActionOff]}
+                >
+                  <Icon name="minus" size={18} color="textSecondary" strokeWidth={2.4} />
+                  <Text variant="buttonS" color="textBody">
+                    Quitar serie
+                  </Text>
+                </PressableScale>
+                <PressableScale
+                  accessibilityRole="button"
+                  accessibilityLabel="Agregar serie"
+                  accessibilityState={{ disabled: sets >= MAX_PLANNED_SETS }}
+                  disabled={sets >= MAX_PLANNED_SETS}
+                  onPress={() => changeSets(sets + 1)}
+                  style={[
+                    styles.setAction,
+                    styles.setActionAdd,
+                    sets >= MAX_PLANNED_SETS && styles.setActionOff,
+                  ]}
+                >
+                  <Icon name="add" size={18} color="accent" strokeWidth={2.4} />
+                  <Text variant="buttonS" color="accent">
+                    Agregar serie
+                  </Text>
+                </PressableScale>
+              </View>
               <Text variant="caption" color="textTertiary" style={styles.hint}>
                 Tocá el número para escribir rangos («8-10») o AMRAP. La columna CARGA queda
                 reservada para más adelante.
@@ -410,7 +482,7 @@ function Editor({ data, dayId }: { data: Loaded; dayId: string }) {
           </Text>
         </PressableScale>
       </ScrollView>
-      <NumericAccessoryBar bar={bar} />
+      <RepsKeyboardBar bar={bar} onObscured={scrollBy} />
     </>
   );
 }
@@ -432,6 +504,7 @@ function FillChip({ label, onPress }: { label: string; onPress: () => void }) {
 
 const styles = StyleSheet.create({
   sheet: { flex: 1, backgroundColor: colors.surfaceRaised },
+  scroll: { flex: 1 },
   content: { gap: space.lg + 2, paddingHorizontal: space.lg, paddingTop: space.md + 2 },
   rowBetween: {
     flexDirection: 'row',
@@ -465,6 +538,22 @@ const styles = StyleSheet.create({
   },
   sameInput: { flex: 1, minWidth: 0, height: inputHeight.repsBig, justifyContent: 'center' },
   sameHint: { textAlign: 'right' },
+  sameSets: { minHeight: hit.min, justifyContent: 'center' },
+  setActions: { flexDirection: 'row', gap: space.sm, paddingTop: space.xs },
+  setAction: {
+    flex: 1,
+    height: hit.min,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: space.xs + 2,
+    borderRadius: radii.lg - 2,
+    backgroundColor: colors.surface,
+    borderWidth: stroke.hairline,
+    borderColor: colors.border,
+  },
+  setActionAdd: { borderColor: colors.accentBorder, backgroundColor: colors.accentMuted },
+  setActionOff: { opacity: 0.3 },
   perSet: { gap: space.xs + 2 },
   fills: { gap: space.xs + 2, paddingBottom: space.xs },
   fill: {

@@ -22,25 +22,21 @@ import { ConfirmHost, ErrorState, LoadingState } from '../components';
 
 import { DataProvider } from '../data/DataProvider';
 import { createRepositories } from '../data/createRepositories';
-import { colors, fonts, radii } from '../theme';
+import { colors, fonts } from '../theme';
 
 export { ErrorBoundary } from 'expo-router';
 
-/** Detents of the bottom sheets (design/S4): the edit sheet is tall, the rest picker half. */
-const SHEET_FULL = 0.92;
-const SHEET_HALF = 0.5;
-
-/** Native form sheet with grabber; swiping down closes it. Web renders it as a plain screen. */
-function sheetOptions(detents: number[]) {
-  return {
-    presentation: 'formSheet',
-    headerShown: false,
-    sheetAllowedDetents: detents,
-    sheetGrabberVisible: true,
-    sheetCornerRadius: radii.sheet,
-    contentStyle: { backgroundColor: colors.surfaceRaised },
-  } as const;
-}
+/**
+ * Edit sheets (design/S4 alternative): native page sheet (`presentation: 'modal'`), the same as
+ * the other modal routes. Not `formSheet`: on iOS react-native-screens lays its content out with
+ * no bottom edge and force-resizes the first ScrollView it finds, which hid the top of the edit
+ * sheet (header and series stepper). See docs/DECISIONS.md.
+ */
+const sheetOptions = {
+  presentation: 'modal',
+  headerShown: false,
+  contentStyle: { backgroundColor: colors.surfaceRaised },
+} as const;
 
 preventAutoHideAsync().catch(() => undefined);
 
@@ -140,11 +136,11 @@ export default function RootLayout() {
             />
             <Stack.Screen
               name="rutina/ejercicio/[plannedId]"
-              options={{ title: 'Editar ejercicio', ...sheetOptions([SHEET_FULL]) }}
+              options={{ title: 'Editar ejercicio', ...sheetOptions }}
             />
             <Stack.Screen
               name="rutina/descanso/[plannedId]"
-              options={{ title: 'Descanso', ...sheetOptions([SHEET_HALF]) }}
+              options={{ title: 'Descanso', ...sheetOptions }}
             />
             <Stack.Screen
               name="elegir-ejercicio"

@@ -1,4 +1,4 @@
-import type { WeightUnit, WorkoutListItem } from '@gym/core';
+import { summarizePlannedSets, type WeightUnit, type WorkoutListItem } from '@gym/core';
 import { useRouter } from 'expo-router';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
@@ -148,8 +148,7 @@ export default function HoyScreen() {
     const todayExercises = suggested
       ? suggested.exercises.map((e, i) => ({
           name: e.name,
-          sets: plannedByIndex[i]?.sets ?? 0,
-          reps: plannedByIndex[i]?.reps ?? '',
+          summary: plannedByIndex[i] ? summarizePlannedSets(plannedByIndex[i]) : '',
         }))
       : [];
 
@@ -173,7 +172,7 @@ export default function HoyScreen() {
             caption={`Día ${suggested.day.order + 1} de ${active?.days.length ?? 1} · ${suggested.routine.name}`}
             dayName={suggested.day.name}
             exercises={todayExercises}
-            totalSets={todayExercises.reduce((n, e) => n + e.sets, 0)}
+            totalSets={plannedByIndex.reduce((n, e) => n + e.plannedSets.length, 0)}
             lastTime={lastSameDay ? formatDayMonthShort(lastSameDay.startedAt) : undefined}
             blocked={inProgress !== null}
             onStart={() => start(suggested.day.id)}

@@ -1,4 +1,9 @@
-import type { PreviousPerformance, WeightUnit, WorkoutExerciseDetail } from '@gym/core';
+import {
+  plannedRepsForSet,
+  type PreviousPerformance,
+  type WeightUnit,
+  type WorkoutExerciseDetail,
+} from '@gym/core';
 import { Pressable, StyleSheet, View, type TextInputInstance } from 'react-native';
 import Animated, {
   FadeIn,
@@ -192,7 +197,9 @@ export function ExerciseBlock({
                 previousText={previousText(previous, s.setIndex, unit)}
                 kg={input.kg}
                 reps={input.reps}
-                repsPlaceholder={exercise.plannedReps}
+                repsPlaceholder={
+                  plannedRepsForSet(exercise.plannedSetReps, i) || exercise.plannedReps
+                }
                 completed={s.completed}
                 focused={s.id === focusSetId}
                 pr={prSets.has(s.id)}

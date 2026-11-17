@@ -10,11 +10,10 @@ import {
   EmptyState,
   ErrorState,
   LoadingState,
-  PlannedExerciseCard,
+  PlannedExerciseRow,
   SavedIndicator,
   ScreenContainer,
   Text,
-  confirm,
 } from '../../../components';
 import { useRepositories } from '../../../data/DataProvider';
 import { useFocusAsync } from '../../../data/useFocusAsync';
@@ -64,7 +63,7 @@ export default function DayScreen() {
 
   const { day, names, routineName, position } = data;
   const ids = day.exercises.map((e) => e.id);
-  const totalSets = day.exercises.reduce((sum, e) => sum + e.sets, 0);
+  const totalSets = day.exercises.reduce((sum, e) => sum + e.plannedSets.length, 0);
 
   async function persist(run: () => Promise<unknown>) {
     const ok = await attempt(async () => {
@@ -83,17 +82,6 @@ export default function DayScreen() {
 
   async function move(index: number, delta: -1 | 1) {
     await persist(() => repos.routines.reorderPlannedExercises(day.id, moveId(ids, index, delta)));
-  }
-
-  async function remove(id: string, name: string) {
-    const ok = await confirm({
-      title: `¿Quitar ${name}?`,
-      message: 'Se quita de este día. Lo que ya entrenaste se conserva.',
-      confirmLabel: 'Quitar',
-      destructive: true,
-    });
-    if (!ok) return;
-    await persist(() => repos.routines.deletePlannedExercise(id));
   }
 
   return (
@@ -127,7 +115,7 @@ export default function DayScreen() {
               {totalSets}
             </Text>
             <Text variant="caption" color="textTertiary">
-              {totalSets === 1 ? 'serie en total' : 'series en total'}
+              {`${totalSets === 1 ? 'serie' : 'series'} · tocá uno para editarlo`}
             </Text>
           </View>
         </View>
@@ -145,17 +133,20 @@ export default function DayScreen() {
                 key={p.id}
                 layout={reduced ? undefined : LinearTransition.duration(motion.base + 20)}
               >
-                <PlannedExerciseCard
+                <PlannedExerciseRow
                   planned={p}
                   name={name}
                   position={i + 1}
                   canMoveUp={i > 0}
                   canMoveDown={i < day.exercises.length - 1}
-                  onSave={(patch) => {
-                    void persist(() => repos.routines.updatePlannedExercise(p.id, patch));
+                  onOpen={() => {
+                    Keyboard.dismiss();
+                    router.push({
+                      pathname: '/rutina/ejercicio/[plannedId]',
+                      params: { plannedId: p.id, dayId: day.id },
+                    });
                   }}
                   onMove={(delta) => move(i, delta)}
-                  onDelete={() => remove(p.id, name)}
                 />
               </Animated.View>
             );
@@ -169,6 +160,12 @@ export default function DayScreen() {
             router.push({ pathname: '/elegir-ejercicio', params: { dayId: day.id } });
           }}
         />
+        {day.exercises.length > 0 ? (
+          <Text variant="caption" color="textTertiary" style={styles.footHint}>
+            Para quitar un ejercicio, abrilo y tocá «Quitar del día». Así el tacho no queda al lado
+            de las flechas.
+          </Text>
+        ) : null}
       </ScrollView>
     </Shell>
   );
@@ -188,4 +185,5 @@ const styles = StyleSheet.create({
     marginBottom: -space.sm,
   },
   list: { gap: space.sm + 2 },
+  footHint: { textAlign: 'center', paddingHorizontal: space.xs },
 });

@@ -22,9 +22,25 @@ import { ConfirmHost, ErrorState, LoadingState } from '../components';
 
 import { DataProvider } from '../data/DataProvider';
 import { createRepositories } from '../data/createRepositories';
-import { colors, fonts } from '../theme';
+import { colors, fonts, radii } from '../theme';
 
 export { ErrorBoundary } from 'expo-router';
+
+/** Detents of the bottom sheets (design/S4): the edit sheet is tall, the rest picker half. */
+const SHEET_FULL = 0.92;
+const SHEET_HALF = 0.5;
+
+/** Native form sheet with grabber; swiping down closes it. Web renders it as a plain screen. */
+function sheetOptions(detents: number[]) {
+  return {
+    presentation: 'formSheet',
+    headerShown: false,
+    sheetAllowedDetents: detents,
+    sheetGrabberVisible: true,
+    sheetCornerRadius: radii.sheet,
+    contentStyle: { backgroundColor: colors.surfaceRaised },
+  } as const;
+}
 
 preventAutoHideAsync().catch(() => undefined);
 
@@ -121,6 +137,14 @@ export default function RootLayout() {
             <Stack.Screen
               name="rutina/dia/[dayId]"
               options={{ title: 'Armar día', headerShown: false }}
+            />
+            <Stack.Screen
+              name="rutina/ejercicio/[plannedId]"
+              options={{ title: 'Editar ejercicio', ...sheetOptions([SHEET_FULL]) }}
+            />
+            <Stack.Screen
+              name="rutina/descanso/[plannedId]"
+              options={{ title: 'Descanso', ...sheetOptions([SHEET_HALF]) }}
             />
             <Stack.Screen
               name="elegir-ejercicio"

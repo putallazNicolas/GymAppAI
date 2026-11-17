@@ -44,6 +44,11 @@ export default [
             'Property[key.name=/^(fontSize|lineHeight|letterSpacing|borderRadius|fontWeight)$/] > Literal',
           message: 'Use a typography/radius token from src/theme instead of a literal value.',
         },
+        {
+          selector: 'Property[key.name="textTransform"]',
+          message:
+            'Uppercase comes from a Text variant in src/theme. Never on a TextInput: on iOS it rewrites the typed value.',
+        },
       ],
     },
   },

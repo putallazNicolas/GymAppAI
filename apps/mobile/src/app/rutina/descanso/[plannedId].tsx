@@ -88,7 +88,7 @@ function Picker({ data }: { data: Loaded }) {
         <View style={styles.readout} accessibilityLiveRegion="polite">
           <Bump trigger={rest}>
             {rest === 0 ? (
-              <Text variant="numL" color="textBody" style={styles.none}>
+              <Text variant="numLCaps" color="textBody" style={styles.none}>
                 Sin descanso
               </Text>
             ) : (
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: space.xs,
   },
-  none: { textTransform: 'uppercase', textAlign: 'center' },
+  none: { textAlign: 'center' },
   grid: { gap: space.sm, marginHorizontal: space.lg, marginTop: space.md + 2 },
   gridRow: { flexDirection: 'row', gap: space.sm },
   preset: {

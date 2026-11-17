@@ -26,6 +26,8 @@ interface SetRowProps {
   kg: string;
   reps: string;
   repsPlaceholder?: string;
+  /** Increments to shake the reps field (✓ tapped with no reps and no planned number). */
+  shakeSignal?: number;
   completed: boolean;
   /** Marks the row as the one being worked on (also set automatically while an input has focus). */
   focused?: boolean;
@@ -54,6 +56,9 @@ const PR_OVERSHOOT = 1.15;
 const PR_DELAY = 150;
 const FRAME_DELAY = 120;
 const FRAME_SHIFT = -4;
+const SHAKE_DX = 6;
+/** One shake lasts 240 ms; the sequence is two of them. */
+const SHAKE_MS = 240;
 
 function PrBadge() {
   const reduced = useReducedMotion();
@@ -85,6 +90,7 @@ export function SetRow({
   kg,
   reps,
   repsPlaceholder,
+  shakeSignal = 0,
   completed,
   focused = false,
   pr = false,
@@ -155,6 +161,22 @@ export function SetRow({
         ? colors.surfaceRaised
         : colors.surface,
   }));
+  // Reps field shake (2 x 240 ms); with reduced motion the caller only focuses the field.
+  const shake = useSharedValue(0);
+  const firstShake = useRef(shakeSignal);
+  useEffect(() => {
+    if (shakeSignal === firstShake.current) return;
+    firstShake.current = shakeSignal;
+    if (reduced) return;
+    shake.value = 0;
+    const oneShake = () => [
+      withTiming(SHAKE_DX, { duration: SHAKE_MS / 4 }),
+      withTiming(-SHAKE_DX, { duration: SHAKE_MS / 2 }),
+      withTiming(0, { duration: SHAKE_MS / 4 }),
+    ];
+    shake.value = withSequence(...oneShake(), ...oneShake());
+  }, [shakeSignal, reduced, shake]);
+  const shakeAnimated = useAnimatedStyle(() => ({ transform: [{ translateX: shake.value }] }));
   const popAnimated = useAnimatedStyle(() => ({ transform: [{ scale: pop.value }] }));
 
   function toggle() {
@@ -162,6 +184,8 @@ export function SetRow({
     onToggleComplete();
   }
 
+  // "8-10" and "10" keep the big size; words such as AMRAP go to 16 so they fit the cell.
+  const isTextPlaceholder = !!repsPlaceholder && !/^[\d\s\-–]+$/.test(repsPlaceholder);
   const inputBase = [styles.input, completed && styles.inputCompleted];
 
   return (
@@ -206,29 +230,32 @@ export function SetRow({
           onBlurKg?.();
         }}
       />
-      <TextInput
-        ref={repsInputRef}
-        style={[
-          ...inputBase,
-          styles.inputReps,
-          !completed && (repsFocus ? styles.inputActive : styles.inputPending),
-          repsFocus && styles.inputFocused,
-        ]}
-        value={reps}
-        onChangeText={onChangeReps}
-        keyboardType="number-pad"
-        placeholder={repsPlaceholder}
-        placeholderTextColor={colors.textDisabled}
-        selectionColor={colors.accent}
-        selectTextOnFocus
-        accessibilityLabel={`Repeticiones, serie ${index}`}
-        onSubmitEditing={onSubmitReps}
-        onFocus={() => setRepsFocus(true)}
-        onBlur={() => {
-          setRepsFocus(false);
-          onBlurReps?.();
-        }}
-      />
+      <Animated.View style={shakeAnimated}>
+        <TextInput
+          ref={repsInputRef}
+          style={[
+            ...inputBase,
+            styles.inputReps,
+            isTextPlaceholder && reps === '' && styles.inputRepsText,
+            !completed && (repsFocus ? styles.inputActive : styles.inputPending),
+            repsFocus && styles.inputFocused,
+          ]}
+          value={reps}
+          onChangeText={onChangeReps}
+          keyboardType="number-pad"
+          placeholder={repsPlaceholder}
+          placeholderTextColor={colors.textDisabled}
+          selectionColor={colors.accent}
+          selectTextOnFocus
+          accessibilityLabel={`Repeticiones, serie ${index}`}
+          onSubmitEditing={onSubmitReps}
+          onFocus={() => setRepsFocus(true)}
+          onBlur={() => {
+            setRepsFocus(false);
+            onBlurReps?.();
+          }}
+        />
+      </Animated.View>
       <Animated.View style={popAnimated}>
         <PressableScale
           accessibilityRole="checkbox"
@@ -281,6 +308,7 @@ const styles = StyleSheet.create({
     borderRadius: radii.sm,
   },
   inputReps: { width: 60 },
+  inputRepsText: { ...inputType.numMInputSmall },
   inputPending: { borderWidth: stroke.hairline, borderColor: colors.border },
   inputActive: {
     backgroundColor: colors.background,

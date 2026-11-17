@@ -18,6 +18,9 @@ export default function WorkoutScreen() {
     const ids = workout.exercises.map((e) => e.exerciseId);
     const exercises = await repos.exercises.getByIds(ids);
     const names = Object.fromEntries(exercises.map((e) => [e.id, e.name]));
+    const cues = Object.fromEntries(
+      exercises.filter((e) => e.notes?.trim()).map((e) => [e.id, e.notes as string]),
+    );
     const prevEntries = await Promise.all(
       ids.map(
         async (id) =>
@@ -36,6 +39,7 @@ export default function WorkoutScreen() {
       workout,
       settings,
       names,
+      cues,
       previous: Object.fromEntries(prevEntries),
       bests: Object.fromEntries(bestEntries),
       routineName: routine?.name,
@@ -67,6 +71,7 @@ export default function WorkoutScreen() {
     <ActiveWorkout
       initial={data.workout}
       names={data.names}
+      cues={data.cues}
       previous={data.previous}
       bests={data.bests}
       routineName={data.routineName}

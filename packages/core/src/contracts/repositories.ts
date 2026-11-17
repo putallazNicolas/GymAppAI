@@ -17,6 +17,8 @@ import type {
   ID,
   MuscleGroup,
   PlannedExercise,
+  PlannedSet,
+  RepsMode,
   Routine,
   RoutineDay,
   Settings,
@@ -48,30 +50,43 @@ export class ValidationError extends Error {
 
 export interface ExerciseFilter {
   muscleGroup?: MuscleGroup;
+  /** Only custom exercises ("Propios" chip). */
+  customOnly?: boolean;
+  /** Archived exercises are excluded unless true. */
+  includeArchived?: boolean;
   /** Case- and accent-insensitive substring match on name ("press" matches "Press banca"). */
   search?: string;
 }
 
 export interface NewExerciseInput {
+  /** Trimmed; 1..EXERCISE_NAME_MAX_LENGTH chars. */
   name: string;
   muscleGroup: MuscleGroup;
+  /** Duplicates and `muscleGroup` itself are dropped. */
+  secondaryMuscleGroups?: MuscleGroup[];
   equipment?: Equipment;
+  notes?: string;
 }
 
 export interface ExerciseRepo {
-  /** Sorted by name (Spanish locale, accent-insensitive). */
+  /** Sorted by name (Spanish locale, accent-insensitive). Archived excluded unless asked. */
   list(filter?: ExerciseFilter): Promise<Exercise[]>;
+  /** Returns archived exercises too (history needs them). */
   getById(id: ID): Promise<Exercise | null>;
-  /** Missing ids are skipped. Order follows `ids`. */
+  /** Missing ids are skipped. Order follows `ids`. Archived included. */
   getByIds(ids: ID[]): Promise<Exercise[]>;
-  /** Creates a custom exercise (`isCustom: true`). Rejects with ValidationError on empty name. */
+  /** Creates a custom exercise (`isCustom: true`). Rejects with ValidationError on an invalid name. */
   create(input: NewExerciseInput): Promise<Exercise>;
+  /** Edits a custom exercise and bumps `updatedAt`. Catalog exercises reject with ValidationError. */
   update(id: ID, patch: Patch<NewExerciseInput>): Promise<Exercise>;
+  /** Hides a custom exercise (`archived: true`). Catalog exercises reject with ValidationError. */
+  archive(id: ID): Promise<Exercise>;
   /**
-   * Deletes a custom exercise. Rejects with ValidationError for catalog exercises or when the
-   * exercise is referenced by any planned exercise or workout.
+   * Removes a custom exercise. If it is referenced by any planned exercise or workout it is archived
+   * instead (resolves `'archived'`); otherwise it is deleted (resolves `'deleted'`). Catalog exercises
+   * reject with ValidationError.
    */
-  delete(id: ID): Promise<void>;
+  delete(id: ID): Promise<'deleted' | 'archived'>;
 }
 
 // ---------------------------------------------------------------------------
@@ -92,16 +107,21 @@ export interface RoutineDetail extends Routine {
 
 export interface NewPlannedExerciseInput {
   exerciseId: ID;
-  /** Defaults to 3. */
-  sets?: number;
-  /** Defaults to "10". */
-  reps?: string;
+  /** Defaults to "same". */
+  repsMode?: RepsMode;
+  /** Defaults to 3 sets of "10". Reps are normalized; see PlannedSet. */
+  plannedSets?: PlannedSet[];
   restSeconds?: number;
   notes?: string;
 }
 
+/**
+ * Validation on every write (ValidationError): 1..MAX_PLANNED_SETS sets, non-empty reps, with
+ * repsMode "same" all reps equal, restSeconds an integer in 0..MAX_REST_SECONDS and a multiple of
+ * REST_STEP_SECONDS.
+ */
 export type PlannedExercisePatch = Patch<
-  Pick<PlannedExercise, 'exerciseId' | 'sets' | 'reps' | 'restSeconds' | 'notes'>
+  Pick<PlannedExercise, 'exerciseId' | 'repsMode' | 'plannedSets' | 'restSeconds' | 'notes'>
 >;
 
 export interface RoutineRepo {
@@ -110,7 +130,10 @@ export interface RoutineRepo {
   getById(id: ID): Promise<RoutineDetail | null>;
   /** The active (non-archived) routine, if any. */
   getActive(): Promise<RoutineDetail | null>;
-  /** New routines start inactive, unarchived, with no days. */
+  /**
+   * New routines start inactive, unarchived, with no days. Routine and day names are trimmed,
+   * can't be empty and are at most NAME_MAX_LENGTH chars (ValidationError otherwise).
+   */
   create(input: { name: string }): Promise<Routine>;
   update(id: ID, patch: { name?: string; archived?: boolean }): Promise<Routine>;
   /**
@@ -161,6 +184,8 @@ export interface NewWorkoutInput {
     exerciseId: ID;
     plannedSets: number;
     plannedReps: string;
+    /** Planned reps per set (snapshot of PlannedExercise.plannedSets). */
+    plannedSetReps: string[];
     restSeconds?: number;
     notes?: string;
     /** One entry per set; length is usually plannedSets. */

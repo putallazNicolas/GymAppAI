@@ -1,5 +1,28 @@
 # Progreso
 
+## SDK 58 (2026-11-17)
+
+**Expo SDK 58** · React Native **0.88.1** · React 19.3 · TypeScript 6.0 · Node **26 LTS**. Versión de la app
+**0.2.0**.
+
+**Qué se rompió y cómo se arregló:** Expo Go de la App Store pasó a la SDK 58 y el proyecto estaba en la 57 ("Project
+is incompatible with this version of Expo Go"). Se actualizó todo a SDK 58:
+
+- refs con tipos de instancia por el TypeScript estricto de RN;
+- la tab bar propia, adaptada a la nueva API de Expo Router;
+- `File.write()`, que ahora es async (Exportar datos);
+- `web.output: "single"` para la vista web.
+
+El rediseño no cambió: el recorrido completo en el navegador (iPhone 393×852) da las mismas pantallas.
+
+**Warnings:** 0 en typecheck, lint, tests, `expo export` (iOS y web), `expo-doctor` y el smoke test web. Quedan 2
+avisos de `npm install` que no se pueden eliminar hoy (`eslint@9` y `glob@10`, por dependencias de terceros), ver
+`DECISIONS.md`. Nuevo requisito permanente en `CLAUDE.md`: última tecnología, dependencias al día y cero warnings.
+
+**Qué tenés que hacer:** actualizá **Expo Go** desde el App Store. Cuando el workflow publique el update (sale solo
+al mergear), abrí expo.dev → gym-app → Updates → el update más nuevo de `preview` → **Preview** y escaneá el QR. Si
+algún día vuelve a decir "incompatible", es otro salto de SDK: ver `docs/INSTALAR-EN-IPHONE.md` (A5).
+
 ## Para instalar en el iPhone (2026-11-16)
 
 Guía completa: [INSTALAR-EN-IPHONE.md](INSTALAR-EN-IPHONE.md).

@@ -120,8 +120,10 @@ describe('legacy conversion', () => {
     expect(legacyRestSeconds(100)).toBe(105);
     expect(legacyRestSeconds(97)).toBe(90);
     expect(legacyRestSeconds(90)).toBe(90);
-    expect(legacyRestSeconds(7)).toBe(0);
+    expect(legacyRestSeconds(5)).toBe(15);
+    expect(legacyRestSeconds(7)).toBe(15);
     expect(legacyRestSeconds(8)).toBe(15);
+    expect(legacyRestSeconds(0)).toBe(0);
     expect(legacyRestSeconds(900)).toBe(600);
     expect(legacyRestSeconds(-20)).toBe(0);
   });

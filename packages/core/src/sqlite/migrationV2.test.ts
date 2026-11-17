@@ -159,7 +159,7 @@ describe('sqlite migration v1 -> v2 with real old-format data', () => {
       restSeconds: 90,
     });
     const [p3, p4, p5] = dayB!.exercises;
-    expect(p3).toMatchObject({ id: 'p3', plannedSets: same(5, 'AMRAP'), restSeconds: 0 }); // 5 -> 0
+    expect(p3).toMatchObject({ id: 'p3', plannedSets: same(5, 'AMRAP'), restSeconds: 15 }); // 5 -> 15, never 0
     expect(p4).toMatchObject({
       id: 'p4',
       plannedSets: same(2, '8-10'),

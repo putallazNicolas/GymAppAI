@@ -49,6 +49,8 @@ describe.each(BACKENDS)('importing a v1 file on %s', (_name, build) => {
           restSeconds: 100,
         },
         { id: 'p2', dayId: 'd1', exerciseId: 'e1', order: 1, sets: 2, reps: 'amrap', notes: 'n' },
+        { id: 'p3', dayId: 'd1', exerciseId: 'e1', order: 2, sets: 1, reps: '5', restSeconds: 5 },
+        { id: 'p4', dayId: 'd1', exerciseId: 'e1', order: 3, sets: 1, reps: '5', restSeconds: 0 },
       ],
       workouts: [
         {
@@ -113,6 +115,9 @@ describe.each(BACKENDS)('importing a v1 file on %s', (_name, build) => {
       notes: 'n',
     });
     expect('restSeconds' in p2!).toBe(false);
+    const day = (await repos.routines.getById('r1'))!.days[0]!.exercises;
+    expect(day[2]?.restSeconds).toBe(15); // 5 -> 15, never 0 ("Sin descanso")
+    expect(day[3]?.restSeconds).toBe(0); // 0 stays 0
     expect(await repos.exercises.getById('e1')).toMatchObject({ updatedAt: ts, createdAt: ts });
     const w = (await repos.workouts.getById('w1'))!;
     expect(w.exercises[0]).toMatchObject({

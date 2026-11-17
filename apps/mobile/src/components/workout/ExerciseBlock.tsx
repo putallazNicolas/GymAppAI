@@ -1,5 +1,6 @@
 import {
   plannedRepsForSet,
+  summarizePlannedSets,
   type PreviousPerformance,
   type WeightUnit,
   type WorkoutExerciseDetail,
@@ -90,7 +91,15 @@ export function ExerciseBlock({
   const reduced = useReducedMotion();
   const sets = exercise.sets;
   const done = sets.filter((s) => s.completed).length;
-  const planned = `${exercise.plannedSets} × ${exercise.plannedReps}`;
+  const setReps = exercise.plannedSetReps;
+  // plannedReps is already a summary in contracts v2; derive the label from the per-set snapshot.
+  const planned =
+    setReps.length === 0
+      ? `${exercise.plannedSets} × ${exercise.plannedReps}`
+      : summarizePlannedSets({
+          repsMode: setReps.every((r) => r === setReps[0]) ? 'same' : 'perSet',
+          plannedSets: setReps.map((reps) => ({ reps })),
+        });
 
   const layout = reduced
     ? undefined

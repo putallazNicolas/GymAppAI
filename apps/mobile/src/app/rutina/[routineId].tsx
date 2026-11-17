@@ -1,11 +1,12 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Keyboard, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import Animated, { LinearTransition, useReducedMotion } from 'react-native-reanimated';
 
 import {
   BackBar,
   DashedAddButton,
+  EditableTitle,
   EmptyState,
   ErrorState,
   IconButton,
@@ -14,7 +15,6 @@ import {
   ScreenContainer,
   Switch,
   Text,
-  UnderlineField,
   confirm,
 } from '../../components';
 import { useRepositories } from '../../data/DataProvider';
@@ -33,7 +33,6 @@ export default function RoutineScreen() {
     () => repos.routines.getById(routineId),
     [routineId],
   );
-  const [draftName, setDraftName] = useState<string | undefined>(undefined);
   const [saved, setSaved] = useState(0);
 
   if (loading && data === undefined)
@@ -58,7 +57,7 @@ export default function RoutineScreen() {
   const routine = data;
   const dayIds = routine.days.map((d) => d.id);
 
-  /** Runs a mutation; on success marks "Guardado" and reloads. */
+  /** Runs a mutation; on success marks "Guardado" and reloads (the reload is not awaited: the title keeps its draft until the new name arrives). */
   async function persist(run: () => Promise<unknown>) {
     const result = await attempt(async () => {
       await run();
@@ -69,11 +68,9 @@ export default function RoutineScreen() {
     return result;
   }
 
-  async function saveName() {
-    const name = (draftName ?? routine.name).trim();
-    setDraftName(undefined);
-    if (!name || name === routine.name) return;
-    await persist(() => repos.routines.update(routine.id, { name }));
+  /** The title already validated and trimmed the name; resolves after the reload. */
+  async function saveName(name: string) {
+    return (await persist(() => repos.routines.update(routine.id, { name }))) === true;
   }
 
   async function move(index: number, delta: -1 | 1) {
@@ -93,12 +90,13 @@ export default function RoutineScreen() {
   }
 
   async function addDay() {
+    Keyboard.dismiss();
     const day = await attempt(() =>
       repos.routines.addDay(routine.id, { name: `Día ${routine.days.length + 1}` }),
     );
     if (day) {
       setSaved((n) => n + 1);
-      router.push({ pathname: '/rutina/dia/[dayId]', params: { dayId: day.id } });
+      router.push({ pathname: '/rutina/dia/[dayId]', params: { dayId: day.id, isNew: '1' } });
     }
   }
 
@@ -113,17 +111,14 @@ export default function RoutineScreen() {
         automaticallyAdjustKeyboardInsets
         contentContainerStyle={styles.content}
         keyboardShouldPersistTaps="handled"
-        keyboardDismissMode="on-drag"
+        keyboardDismissMode="interactive"
         showsVerticalScrollIndicator={false}
       >
-        <UnderlineField
+        <EditableTitle
           label="Nombre de la rutina"
-          value={draftName ?? routine.name}
-          onChangeText={setDraftName}
-          onBlur={saveName}
-          onSubmitEditing={saveName}
-          returnKeyType="done"
-          autoCapitalize="words"
+          value={routine.name}
+          onCommit={saveName}
+          placeholder="Nombre de la rutina"
         />
 
         <View style={styles.activeCard}>
@@ -172,9 +167,10 @@ export default function RoutineScreen() {
                 <Pressable
                   accessibilityRole="button"
                   accessibilityLabel={`${day.name}, ${dayMeta(day.exercises.length, sets)}`}
-                  onPress={() =>
-                    router.push({ pathname: '/rutina/dia/[dayId]', params: { dayId: day.id } })
-                  }
+                  onPress={() => {
+                    Keyboard.dismiss();
+                    router.push({ pathname: '/rutina/dia/[dayId]', params: { dayId: day.id } });
+                  }}
                   style={styles.dayInfo}
                 >
                   <Text variant="displayS" numberOfLines={1}>

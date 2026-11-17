@@ -1,0 +1,65 @@
+name: EAS Update (preview)
+
+# Publishes an EAS Update to the `preview` branch every time CI passes on `main`
+# (i.e. after each merged PR). The owner opens it in Expo Go on the iPhone.
+# See docs/INSTALAR-EN-IPHONE.md. Without the EXPO_TOKEN secret the job is skipped (stays green).
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+
+concurrency:
+  group: eas-update-preview
+  cancel-in-progress: true
+
+jobs:
+  update:
+    name: eas update → preview
+    # Only after a successful CI run triggered by a push to main (typecheck, lint, test, bundle).
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Check for EXPO_TOKEN
+        id: token
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: |
+          if [ -z "$EXPO_TOKEN" ]; then
+            echo "::notice::EXPO_TOKEN no está configurado: se saltea el EAS Update (ver docs/INSTALAR-EN-IPHONE.md)."
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.token.outputs.present == 'true'
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - uses: actions/setup-node@v4
+        if: steps.token.outputs.present == 'true'
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Setup EAS CLI
+        if: steps.token.outputs.present == 'true'
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - run: npm ci
+        if: steps.token.outputs.present == 'true'
+
+      - name: Publish update to the preview branch
+        if: steps.token.outputs.present == 'true'
+        working-directory: apps/mobile
+        env:
+          COMMIT_MESSAGE: ${{ github.event.workflow_run.head_commit.message }}
+        run: |
+          MESSAGE="$(printf '%s' "$COMMIT_MESSAGE" | head -n 1)"
+          eas update --branch preview --environment preview --non-interactive --message "$MESSAGE"

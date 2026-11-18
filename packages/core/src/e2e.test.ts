@@ -77,5 +77,5 @@ it('runs the whole V1 flow on SQLite', async () => {
   );
   expect((await target.importAllData(payload)).workouts).toBe(2);
   expect(await target.getExerciseProgress(squat.id)).toHaveLength(2);
-  expect(exportFileName(new Date(2026, 9, 15))).toBe('gym-app-backup-2026-10-15.json');
+  expect(exportFileName(new Date(2026, 9, 15))).toBe('kalk-backup-2026-10-15.json');
 });

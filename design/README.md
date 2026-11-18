@@ -1,7 +1,7 @@
 # Diseño · Dirección "A · Plataforma"
 
 Copia del canvas de Claude Design **"Gym App Rediseño"** (página "Ajustes UX" agregada el 2026-11-17, versión `1794918701-acd6`;
-página "Marca" agregada el 2026-11-18, versión `1794969608-9c5a`)
+página "Marca" agregada el 2026-11-18, versión `1794969608-9c5a`; L4 y S5 actualizado: versión `1795042489-bff7`)
 (`https://claude.ai/artifact/GRHkNGiBdDzJVLgxnrFNec`, versión `1792031927-2d26`), para que los agentes
 lo tengan en el repo. Cada `.dc.html` es HTML con CSS inline: los valores exactos (colores, tamaños,
 pesos, radios, espaciados y textos) están ahí. Abrilos como texto; no hace falta renderizarlos.
@@ -45,6 +45,7 @@ pesos, radios, espaciados y textos) están ahí. Abrilos como texto; no hace fal
 | `L1-Revision-Logo.dc.html`      | Marca · Revisión del logo B3: reglas del naranja, hueso como token, tamaño mínimo del wordmark (16 px), viewBox 232                                                                         | —                        |
 | `L2-Icono-y-Splash.dc.html`     | Marca · Ícono (claro, oscuro, tintado), splash nativo, réplica de carga y transición a Hoy                                                                                                  | `app.json`, `_layout`    |
 | `L3-Marca-en-la-App.dc.html`    | Marca · Dónde va la marca (Hoy, Hoy vacío, Acerca de Kalk) y dónde no; tabla de textos que cambian                                                                                          | `(tabs)/index`, `perfil` |
+| `L4-Marca-en-Hoy.dc.html`       | Marca · Marca en Hoy: tres opciones y la elegida, **C · firma al pie**; también «Acerca de Kalk» con el ícono solo (aprobado)                                                               | `(tabs)/index`           |
 | `Main.dc.html`                  | Exploración de Entrenando (referencia extra)                                                                                                                                                | —                        |
 | `canvas.json`                   | Índice del canvas                                                                                                                                                                           | —                        |
 
@@ -94,7 +95,8 @@ Las exploraciones B y C de la página "Direcciones" no se copiaron: no se usan.
 - El logo **nunca** se escribe con una tipografía: `KalkWordmark` y `KalkMark` (`react-native-svg`), con
   `accessibilityLabel="Kalk"`, 16 px de alto mínimo y nunca dentro de un `Pressable`.
 - Dentro de pantallas con acciones, la marca va **una tinta hueso** (`tone="mono"`). A color (brazo naranja)
-  solo en el ícono, el splash y «Acerca de Kalk».
+  solo en el ícono, el splash y «Acerca de Kalk». Excepción: la firma al pie de Hoy, en gris (`tone="muted"`,
+  `brand.muted`), según `L4` opción C.
 - Colores de marca en `brand.*` (`bone`, `signal`, `ink`), literales y separados de `colors.*`.
 - Fuentes del ícono en `apps/mobile/assets/brand/src/icono/`. El viewBox del wordmark es `0 0 232 52`
   (el paquete de marketing v1.0 dice 230 y recorta la punta de la última K).

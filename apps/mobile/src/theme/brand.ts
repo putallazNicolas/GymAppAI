@@ -11,4 +11,9 @@ export const brand = {
   ink: '#0B0B0C',
   /** Tile of the lockup on a dark surface (marketing LEEME §1). */
   tileRaised: '#1C1C1F',
+  /**
+   * The gray signature at the foot of Hoy (design/L4, option C). The only gray in the brand: an
+   * exception approved by the owner (4.7:1 on ink). Same value as colors.textTertiary today.
+   */
+  muted: '#7C7C82',
 } as const;

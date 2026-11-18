@@ -5,14 +5,13 @@ import { colors, radii, space, stroke } from '../../theme';
 import { Text } from '../Text';
 
 import { KalkMark } from './KalkMark';
-import { KalkWordmark } from './KalkWordmark';
 
-const ICON_SIZE = 56;
-const WORDMARK_HEIGHT = 18;
+const ICON_SIZE = 80;
 
 /**
- * "Acerca de Kalk" (design/L3): the only place inside the app with the icon in color. No
- * actions; the wordmark stays one ink (one orange per piece).
+ * "Acerca de Kalk" (design/L4, approved proposal; S5 box point 5): the icon alone, in color, and
+ * the name as text next to the version. The only place inside the app with the icon in color.
+ * No wordmark here: the drawn name lives on the foot of Hoy.
  */
 export function AboutKalk() {
   return (
@@ -20,14 +19,23 @@ export function AboutKalk() {
       <Text variant="label" accessibilityRole="header">
         Acerca de Kalk
       </Text>
-      <KalkMark size={ICON_SIZE} tile tone="color" />
-      <KalkWordmark height={WORDMARK_HEIGHT} tone="mono" />
+      <KalkMark size={ICON_SIZE} tile tone="color" outline={colors.border} />
       <Text variant="caption" color="textBody" style={styles.center}>
         {'Tu planilla de fuerza, sin papel.\nTus datos quedan en este teléfono.'}
       </Text>
-      <Text variant="numS" color="textTertiary">
-        Versión {appVersionLabel()}
-      </Text>
+      {/* Two Texts in a row: never nest the 15 pt version inside the 14 pt name. */}
+      <View
+        style={styles.nameRow}
+        accessible
+        accessibilityLabel={`Kalk, versión ${appVersionLabel()}`}
+      >
+        <Text variant="aboutName" color="textPrimary">
+          Kalk
+        </Text>
+        <Text variant="aboutVersion" color="textTertiary">
+          {appVersionLabel()}
+        </Text>
+      </View>
     </View>
   );
 }
@@ -44,4 +52,5 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
   },
   center: { textAlign: 'center' },
+  nameRow: { flexDirection: 'row', alignItems: 'baseline', gap: space.xs + 1 },
 });

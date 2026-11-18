@@ -1,5 +1,13 @@
 # Progreso
 
+## Firma de Kalk en Hoy (2026-11-18)
+
+Opción C de `design/L4`: Hoy ya no tiene el wordmark arriba; el header vuelve a ser fecha y saludo. La marca
+queda como una firma gris al pie. **En Expo Go, sin build:** abrí Hoy, scrolleá hasta el final y fijate que
+"KΛLK" esté centrado, en gris apagado, debajo de "Últimos entrenamientos"; con la app vacía, pegado abajo,
+arriba de la tab bar. En Perfil, «Acerca de Kalk» muestra solo el ícono, más grande, y abajo «Kalk 0.2.0» en
+una línea (en un build dice también el número de build). La pantalla de carga no cambió.
+
 ## Marca Kalk (2026-11-18)
 
 La app se llama **Kalk**. Logo B3 (K maciza) aprobado; integración según `design/S5` (PRs #40, #41 y #42).

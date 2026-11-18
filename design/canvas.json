@@ -2,6 +2,14 @@
   "v": 3,
   "attachments": {},
   "boards": {
+    "L4-Marca-en-Hoy.dc.html": {
+      "h": 2860,
+      "page": "marca",
+      "title": "L4 · Marca en Hoy: actual + 3 opciones (esperan aprobación)",
+      "w": 1840,
+      "x": 0,
+      "y": 5820
+    },
     "L1-Revision-Logo.dc.html": {
       "h": 2560,
       "page": "marca",
@@ -27,7 +35,7 @@
       "y": 3000
     },
     "S5-Notas-Marca.dc.html": {
-      "h": 2700,
+      "h": 2900,
       "page": "marca",
       "title": "S5 · Notas de marca para el desarrollador",
       "w": 1100,
@@ -446,7 +454,8 @@
     "L1-Revision-Logo.dc.html",
     "L2-Icono-y-Splash.dc.html",
     "L3-Marca-en-la-App.dc.html",
-    "S5-Notas-Marca.dc.html"
+    "S5-Notas-Marca.dc.html",
+    "L4-Marca-en-Hoy.dc.html"
   ],
   "pages": [
     {

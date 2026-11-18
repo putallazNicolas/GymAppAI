@@ -20,9 +20,9 @@ tabs. **Resumen** aparece al finalizar el entrenamiento.
 
 ## 4.1 Hoy (home)
 
-- Arriba de todo, el wordmark **Kalk** una tinta hueso de 16 pt (`KalkWordmark`, no se toca; también en el
-  estado vacío). Es el único header con marca (`design/L3`).
-- Fecha y saludo.
+- Header: fecha y saludo, sin marca (el "SEMANA 1/4" de P01 sigue fuera de V1).
+- **Firma al pie** (`design/L4`, opción C): `KalkWordmark` gris (`tone="muted"`, 16 pt) centrado como último
+  elemento del scroll, 32 pt debajo del último bloque. En el estado vacío queda pegado al fondo. No se toca.
 - Card "Entrenamiento de hoy" con el día sugerido de la rutina activa (nombre del día y lista corta de
   ejercicios), botón grande **Empezar** y un link **"Elegir otro día"**.
 - Si hay un entrenamiento sin finalizar, un banner **"Continuar entrenamiento"** arriba de todo.
@@ -143,9 +143,9 @@ tabs. **Resumen** aparece al finalizar el entrenamiento.
 - Botón **"Exportar datos"**: genera un JSON y abre el share sheet (`expo-file-system` + `expo-sharing`).
 - **(propuesta)** "Importar datos" desde un JSON.
 - Debajo del botón de importar: "Se exporta kalk-backup-AAAA-MM-DD.json".
-- Bloque **"Acerca de Kalk"** (`design/L3`): ícono a color, wordmark una tinta, "Tu planilla de fuerza, sin
-  papel. / Tus datos quedan en este teléfono." y la versión (`expo-application` en un build; en Expo Go, la de
-  `app.json`).
+- Bloque **"Acerca de Kalk"** (`design/L4`, propuesta aprobada): solo el ícono a color de 80 pt (sin wordmark),
+  "Tu planilla de fuerza, sin papel. / Tus datos quedan en este teléfono." y "Kalk 1.0.0 (12)" en una línea
+  (`expo-application` en un build; en Expo Go, la versión de `app.json` sin número de build).
 
 ## Carga de la app
 

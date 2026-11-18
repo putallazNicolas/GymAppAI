@@ -2,6 +2,38 @@
   "v": 3,
   "attachments": {},
   "boards": {
+    "L1-Revision-Logo.dc.html": {
+      "h": 2560,
+      "page": "marca",
+      "title": "L1 · Revisión del logo B3 contra «A · Plataforma»",
+      "w": 1600,
+      "x": 0,
+      "y": 0
+    },
+    "L2-Icono-y-Splash.dc.html": {
+      "h": 1460,
+      "page": "marca",
+      "title": "L2 · Ícono y splash (tras la aprobación)",
+      "w": 1600,
+      "x": 0,
+      "y": 3000
+    },
+    "L3-Marca-en-la-App.dc.html": {
+      "h": 1460,
+      "page": "marca",
+      "title": "L3 · Marca dentro de la app: dónde sí y dónde no",
+      "w": 1600,
+      "x": 1680,
+      "y": 3000
+    },
+    "S5-Notas-Marca.dc.html": {
+      "h": 2700,
+      "page": "marca",
+      "title": "S5 · Notas de marca para el desarrollador",
+      "w": 1100,
+      "x": 3360,
+      "y": 3000
+    },
     "A-Ficha.dc.html": {
       "h": 640,
       "page": "direcciones",
@@ -249,7 +281,7 @@
       "y": 3320
     },
     "S1-Tokens.dc.html": {
-      "h": 1300,
+      "h": 1580,
       "page": "plataforma",
       "title": "Sistema · Tokens",
       "w": 880,
@@ -287,10 +319,26 @@
   },
   "designSystems": [],
   "launch": {
-    "page": "ajustes-ux",
+    "page": "marca",
     "view": "canvas"
   },
   "notes": {
+    "marcaA": {
+      "kind": "title1",
+      "maxW": 1600,
+      "page": "marca",
+      "text": "Kalk · Parte 1: revisión del logo B3",
+      "x": 0,
+      "y": -260
+    },
+    "marcaB": {
+      "kind": "title1",
+      "maxW": 4460,
+      "page": "marca",
+      "text": "Kalk · Parte 2: integración en la app (cuando se apruebe)",
+      "x": 0,
+      "y": 2740
+    },
     "filaA": {
       "kind": "title1",
       "maxW": 1812,
@@ -394,7 +442,11 @@
     "P06c-Titulo-Estados.dc.html",
     "P08b-Crear-Ejercicio.dc.html",
     "P08c-Ejercicio-Propio.dc.html",
-    "S4-Notas-UX.dc.html"
+    "S4-Notas-UX.dc.html",
+    "L1-Revision-Logo.dc.html",
+    "L2-Icono-y-Splash.dc.html",
+    "L3-Marca-en-la-App.dc.html",
+    "S5-Notas-Marca.dc.html"
   ],
   "pages": [
     {
@@ -408,6 +460,10 @@
     {
       "id": "ajustes-ux",
       "name": "Ajustes UX"
+    },
+    {
+      "id": "marca",
+      "name": "Marca"
     }
   ],
   "title": "Gym App Rediseño"

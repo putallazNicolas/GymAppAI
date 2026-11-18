@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Notas de marca para el desarrollador</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.num{font-family:'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums}
+pre,code{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace}
+code{color:#F4F4F2;font-size:12.5px}
+</style>
+</helmet>
+<div style="width:1100px;height:2700px;box-sizing:border-box;padding:48px;background:#0B0B0C;color:#F4F4F2;font-family:'Barlow',sans-serif;display:flex;flex-direction:column;gap:32px">
+
+  <header style="display:flex;flex-direction:column;gap:6px">
+    <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#FF5B1F">S5 · KALK · PARA CUANDO SE APRUEBE EL LOGO</span>
+    <h1 class="num" style="margin:0;font-size:56px;line-height:0.92;font-weight:800;text-transform:uppercase">Notas de marca para el desarrollador</h1>
+  </header>
+
+  <div style="padding:14px 18px;border-radius:14px;background:rgba(255,91,31,0.10);box-shadow:inset 0 0 0 1px rgba(255,91,31,0.45);font-size:14px;line-height:1.5;color:#C9C9CC"><b style="color:#F4F4F2">Paquete revisado</b> (<code>Kalk-logo-B3.zip</code>, LEEME v1.0). La sección 3 de <code>app.json</code> queda <b style="color:#F4F4F2">confirmada con tres correcciones</b>:<br>1. <code>imageWidth</code> del splash va en <b style="color:#F4F4F2">120</b>, no 200: el arte viene recortado a la K (90 % del cuadrado).<br>2. El array <code>plugins</code> tiene que conservar <code>"expo-router"</code>. Si se copia el ejemplo tal cual, se pierde y la navegación se rompe.<br>3. Se suma <code>web.favicon</code>.<br>Verifiqué los PNG: el ícono por defecto y el tintado son RGB sin alfa, y el oscuro, el splash y los de Android son RGBA, como corresponde.</div>
+
+  <section style="display:flex;flex-direction:column;gap:10px">
+    <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">1 · QUÉ ARCHIVO VA EN CADA LUGAR · CARPETA <code>apps/mobile/assets/brand/</code> (CONFIRMADA)</span>
+    <div style="border-radius:14px;border:1px solid #2A2A2E;overflow:hidden;font-size:13.5px;line-height:1.45">
+      <div style="display:grid;grid-template-columns:250px 300px minmax(0,1fr);gap:16px;padding:10px 16px;background:#1C1C1F;font-size:11px;font-weight:700;letter-spacing:0.12em;color:#9A9A9F"><span>ARCHIVO</span><span>VA EN</span><span>NOTA</span></div>
+      <div style="display:grid;grid-template-columns:250px 300px minmax(0,1fr);gap:16px;padding:10px 16px;border-top:1px solid #1F1F22;background:#141416"><code>ios/icon-1024.png</code><code>expo.icon · ios.icon.light</code><span style="color:#C9C9CC">Baldosa <code>#0B0B0C</code>, RGB sin alfa, sin esquinas (verificado).</span></div>
+      <div style="display:grid;grid-template-columns:250px 300px minmax(0,1fr);gap:16px;padding:10px 16px;border-top:1px solid #1F1F22;background:#141416"><code>ios/icon-dark-1024.png</code><code>ios.icon.dark</code><span style="color:#C9C9CC">K y brazo sobre transparente (RGBA).</span></div>
+      <div style="display:grid;grid-template-columns:250px 300px minmax(0,1fr);gap:16px;padding:10px 16px;border-top:1px solid #1F1F22;background:#141416"><code>ios/icon-tinted-1024.png</code><code>ios.icon.tinted</code><span style="color:#C9C9CC">Grises sobre negro (K blanca, brazo <code>#9A9A9A</code>), RGB.</span></div>
+      <div style="display:grid;grid-template-columns:250px 300px minmax(0,1fr);gap:16px;padding:10px 16px;border-top:1px solid #1F1F22;background:#141416"><code>kalk.icon</code> <span style="color:#7C7C82">(no viene)</span><code>ios.icon</code><span style="color:#C9C9CC">Icon Composer para iOS 26+. Se arma desde <code>src/icono/app-icon-master.svg</code> y, si llega, reemplaza a los tres PNG de iOS.</span></div>
+      <div style="display:grid;grid-template-columns:250px 300px minmax(0,1fr);gap:16px;padding:10px 16px;border-top:1px solid #1F1F22;background:#141416"><code>android/adaptive-foreground-1024.png</code><code>android.adaptiveIcon.foregroundImage</code><span style="color:#C9C9CC">La K al 36 % del lienzo: entra en la zona segura (radio máximo 25,4 % contra 30,6 % permitido).</span></div>
+      <div style="display:grid;grid-template-columns:250px 300px minmax(0,1fr);gap:16px;padding:10px 16px;border-top:1px solid #1F1F22;background:#141416"><code>android/adaptive-monochrome-1024.png</code><code>android.adaptiveIcon.monochromeImage</code><span style="color:#C9C9CC">K blanca sobre transparente. <code>adaptive-background-1024.png</code> no se usa: alcanza con <code>backgroundColor</code>.</span></div>
+      <div style="display:grid;grid-template-columns:250px 300px minmax(0,1fr);gap:16px;padding:10px 16px;border-top:1px solid #1F1F22;background:#141416"><code>splash/splash-icon-1024.png</code><code>plugin expo-splash-screen · image</code><span style="color:#C9C9CC">Recortado a la K, que ocupa el 90 % del cuadrado. Por eso va con <code>imageWidth: 120</code> (la K queda en unos 108 pt).</span></div>
+      <div style="display:grid;grid-template-columns:250px 300px minmax(0,1fr);gap:16px;padding:10px 16px;border-top:1px solid #1F1F22;background:#141416"><code>web/favicon-48.png</code><code>web.favicon</code><span style="color:#C9C9CC">Para la vista web y el smoke test de Playwright. <code>apple-touch-icon-180.png</code>, <code>favicon.svg</code> y <code>play-store-icon-512.png</code> no van al repo de la app: son para la landing y las tiendas.</span></div>
+      <div style="display:grid;grid-template-columns:250px 300px minmax(0,1fr);gap:16px;padding:10px 16px;border-top:1px solid #1F1F22;background:#141416"><code>logo/svg/*, logo/png/*</code><span style="color:#9A9A9F">No van al bundle</span><span style="color:#C9C9CC">El wordmark y la K se transcriben a componentes con <code>react-native-svg</code> (punto 3). Los <code>src/icono/*.svg</code> se guardan en <code>assets/brand/src/</code> como fuente, ya con el viewBox corregido (232 y 352).</span></div>
+      <div style="display:grid;grid-template-columns:250px 300px minmax(0,1fr);gap:16px;padding:10px 16px;border-top:1px solid #1F1F22;background:rgba(255,77,106,0.08)"><code>assets/images/icon.png, splash-icon.png, android-icon-*.png, favicon.png</code><span style="color:#FF4D6A">Se borran</span><span style="color:#C9C9CC">Después de migrar, para que no queden dos íconos en el repo.</span></div>
+    </div>
+  </section>
+
+  <section style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:start">
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">2 · <code>apps/mobile/app.json</code> (SOLO LO QUE CAMBIA)</span>
+      <pre style="margin:0;padding:16px;border-radius:14px;background:#141416;border:1px solid #2A2A2E;font-size:12px;line-height:1.55;color:#E4E4E2;white-space:pre">"expo": {
+  "name": "Kalk",
+  "scheme": "kalk",
+  "icon": "./assets/brand/ios/icon-1024.png",
+  "ios": {
+    "icon": {
+      "light": "./assets/brand/ios/icon-1024.png",
+      "dark": "./assets/brand/ios/icon-dark-1024.png",
+      "tinted": "./assets/brand/ios/icon-tinted-1024.png"
+    }
+  },
+  "android": {
+    "adaptiveIcon": {
+      "backgroundColor": "#0B0B0C",
+      "foregroundImage": "./assets/brand/android/adaptive-foreground-1024.png",
+      "monochromeImage": "./assets/brand/android/adaptive-monochrome-1024.png"
+    }
+  },
+  "web": { "favicon": "./assets/brand/web/favicon-48.png" },
+  "plugins": [
+    "expo-router",
+    ["expo-splash-screen", {
+      "image": "./assets/brand/splash/splash-icon-1024.png",
+      "imageWidth": 120,
+      "resizeMode": "contain",
+      "backgroundColor": "#0B0B0C"
+    }]
+  ]
+}</pre>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;font-size:13.5px;line-height:1.5;color:#C9C9CC">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">CORRECCIONES RESPECTO DEL REPO Y DEL LEEME §3</span>
+      <div style="padding:12px 14px;border-radius:12px;background:#141416;border:1px solid #2A2A2E"><b style="color:#F4F4F2">Rutas:</b> se conserva la estructura del paquete (<code>ios/</code>, <code>android/</code>, <code>splash/</code>, <code>web/</code>) dentro de <code>assets/brand/</code>, como sugiere el LEEME.</div>
+      <div style="padding:12px 14px;border-radius:12px;background:#141416;border:1px solid #2A2A2E"><b style="color:#F4F4F2">Fondo <code>#0B0F0D</code> → <code>#0B0B0C</code></b> en el splash y en el ícono adaptivo. Hoy hay un negro verdoso que no es <code>background</code> ni <code>brand.ink</code>, y se notaría el salto del splash a Hoy.</div>
+      <div style="padding:12px 14px;border-radius:12px;background:#141416;border:1px solid #2A2A2E"><b style="color:#F4F4F2"><code>android.adaptiveIcon.backgroundImage</code> se va:</b> alcanza con <code>backgroundColor</code>.</div>
+      <div style="padding:12px 14px;border-radius:12px;background:#141416;border:1px solid #2A2A2E"><b style="color:#F4F4F2"><code>ios.icon</code> como objeto</b> (light/dark/tinted) es el formato que acepta Expo para las tres apariencias. La alternativa es la ruta a un <code>.icon</code>. Validar con <code>npx expo config --type public</code>.</div>
+      <div style="padding:12px 14px;border-radius:12px;background:rgba(255,77,106,0.08);box-shadow:inset 0 0 0 1px rgba(255,77,106,0.35)"><b style="color:#F4F4F2">No cambian:</b> <code>slug</code> (está atado al proyecto de EAS), <code>ios.bundleIdentifier</code> y <code>android.package</code> (son la identidad de la app ya instalada y en TestFlight), <code>extra.eas.projectId</code>, <code>updates.url</code> y <code>DATABASE_NAME = 'gym-app.db'</code>. Renombrar la base deja al usuario sin sus datos.</div>
+      <div style="padding:12px 14px;border-radius:12px;background:#141416;border:1px solid #2A2A2E"><b style="color:#F4F4F2"><code>scheme</code> a <code>kalk</code>:</b> es opcional y seguro hoy, porque ninguna URL externa usa <code>gymapp://</code>. Anotarlo en <code>docs/DECISIONS.md</code>.</div>
+    </div>
+  </section>
+
+  <section style="display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:20px;align-items:start">
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">3 · WORDMARK Y K COMO SVG (NUNCA CON UNA TIPOGRAFÍA)</span>
+      <pre style="margin:0;padding:16px;border-radius:14px;background:#141416;border:1px solid #2A2A2E;font-size:11.5px;line-height:1.55;color:#E4E4E2;white-space:pre">// src/components/brand/KalkWordmark.tsx
+import Svg, { Polygon } from 'react-native-svg';
+import { brand } from '../../theme';
+
+type Props = { height?: number; tone?: 'mono' | 'color' };
+
+/** 232 × 52. tone 'mono' = una tinta hueso (default en la UI). */
+export function KalkWordmark({ height = 16, tone = 'mono' }: Props) {
+  const arm = tone === 'color' ? brand.signal : brand.bone;
+  return (
+    &lt;Svg
+      width={(height * 232) / 52}
+      height={height}
+      viewBox="0 0 232 52"
+      accessibilityRole="image"
+      accessibilityLabel="Kalk"
+    &gt;
+      &lt;Polygon fill={brand.bone} points="0,0 12,0 12,20 32,0 48,0 20,28 12,36 12,52 0,52" /&gt;
+      &lt;Polygon fill={arm} points="22,30 51,52 32,52 14,38" /&gt;
+      &lt;Polygon fill={brand.bone} points="64,52 82,0 98,0 116,52 102,52 90,17 78,52" /&gt;
+      &lt;Polygon fill={brand.bone} points="130,0 142,0 142,40 166,40 166,52 130,52" /&gt;
+      &lt;Polygon fill={brand.bone} points="180,0 192,0 192,20 212,0 228,0 200,28 192,36 192,52 180,52" /&gt;
+      &lt;Polygon fill={brand.bone} points="202,30 231,52 212,52 194,38" /&gt;
+    &lt;/Svg&gt;
+  );
+}
+
+// src/components/brand/KalkMark.tsx: viewBox 0 0 100 100
+// K:      25,24 37,24 37,44 57,24 73,24 45,52 37,60 37,76 25,76
+// brazo:  47,54 76,76 57,76 39,62
+// props: size, tile?: boolean (rect rx 22.4 fill brand.ink), tone</pre>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;font-size:13.5px;line-height:1.5;color:#C9C9CC">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">REGLAS DE CÓDIGO</span>
+      <div style="padding:12px 14px;border-radius:12px;background:#141416;border:1px solid #2A2A2E">Nunca <code>&lt;Text&gt;KALK&lt;/Text&gt;</code> con Barlow imitando el logo. El nombre como texto corrido («Kalk te sugiere…») sí va con la tipografía del cuerpo.</div>
+      <div style="padding:12px 14px;border-radius:12px;background:#141416;border:1px solid #2A2A2E">El wordmark mide 16 px de alto como mínimo en pantalla. En el header de Hoy: <code>height={16}</code>, <code>tone="mono"</code>.</div>
+      <div style="padding:12px 14px;border-radius:12px;background:#141416;border:1px solid #2A2A2E"><code>tone="color"</code> solo en «Acerca de Kalk» (y únicamente en el ícono; el wordmark de ese bloque va en mono) y en la réplica del splash.</div>
+      <div style="padding:12px 14px;border-radius:12px;background:#141416;border:1px solid #2A2A2E">Nunca dentro de un <code>Pressable</code>: la marca no es un botón.</div>
+      <div style="padding:12px 14px;border-radius:12px;background:#141416;border:1px solid #2A2A2E">Las coordenadas de la K son las del SVG de marketing, ya con el <code>translate(-1,0)</code> aplicado. El ícono de la app y el componente quedan idénticos al píxel.</div>
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F;margin-top:6px">4 · TOKENS NUEVOS (<code>theme.ts</code>)</span>
+      <pre style="margin:0;padding:14px;border-radius:12px;background:#141416;border:1px solid #2A2A2E;font-size:12px;line-height:1.55;color:#E4E4E2;white-space:pre">/** Marca Kalk. Literales a propósito: no
+ *  referencian colors.*, la UI puede cambiar
+ *  y la marca no. Solo para logo y splash. */
+export const brand = {
+  bone: '#F4F4F2',
+  signal: '#FF5B1F',
+  ink: '#0B0B0C',
+  tileRaised: '#1C1C1F', // a confirmar
+} as const;</pre>
+    </div>
+  </section>
+
+  <section style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:start">
+    <div style="display:flex;flex-direction:column;gap:10px;font-size:13.5px;line-height:1.5;color:#C9C9CC">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">5 · SPLASH Y CARGA (REEMPLAZA AL <code>LoadingState</code> DE <code>_layout.tsx</code>)</span>
+      <div style="padding:12px 14px;border-radius:12px;background:#141416;border:1px solid #2A2A2E">1. <code>SplashScreen.preventAutoHideAsync()</code> a nivel de módulo, en <code>app/_layout.tsx</code>.</div>
+      <div style="padding:12px 14px;border-radius:12px;background:#141416;border:1px solid #2A2A2E">2. Mientras faltan fuentes o SQLite, se dibuja <code>&lt;BrandSplash /&gt;</code>: fondo <code>brand.ink</code> y la K centrada en un <code>Svg</code> de 120 × 120 con <code>viewBox="21 21 58 58"</code>, el mismo encuadre que <code>splash-icon.svg</code>. Así coincide al píxel con el nativo. En su <code>onLayout</code> se llama a <code>SplashScreen.hideAsync()</code>: el cambio es invisible.</div>
+      <div style="padding:12px 14px;border-radius:12px;background:#141416;border:1px solid #2A2A2E">3. Si pasan 1,5 s, aparece «Preparando tus datos…» (caption, <code>textTertiary</code>), 40 pt debajo de la K.</div>
+      <div style="padding:12px 14px;border-radius:12px;background:#141416;border:1px solid #2A2A2E">4. Cuando todo está listo: la K escala 1 → 0,9 y se va (200 ms, easeIn). Las tabs entran con fundido y suben 8 pt (280 ms, easeOut, delay 80). Con <code>useReducedMotion()</code>, solo un fundido de 150 ms. Si falla la carga, el <code>ErrorState</code> actual se muestra sobre el mismo fondo.</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;font-size:13.5px;line-height:1.5;color:#C9C9CC">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">6 · TEXTOS QUE CAMBIAN</span>
+      <div style="padding:12px 14px;border-radius:12px;background:#141416;border:1px solid #2A2A2E;display:flex;flex-direction:column;gap:6px">
+        <span><code>app.json</code> · <code>name</code>: Gym App → <b style="color:#F4F4F2">Kalk</b></span>
+        <span><code>(tabs)/perfil.tsx</code>: «GYM APP / Versión» → bloque <b style="color:#F4F4F2">Acerca de Kalk</b> (L3)</span>
+        <span><code>home/HomeEmpty.tsx</code>: «…y <b style="color:#F4F4F2">Kalk</b> te sugiere qué entrenar cada día.»</span>
+        <span><code>(tabs)/index.tsx</code>: header de Hoy con <code>KalkWordmark</code> (sin cambio de textos)</span>
+        <span>core · <code>exportFileName</code>: <code>gym-app-backup-…</code> → <code>kalk-backup-…</code> (es back: va como tarea aparte, con su test)</span>
+        <span><code>README.md</code>, <code>docs/INSTALAR-EN-IPHONE.md</code>, descripción de <code>packages/core</code>: Gym App → Kalk</span>
+      </div>
+      <span style="font-size:12px;color:#7C7C82">Los imports <code>@gym/core</code> y el nombre del repo no cambian: son internos.</span>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:10px">
+    <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">7 · QUÉ SE VALIDA EN EXPO GO Y QUÉ NO</span>
+    <div style="border-radius:14px;border:1px solid #2A2A2E;overflow:hidden;font-size:13.5px;line-height:1.45">
+      <div style="display:grid;grid-template-columns:330px 130px minmax(0,1fr);gap:16px;padding:10px 16px;background:#1C1C1F;font-size:11px;font-weight:700;letter-spacing:0.12em;color:#9A9A9F"><span>QUÉ</span><span>EXPO GO</span><span>CÓMO SE VALIDA</span></div>
+      <div style="display:grid;grid-template-columns:330px 130px minmax(0,1fr);gap:16px;padding:10px 16px;border-top:1px solid #1F1F22;background:#141416"><span>Wordmark y K en Hoy, P02 y Perfil</span><b style="color:#3DDC84">Sí</b><span style="color:#C9C9CC">En el iPhone, con Expo Go.</span></div>
+      <div style="display:grid;grid-template-columns:330px 130px minmax(0,1fr);gap:16px;padding:10px 16px;border-top:1px solid #1F1F22;background:#141416"><span>Réplica del splash, «Preparando…» y transición a Hoy</span><b style="color:#3DDC84">Sí</b><span style="color:#C9C9CC">Es código RN. Para ver la espera, forzar una demora en desarrollo.</span></div>
+      <div style="display:grid;grid-template-columns:330px 130px minmax(0,1fr);gap:16px;padding:10px 16px;border-top:1px solid #1F1F22;background:#141416"><span>Textos nuevos y nombre del archivo exportado</span><b style="color:#3DDC84">Sí</b><span style="color:#C9C9CC">Exportar desde Perfil y mirar el nombre en la hoja de compartir.</span></div>
+      <div style="display:grid;grid-template-columns:330px 130px minmax(0,1fr);gap:16px;padding:10px 16px;border-top:1px solid #1F1F22;background:#141416"><span>Config resuelta de <code>app.json</code> (rutas, colores)</span><b style="color:#3DDC84">Sí, sin app</b><span style="color:#C9C9CC"><code>npx expo config --type public</code> y <code>npx expo-doctor</code>, en local o en CI.</span></div>
+      <div style="display:grid;grid-template-columns:330px 130px minmax(0,1fr);gap:16px;padding:10px 16px;border-top:1px solid #1F1F22;background:rgba(255,77,106,0.06)"><span>Ícono en pantalla de inicio (claro, oscuro, tintado)</span><b style="color:#FF4D6A">No</b><span style="color:#C9C9CC">Expo Go muestra su propio ícono. Hace falta un build de preview o producción, instalado en el iPhone.</span></div>
+      <div style="display:grid;grid-template-columns:330px 130px minmax(0,1fr);gap:16px;padding:10px 16px;border-top:1px solid #1F1F22;background:rgba(255,77,106,0.06)"><span>Splash nativo y el nombre «Kalk» bajo el ícono</span><b style="color:#FF4D6A">No</b><span style="color:#C9C9CC">Lo mismo: solo en un build. Revisar que no haya salto de color entre el nativo y la réplica.</span></div>
+      <div style="display:grid;grid-template-columns:330px 130px minmax(0,1fr);gap:16px;padding:10px 16px;border-top:1px solid #1F1F22;background:rgba(255,77,106,0.06)"><span>Ícono adaptivo y temático de Android</span><b style="color:#FF4D6A">No</b><span style="color:#C9C9CC">Requiere un build de Android. Hoy no está en el plan; validar si algún día se publica.</span></div>
+      <div style="display:grid;grid-template-columns:330px 130px minmax(0,1fr);gap:16px;padding:10px 16px;border-top:1px solid #1F1F22;background:#141416"><span>Ficha de la App Store</span><b style="color:#9A9A9F">—</b><span style="color:#C9C9CC">Se carga en App Store Connect, no en el código.</span></div>
+    </div>
+    <span style="font-size:13px;line-height:1.5;color:#9A9A9F">Los builds los genera el dueño: por las reglas del repo, los agentes nunca corren <code>eas build</code> ni <code>eas submit</code>. Orden sugerido: (1) marketing entrega los cambios bloqueantes de L1, (2) se integra y valida todo lo de Expo Go, (3) el dueño hace un build de preview para ver el ícono y el splash.</span>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1100,"height":2700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

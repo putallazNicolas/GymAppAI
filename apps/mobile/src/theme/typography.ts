@@ -34,6 +34,10 @@ export const type = {
   /** Chart axis labels (Y and week dates), 12. */
   numAxis: { fontFamily: fonts.displayMedium, fontSize: 12, lineHeight: 14, ...tnum },
   numS: { fontFamily: fonts.displayMedium, fontSize: 17, lineHeight: 20, ...tnum },
+  /** "Kalk" next to the version in "Acerca de Kalk" (design/L4). */
+  aboutName: { fontFamily: fonts.bodySemi, fontSize: 14, lineHeight: 20 },
+  /** The version next to it: "1.0.0 (12)". */
+  aboutVersion: { fontFamily: fonts.displayMedium, fontSize: 15, lineHeight: 20, ...tnum },
   /** Exercise name inside a selector card, 24. */
   displayName: { fontFamily: fonts.displayBold, fontSize: 24, lineHeight: 26, ...upper },
   /** kg / lb segmented pill labels, 22. */

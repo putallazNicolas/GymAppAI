@@ -3,6 +3,7 @@ import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import { Children, type ReactElement, type ReactNode } from 'react';
 import { hideAsync } from 'expo-splash-screen';
 
+import { AboutKalk } from '../components/brand/AboutKalk';
 import { BrandSplash } from '../components/brand/BrandSplash';
 import { KalkMark } from '../components/brand/KalkMark';
 import { KalkWordmark } from '../components/brand/KalkWordmark';
@@ -37,6 +38,10 @@ describe('KalkWordmark', () => {
     const color = fills(KalkWordmark({ tone: 'color' }));
     expect(color.filter((f) => f === brand.signal)).toHaveLength(1);
     expect(color[1]).toBe(brand.signal);
+  });
+
+  it('"muted" is the whole wordmark in one gray ink (the signature at the foot of Hoy)', () => {
+    expect(new Set(fills(KalkWordmark({ tone: 'muted' })))).toEqual(new Set([brand.muted]));
   });
 });
 
@@ -90,6 +95,19 @@ describe('BrandSplash', () => {
     );
     expect(screen.getByText('No pudimos abrir tus datos.')).toBeTruthy();
     expect(screen.queryByLabelText('Kalk')).toBeNull();
+  });
+});
+
+describe('AboutKalk', () => {
+  it('shows only the icon (no wordmark) and the name as text next to the version', async () => {
+    await render(<AboutKalk />);
+    // One drawn logo: the 80 pt icon. The name is text, never the wordmark.
+    expect(screen.getAllByRole('image', { name: 'Kalk' })).toHaveLength(1);
+    expect(screen.getByRole('image', { name: 'Kalk' }).props.width).toBe(80);
+    expect(screen.getByText('Kalk')).toBeTruthy();
+    // The version comes from expo-application (mocked by jest-expo as "mock").
+    expect(screen.getByLabelText(/^Kalk, versión \S+/)).toBeTruthy();
+    expect(screen.queryByText(/^Versión/)).toBeNull();
   });
 });
 

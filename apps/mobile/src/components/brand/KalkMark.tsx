@@ -19,10 +19,12 @@ interface KalkMarkProps {
   tile?: boolean;
   /** 'mono' = one ink, bone. 'color' = orange arm (icon, splash, "Acerca de Kalk" only). */
   tone?: 'mono' | 'color';
+  /** 1-unit outline around the tile, so it reads on a dark surface (design/L4, "Acerca de Kalk"). */
+  outline?: string;
 }
 
 /** The K of Kalk (design/S5 §3), identical to the app icon. Not interactive. */
-export function KalkMark({ size = 56, tile = false, tone = 'color' }: KalkMarkProps) {
+export function KalkMark({ size = 56, tile = false, tone = 'color', outline }: KalkMarkProps) {
   const s = Math.max(size, MARK_MIN_SIZE);
   return (
     <Svg
@@ -34,6 +36,17 @@ export function KalkMark({ size = 56, tile = false, tone = 'color' }: KalkMarkPr
       accessibilityLabel="Kalk"
     >
       {tile ? <Rect width={100} height={100} rx={TILE_RADIUS} fill={brand.ink} /> : null}
+      {tile && outline ? (
+        <Rect
+          x={0.5}
+          y={0.5}
+          width={99}
+          height={99}
+          rx={TILE_RADIUS - 0.4}
+          fill="none"
+          stroke={outline}
+        />
+      ) : null}
       <Polygon fill={brand.bone} points={K_BODY} />
       <Polygon fill={tone === 'color' ? brand.signal : brand.bone} points={K_ARM} />
     </Svg>

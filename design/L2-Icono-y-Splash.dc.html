@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Ícono y splash de Kalk</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.num{font-family:'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums}
+code{font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:12px;color:#F4F4F2}
+</style>
+</helmet>
+<div style="width:1600px;height:1460px;box-sizing:border-box;padding:56px;background:#0B0B0C;color:#F4F4F2;font-family:'Barlow',sans-serif;display:flex;flex-direction:column;gap:40px">
+
+  <header style="display:flex;flex-direction:column;gap:6px">
+    <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#FF5B1F">L2 · PARA DESPUÉS DE LA APROBACIÓN · CON LOS CAMBIOS DE L1</span>
+    <h1 class="num" style="margin:0;font-size:56px;line-height:0.92;font-weight:800;text-transform:uppercase">Ícono y splash</h1>
+  </header>
+
+  <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start">
+    <section style="display:flex;flex-direction:column;gap:12px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">PANTALLA DE INICIO · TRES APARIENCIAS DE IOS</span>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px">
+        <div style="height:250px;border-radius:24px;background:#C7CFDA;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px">
+          <svg width="90" height="90" viewBox="0 0 100 100" role="img" aria-label="Ícono claro"><rect width="100" height="100" rx="22.4" fill="#0B0B0C"></rect><g transform="translate(-1,0)"><polygon points="26,24 38,24 38,44 58,24 74,24 46,52 38,60 38,76 26,76" fill="#F4F4F2"></polygon><polygon points="48,54 77,76 58,76 40,62" fill="#FF5B1F"></polygon></g></svg>
+          <span style="font-size:13px;font-weight:600;color:#1C1C1E">Kalk</span>
+        </div>
+        <div style="height:250px;border-radius:24px;background:#1B1E25;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px">
+          <svg width="90" height="90" viewBox="0 0 100 100" role="img" aria-label="Ícono oscuro"><rect width="100" height="100" rx="22.4" fill="#1C1C1E"></rect><g transform="translate(-1,0)"><polygon points="26,24 38,24 38,44 58,24 74,24 46,52 38,60 38,76 26,76" fill="#F4F4F2"></polygon><polygon points="48,54 77,76 58,76 40,62" fill="#FF5B1F"></polygon></g></svg>
+          <span style="font-size:13px;font-weight:600;color:#F4F4F2">Kalk</span>
+        </div>
+        <div style="height:250px;border-radius:24px;background:#10141C;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px">
+          <svg width="90" height="90" viewBox="0 0 100 100" role="img" aria-label="Ícono tintado"><rect width="100" height="100" rx="22.4" fill="#141A26"></rect><g transform="translate(-1,0)"><polygon points="26,24 38,24 38,44 58,24 74,24 46,52 38,60 38,76 26,76" fill="#C9D6FF"></polygon><polygon points="48,54 77,76 58,76 40,62" fill="#7083B8"></polygon></g></svg>
+          <span style="font-size:13px;font-weight:600;color:#C9D6FF">Kalk</span>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;font-size:12.5px;line-height:1.45;color:#9A9A9F">
+        <span><b style="color:#F4F4F2">Claro (default)</b>: K + brazo sobre baldosa <code>#0B0B0C</code>, 1024 × 1024, opaco y sin esquinas.</span>
+        <span><b style="color:#F4F4F2">Oscuro</b>: K + brazo sobre transparente; el fondo lo pone iOS.</span>
+        <span><b style="color:#F4F4F2">Tintado</b>: grises sobre negro (K blanca, brazo gris); iOS aplica el color.</span>
+      </div>
+      <span style="font-size:13px;line-height:1.45;color:#C9C9CC">El nombre bajo el ícono es «Kalk» (<code>expo.name</code>): entra entero, sin cortes.</span>
+    </section>
+
+    <section style="display:flex;flex-direction:column;gap:12px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">FICHA DE LA APP STORE (MAQUETA)</span>
+      <div style="padding:22px;border-radius:24px;background:#F4F4F2;color:#0B0B0C;display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;gap:16px;align-items:center">
+          <svg width="112" height="112" viewBox="0 0 100 100" role="img" aria-label="Ícono de Kalk en la ficha"><rect width="100" height="100" rx="22.4" fill="#0B0B0C"></rect><g transform="translate(-1,0)"><polygon points="26,24 38,24 38,44 58,24 74,24 46,52 38,60 38,76 26,76" fill="#F4F4F2"></polygon><polygon points="48,54 77,76 58,76 40,62" fill="#FF5B1F"></polygon></g></svg>
+          <div style="flex:1;display:flex;flex-direction:column;gap:3px">
+            <span style="font-size:24px;font-weight:700">Kalk</span>
+            <span style="font-size:15px;color:#55554F">Registro de fuerza, sin papel</span>
+            <span style="margin-top:8px;align-self:flex-start;height:32px;padding:0 18px;border-radius:16px;background:#1C1C1F;color:#F4F4F2;display:flex;align-items:center;font-size:14px;font-weight:700">Obtener</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">
+          <div style="height:230px;border-radius:16px;background:#0B0B0C;color:#F4F4F2;padding:14px 12px;box-sizing:border-box;display:flex;flex-direction:column;gap:10px">
+            <span class="num" style="font-size:20px;line-height:1;font-weight:800;text-transform:uppercase">Cargá una serie con un toque</span>
+            <span style="flex:1;border-radius:10px;background:#141416;box-shadow:inset 0 0 0 1px rgba(255,91,31,0.45);display:flex;flex-direction:column;gap:5px;padding:8px"><span style="height:18px;border-radius:5px;background:rgba(61,220,132,0.18)"></span><span style="height:18px;border-radius:5px;background:rgba(61,220,132,0.18)"></span><span style="height:20px;border-radius:5px;box-shadow:inset 0 0 0 1.5px #FF5B1F"></span><span style="height:18px;border-radius:5px;background:#1C1C1F"></span></span>
+          </div>
+          <div style="height:230px;border-radius:16px;background:#0B0B0C;color:#F4F4F2;padding:14px 12px;box-sizing:border-box;display:flex;flex-direction:column;gap:10px">
+            <span class="num" style="font-size:20px;line-height:1;font-weight:800;text-transform:uppercase">Tu e1RM, semana a semana</span>
+            <svg viewBox="0 0 100 60" style="flex:1;width:100%" aria-hidden="true"><path d="M2 50L18 44L34 38L50 40L66 26L82 20L98 10L98 60L2 60Z" fill="rgba(255,91,31,0.22)"></path><path d="M2 50L18 44L34 38L50 40L66 26L82 20L98 10" fill="none" stroke="#FF5B1F" stroke-width="2"></path></svg>
+          </div>
+          <div style="height:230px;border-radius:16px;background:#0B0B0C;color:#F4F4F2;padding:14px 12px;box-sizing:border-box;display:flex;flex-direction:column;gap:10px">
+            <span class="num" style="font-size:20px;line-height:1;font-weight:800;text-transform:uppercase">Tus datos, en tu teléfono</span>
+            <span style="flex:1;display:flex;align-items:center;justify-content:center"><svg width="64" height="64" viewBox="0 0 100 100" aria-hidden="true"><g transform="translate(-1,0)"><polygon points="26,24 38,24 38,44 58,24 74,24 46,52 38,60 38,76 26,76" fill="#F4F4F2"></polygon><polygon points="48,54 77,76 58,76 40,62" fill="#FF5B1F"></polygon></g></svg></span>
+          </div>
+        </div>
+      </div>
+      <span style="font-size:12.5px;line-height:1.45;color:#9A9A9F">El subtítulo tiene 29 caracteres (el límite es 30). Las capturas usan pantallas reales de la app, con el título en Barlow Condensed y sin el wordmark: el nombre ya está arriba.</span>
+    </section>
+  </div>
+
+  <section style="display:flex;flex-direction:column;gap:14px">
+    <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">SPLASH Y TRANSICIÓN A HOY</span>
+    <div style="display:grid;grid-template-columns:repeat(4,240px) minmax(0,1fr);gap:20px;align-items:start">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="height:520px;border-radius:30px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;display:flex;align-items:center;justify-content:center">
+          <svg width="128" height="128" viewBox="0 0 100 100" role="img" aria-label="Splash: K de Kalk centrada"><g transform="translate(-1,0)"><polygon points="26,24 38,24 38,44 58,24 74,24 46,52 38,60 38,76 26,76" fill="#F4F4F2"></polygon><polygon points="48,54 77,76 58,76 40,62" fill="#FF5B1F"></polygon></g></svg>
+        </div>
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.1em;color:#FF5B1F">1 · SPLASH NATIVO</span>
+        <span style="font-size:12.5px;line-height:1.45;color:#9A9A9F">Fondo <code>#0B0B0C</code> y la K sin baldosa, centrada, de unos 108 pt de alto (13 % de la pantalla). El arte del paquete (<code>splash-icon-1024.png</code>) viene recortado a la K, que ocupa el 90 % del cuadrado: va con <code>imageWidth: 120</code>, no 200. Con 200, la K mediría unos 180 pt. Sin wordmark ni texto.</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="height:520px;border-radius:30px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px">
+          <svg width="128" height="128" viewBox="0 0 100 100" aria-hidden="true"><g transform="translate(-1,0)"><polygon points="26,24 38,24 38,44 58,24 74,24 46,52 38,60 38,76 26,76" fill="#F4F4F2"></polygon><polygon points="48,54 77,76 58,76 40,62" fill="#FF5B1F"></polygon></g></svg>
+          <span style="font-size:13px;color:#7C7C82">Preparando tus datos…</span>
+        </div>
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.1em;color:#FF5B1F">2 · CARGA (SI TARDA)</span>
+        <span style="font-size:12.5px;line-height:1.45;color:#9A9A9F">Es una réplica exacta del splash dibujada en RN, mientras cargan las fuentes y SQLite. El texto aparece solo si pasan más de 1,5 s. Sin spinner.</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="height:520px;border-radius:30px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;position:relative;overflow:hidden">
+          <div style="position:absolute;inset:0;padding:40px 12px 0;opacity:0.55;display:flex;flex-direction:column;gap:8px;transform:translateY(6px)">
+            <svg width="54" height="12" viewBox="0 0 232 52" aria-hidden="true"><g fill="#F4F4F2"><polygon points="0,0 12,0 12,20 32,0 48,0 20,28 12,36 12,52 0,52"></polygon><polygon points="22,30 51,52 32,52 14,38"></polygon><polygon points="64,52 82,0 98,0 116,52 102,52 90,17 78,52"></polygon><polygon points="130,0 142,0 142,40 166,40 166,52 130,52"></polygon><polygon points="180,0 192,0 192,20 212,0 228,0 200,28 192,36 192,52 180,52"></polygon><polygon points="202,30 231,52 212,52 194,38"></polygon></g></svg>
+            <span class="num" style="font-size:24px;font-weight:800;text-transform:uppercase">Buenas tardes</span>
+            <span style="height:120px;border-radius:12px;background:#141416"></span>
+          </div>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.45">
+            <svg width="115" height="115" viewBox="0 0 100 100" aria-hidden="true"><g transform="translate(-1,0)"><polygon points="26,24 38,24 38,44 58,24 74,24 46,52 38,60 38,76 26,76" fill="#F4F4F2"></polygon><polygon points="48,54 77,76 58,76 40,62" fill="#FF5B1F"></polygon></g></svg>
+          </div>
+        </div>
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.1em;color:#FF5B1F">3 · TRANSICIÓN</span>
+        <span style="font-size:12.5px;line-height:1.45;color:#9A9A9F">La K escala 1 → 0,9 y se desvanece (200 ms, easeIn). Hoy entra con fundido y sube de +8 a 0 pt (280 ms, easeOut, 80 ms después).</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="height:520px;border-radius:30px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;padding:40px 12px 0;box-sizing:border-box;display:flex;flex-direction:column;gap:8px">
+          <svg width="54" height="12" viewBox="0 0 232 52" role="img" aria-label="Kalk"><g fill="#F4F4F2"><polygon points="0,0 12,0 12,20 32,0 48,0 20,28 12,36 12,52 0,52"></polygon><polygon points="22,30 51,52 32,52 14,38"></polygon><polygon points="64,52 82,0 98,0 116,52 102,52 90,17 78,52"></polygon><polygon points="130,0 142,0 142,40 166,40 166,52 130,52"></polygon><polygon points="180,0 192,0 192,20 212,0 228,0 200,28 192,36 192,52 180,52"></polygon><polygon points="202,30 231,52 212,52 194,38"></polygon></g></svg>
+          <span style="font-size:9px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">JUEVES 15 DE OCTUBRE</span>
+          <span class="num" style="font-size:24px;line-height:0.95;font-weight:800;text-transform:uppercase">Buenas tardes</span>
+          <span style="padding:10px;border-radius:12px;background:#141416;border:1px solid #2A2A2E;display:flex;flex-direction:column;gap:8px"><span style="font-size:8px;font-weight:700;letter-spacing:0.14em;color:#FF5B1F">ENTRENAMIENTO DE HOY</span><span class="num" style="font-size:26px;line-height:0.9;font-weight:800;text-transform:uppercase">Piernas A</span><span style="height:34px;border-radius:10px;background:#FF5B1F;color:#0B0B0C;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800">Empezar</span></span>
+        </div>
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.1em;color:#FF5B1F">4 · HOY</span>
+        <span style="font-size:12.5px;line-height:1.45;color:#9A9A9F">El único naranja visible es acción. La marca queda arriba, chica y en una tinta (ver L3).</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;font-size:13.5px;line-height:1.5;color:#C9C9CC">
+        <div style="padding:14px 16px;border-radius:12px;background:#141416;border:1px solid #2A2A2E;display:flex;flex-direction:column;gap:6px">
+          <b style="color:#F4F4F2">Línea de tiempo</b>
+          <div style="display:flex;height:10px;border-radius:5px;overflow:hidden" aria-hidden="true"><span style="flex:4;background:#2A2A2E"></span><span style="flex:2;background:#3A3A3F"></span><span style="flex:3;background:#FF5B1F"></span></div>
+          <div class="num" style="display:flex;justify-content:space-between;font-size:14px;color:#9A9A9F"><span>0 nativo</span><span>listo</span><span>+80</span><span>+360 ms</span></div>
+        </div>
+        <div style="padding:14px 16px;border-radius:12px;background:#141416;border:1px solid #2A2A2E"><b style="color:#F4F4F2">Por qué una réplica en RN:</b> el splash nativo no se anima. Se oculta en el mismo frame en que se dibuja la réplica idéntica (<code>SplashScreen.hideAsync()</code> después del primer layout), así no hay salto, y la animación ocurre en la réplica.</div>
+        <div style="padding:14px 16px;border-radius:12px;background:#141416;border:1px solid #2A2A2E"><b style="color:#F4F4F2">Reduce Motion:</b> sin escala, solo un fundido cruzado de 150 ms.</div>
+        <div style="padding:14px 16px;border-radius:12px;background:rgba(255,91,31,0.10);box-shadow:inset 0 0 0 1px rgba(255,91,31,0.45)"><b style="color:#F4F4F2">Ojo:</b> el ícono y el splash nativo solo se ven en un build (preview o producción), no en Expo Go. La réplica y la transición sí se pueden probar en Expo Go. Detalle en S5.</div>
+      </div>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1600,"height":1460}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

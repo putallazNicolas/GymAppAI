@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Marca dentro de la app</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.num{font-family:'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums}
+code{font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:12px;color:#F4F4F2}
+</style>
+</helmet>
+<div style="width:1600px;height:1460px;box-sizing:border-box;padding:56px;background:#0B0B0C;color:#F4F4F2;font-family:'Barlow',sans-serif;display:flex;flex-direction:column;gap:36px">
+
+  <header style="display:flex;align-items:flex-end;justify-content:space-between;gap:40px">
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#FF5B1F">L3 · PARA DESPUÉS DE LA APROBACIÓN</span>
+      <h1 class="num" style="margin:0;font-size:56px;line-height:0.92;font-weight:800;text-transform:uppercase">La marca adentro: lo justo</h1>
+    </div>
+    <span style="font-size:15px;line-height:1.5;color:#C9C9CC;max-width:560px">La marca aparece en tres lugares de la app: el header de Hoy, «Acerca de Kalk» y la carga. En todo lo demás manda la herramienta: los números y la acción en naranja.</span>
+  </header>
+
+  <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;align-items:start">
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.1em;color:#3DDC84">SÍ · HEADER DE HOY</span>
+      <div style="height:520px;border-radius:30px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;padding:44px 16px 0;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <svg width="71" height="16" viewBox="0 0 232 52" role="img" aria-label="Kalk"><g fill="#F4F4F2"><polygon points="0,0 12,0 12,20 32,0 48,0 20,28 12,36 12,52 0,52"></polygon><polygon points="22,30 51,52 32,52 14,38"></polygon><polygon points="64,52 82,0 98,0 116,52 102,52 90,17 78,52"></polygon><polygon points="130,0 142,0 142,40 166,40 166,52 130,52"></polygon><polygon points="180,0 192,0 192,20 212,0 228,0 200,28 192,36 192,52 180,52"></polygon><polygon points="202,30 231,52 212,52 194,38"></polygon></g></svg>
+          <span style="display:flex;gap:3px" aria-hidden="true"><span style="width:12px;height:4px;border-radius:2px;background:#3DDC84"></span><span style="width:12px;height:4px;border-radius:2px;background:#2A2A2E"></span><span style="width:12px;height:4px;border-radius:2px;background:#2A2A2E"></span><span style="width:12px;height:4px;border-radius:2px;background:#2A2A2E"></span></span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:3px;margin-top:6px"><span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">JUEVES 15 DE OCTUBRE</span><span class="num" style="font-size:32px;line-height:0.95;font-weight:800;text-transform:uppercase">Buenas tardes</span></div>
+        <div style="margin-top:8px;padding:14px;border-radius:16px;background:#141416;border:1px solid #2A2A2E;display:flex;flex-direction:column;gap:10px"><span style="font-size:10px;font-weight:700;letter-spacing:0.14em;color:#FF5B1F">ENTRENAMIENTO DE HOY</span><span class="num" style="font-size:34px;line-height:0.92;font-weight:800;text-transform:uppercase">Piernas A</span><span style="height:48px;border-radius:14px;background:#FF5B1F;color:#0B0B0C;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800">Empezar</span></div>
+      </div>
+      <span style="font-size:13px;line-height:1.5;color:#C9C9CC">Wordmark <b style="color:#F4F4F2">una tinta hueso, 16 px</b>, arriba a la izquierda, en lugar de un renglón vacío. Lo de abajo no cambia: fecha, saludo en Barlow y medidor semanal. No es un botón y no se toca.</span>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.1em;color:#3DDC84">SÍ · HOY VACÍO (PRIMER USO, P02)</span>
+      <div style="height:520px;border-radius:30px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;padding:44px 16px 0;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:column;gap:10px">
+        <svg width="71" height="16" viewBox="0 0 232 52" role="img" aria-label="Kalk"><g fill="#F4F4F2"><polygon points="0,0 12,0 12,20 32,0 48,0 20,28 12,36 12,52 0,52"></polygon><polygon points="22,30 51,52 32,52 14,38"></polygon><polygon points="64,52 82,0 98,0 116,52 102,52 90,17 78,52"></polygon><polygon points="130,0 142,0 142,40 166,40 166,52 130,52"></polygon><polygon points="180,0 192,0 192,20 212,0 228,0 200,28 192,36 192,52 180,52"></polygon><polygon points="202,30 231,52 212,52 194,38"></polygon></g></svg>
+        <div style="display:flex;flex-direction:column;gap:3px;margin-top:6px"><span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">JUEVES 15 DE OCTUBRE</span><span class="num" style="font-size:32px;line-height:0.95;font-weight:800;text-transform:uppercase">Bienvenido</span></div>
+        <div style="margin-top:8px;padding:20px 14px 14px;border-radius:18px;background:#141416;border:1px solid #2A2A2E;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px">
+          <svg width="200" height="68" viewBox="0 0 320 110" aria-hidden="true"><rect x="44" y="12" width="20" height="86" rx="4" fill="none" stroke="#3A3A3F" stroke-width="2" stroke-dasharray="5 5"></rect><rect x="256" y="12" width="20" height="86" rx="4" fill="none" stroke="#3A3A3F" stroke-width="2" stroke-dasharray="5 5"></rect><rect x="8" y="49" width="80" height="12" rx="3" fill="#2A2A2E"></rect><rect x="232" y="49" width="80" height="12" rx="3" fill="#2A2A2E"></rect><rect x="94" y="52" width="132" height="6" rx="3" fill="#5E5E64"></rect></svg>
+          <span class="num" style="font-size:24px;font-weight:800;text-transform:uppercase">La barra está vacía</span>
+          <span style="font-size:13px;line-height:1.45;color:#C9C9CC">Armá tu primera rutina y <b style="color:#F4F4F2">Kalk</b> te sugiere qué entrenar cada día.</span>
+          <span style="margin-top:4px;align-self:stretch;height:46px;border-radius:14px;background:#FF5B1F;color:#0B0B0C;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800">Armá tu primera rutina</span>
+        </div>
+      </div>
+      <span style="font-size:13px;line-height:1.5;color:#C9C9CC">Mismo header que Hoy. El estado vacío <b style="color:#F4F4F2">no lleva logo</b>: la barra vacía es la ilustración. Lo único que cambia es la frase, que nombra la app una vez, como texto.</span>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.1em;color:#3DDC84">SÍ · PERFIL · ACERCA DE KALK</span>
+      <div style="height:520px;border-radius:30px;background:#0B0B0C;box-shadow:inset 0 0 0 1px #2A2A2E;padding:24px 16px 0;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:column;gap:12px">
+        <span style="height:52px;border-radius:14px;background:#FF5B1F;color:#0B0B0C;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800">Exportar datos</span>
+        <span style="height:48px;border-radius:14px;box-shadow:inset 0 0 0 1.5px #3A3A3F;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700">Importar datos</span>
+        <span style="font-size:11px;color:#7C7C82;text-align:center">Se exporta kalk-backup-2026-10-15.json</span>
+        <div style="margin-top:40px;padding:18px 16px;border-radius:16px;background:#141416;border:1px solid #2A2A2E;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center">
+          <span style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">ACERCA DE KALK</span>
+          <svg width="56" height="56" viewBox="0 0 100 100" role="img" aria-label="Ícono de Kalk"><rect width="100" height="100" rx="22.4" fill="#0B0B0C"></rect><g transform="translate(-1,0)"><polygon points="26,24 38,24 38,44 58,24 74,24 46,52 38,60 38,76 26,76" fill="#F4F4F2"></polygon><polygon points="48,54 77,76 58,76 40,62" fill="#FF5B1F"></polygon></g></svg>
+          <svg width="80" height="18" viewBox="0 0 232 52" role="img" aria-label="Kalk"><polygon points="0,0 12,0 12,20 32,0 48,0 20,28 12,36 12,52 0,52" fill="#F4F4F2"></polygon><polygon points="22,30 51,52 32,52 14,38" fill="#F4F4F2"></polygon><polygon points="64,52 82,0 98,0 116,52 102,52 90,17 78,52" fill="#F4F4F2"></polygon><polygon points="130,0 142,0 142,40 166,40 166,52 130,52" fill="#F4F4F2"></polygon><polygon points="180,0 192,0 192,20 212,0 228,0 200,28 192,36 192,52 180,52" fill="#F4F4F2"></polygon><polygon points="202,30 231,52 212,52 194,38" fill="#F4F4F2"></polygon></svg>
+          <span style="font-size:13px;line-height:1.45;color:#C9C9CC">Tu planilla de fuerza, sin papel.<br>Tus datos quedan en este teléfono.</span>
+          <span class="num" style="font-size:15px;color:#7C7C82">Versión 1.0.0 (12)</span>
+        </div>
+      </div>
+      <span style="font-size:13px;line-height:1.5;color:#C9C9CC">Reemplaza el «GYM APP / Versión» de hoy. Es el único lugar con el ícono <b style="color:#F4F4F2">a color</b> dentro de la app: no tiene acciones y queda lejos de los botones. El wordmark va en hueso: un solo naranja por pieza. La versión sale de <code>expo-application</code>.</span>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.1em;color:#FF4D6A">NO · DÓNDE NO VA LA MARCA</span>
+      <div style="padding:16px 18px;border-radius:16px;background:#141416;border:1px solid #2A2A2E;display:flex;flex-direction:column;gap:10px;font-size:14px;line-height:1.45;color:#C9C9CC">
+        <span><b style="color:#F4F4F2">Entrenando.</b> Ni header ni marca de agua: ahí solo números y ✓.</span>
+        <span><b style="color:#F4F4F2">Resumen y PR.</b> Las tres luces blancas son el festejo; un logo ahí lo vuelve publicidad.</span>
+        <span><b style="color:#F4F4F2">Tab bar.</b> Íconos de sección, no de marca.</span>
+        <span><b style="color:#F4F4F2">Headers de Rutinas, Progreso y Perfil.</b> El título de la pantalla en Barlow alcanza.</span>
+        <span><b style="color:#F4F4F2">Estados vacíos contextuales</b> (Progreso vacío, P10): sin cambios.</span>
+        <span><b style="color:#F4F4F2">Botones, temporizador, diálogos.</b> La cuña naranja nunca aparece como ícono de acción.</span>
+        <span><b style="color:#F4F4F2">Carga.</b> La réplica del splash (L2) y nada más: ni spinner ni wordmark.</span>
+      </div>
+      <div style="padding:14px 16px;border-radius:14px;background:rgba(255,91,31,0.10);box-shadow:inset 0 0 0 1px rgba(255,91,31,0.45);font-size:13.5px;line-height:1.5;color:#C9C9CC"><b style="color:#F4F4F2">Regla corta:</b> dentro de pantallas con acciones, la marca va en una tinta hueso. A color solo en ícono, splash y «Acerca de».</div>
+    </div>
+  </div>
+
+  <section style="display:flex;flex-direction:column;gap:10px">
+    <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">TEXTOS QUE HOY DICEN «GYM APP»</span>
+    <div style="border-radius:14px;border:1px solid #2A2A2E;overflow:hidden;font-size:13.5px;line-height:1.45">
+      <div style="display:grid;grid-template-columns:330px 260px 260px minmax(0,1fr);gap:16px;padding:10px 16px;background:#1C1C1F;font-size:11px;font-weight:700;letter-spacing:0.12em;color:#9A9A9F"><span>DÓNDE</span><span>HOY</span><span>PASA A</span><span>NOTA</span></div>
+      <div style="display:grid;grid-template-columns:330px 260px 260px minmax(0,1fr);gap:16px;padding:10px 16px;border-top:1px solid #1F1F22;background:#141416"><code>apps/mobile/app.json · expo.name</code><span style="color:#9A9A9F">Gym App</span><span>Kalk</span><span style="color:#9A9A9F">Nombre bajo el ícono y en ajustes de iOS.</span></div>
+      <div style="display:grid;grid-template-columns:330px 260px 260px minmax(0,1fr);gap:16px;padding:10px 16px;border-top:1px solid #1F1F22;background:#141416"><code>app/(tabs)/perfil.tsx</code><span style="color:#9A9A9F">GYM APP · Versión x</span><span>Bloque «Acerca de Kalk»</span><span style="color:#9A9A9F">Ícono + wordmark SVG + frase + versión.</span></div>
+      <div style="display:grid;grid-template-columns:330px 260px 260px minmax(0,1fr);gap:16px;padding:10px 16px;border-top:1px solid #1F1F22;background:#141416"><code>components/home/HomeEmpty.tsx</code><span style="color:#9A9A9F">…cada día te sugerimos qué entrenar.</span><span>…y Kalk te sugiere qué entrenar cada día.</span><span style="color:#9A9A9F">La única mención en texto dentro del flujo.</span></div>
+      <div style="display:grid;grid-template-columns:330px 260px 260px minmax(0,1fr);gap:16px;padding:10px 16px;border-top:1px solid #1F1F22;background:#141416"><code>core · services/dataExport.ts · exportFileName</code><span style="color:#9A9A9F">gym-app-backup-AAAA-MM-DD.json</span><span>kalk-backup-AAAA-MM-DD.json</span><span style="color:#9A9A9F">Importar sigue aceptando los archivos viejos (lee el contenido, no el nombre).</span></div>
+      <div style="display:grid;grid-template-columns:330px 260px 260px minmax(0,1fr);gap:16px;padding:10px 16px;border-top:1px solid #1F1F22;background:#141416"><code>README.md · docs/INSTALAR-EN-IPHONE.md</code><span style="color:#9A9A9F">Gym App</span><span>Kalk</span><span style="color:#9A9A9F">Incluye «instalá Gym App» en TestFlight.</span></div>
+      <div style="display:grid;grid-template-columns:330px 260px 260px minmax(0,1fr);gap:16px;padding:10px 16px;border-top:1px solid #1F1F22;background:rgba(255,77,106,0.08)"><code>slug · bundleIdentifier · package · gym-app.db</code><span style="color:#9A9A9F">gym-app · …gymapp</span><span style="color:#FF4D6A">No cambian</span><span style="color:#C9C9CC">Cambiarlos rompe el proyecto de EAS, las actualizaciones, la app de TestFlight o, en el caso de la base, <b style="color:#F4F4F2">borra los datos del usuario</b>. El usuario nunca los ve.</span></div>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1600,"height":1460}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

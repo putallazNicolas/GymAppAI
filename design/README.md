@@ -1,6 +1,7 @@
 # Diseño · Dirección "A · Plataforma"
 
-Copia del canvas de Claude Design **"Gym App Rediseño"** (página "Ajustes UX" agregada el 2026-11-17, versión `1794918701-acd6`)
+Copia del canvas de Claude Design **"Gym App Rediseño"** (página "Ajustes UX" agregada el 2026-11-17, versión `1794918701-acd6`;
+página "Marca" agregada el 2026-11-18, versión `1794969608-9c5a`)
 (`https://claude.ai/artifact/GRHkNGiBdDzJVLgxnrFNec`, versión `1792031927-2d26`), para que los agentes
 lo tengan en el repo. Cada `.dc.html` es HTML con CSS inline: los valores exactos (colores, tamaños,
 pesos, radios, espaciados y textos) están ahí. Abrilos como texto; no hace falta renderizarlos.
@@ -14,34 +15,38 @@ pesos, radios, espaciados y textos) están ahí. Abrilos como texto; no hace fal
 
 ## Mapa de artboards
 
-| Archivo                         | Pantalla                                                                                                                                                   | Ruta en la app           |
-| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `P01-Hoy.dc.html`               | Hoy con datos + banner "Continuar entrenamiento"                                                                                                           | `(tabs)/index`           |
-| `P02-Hoy-Vacio.dc.html`         | Hoy, estado vacío                                                                                                                                          | `(tabs)/index`           |
-| `P03-Entrenando.dc.html`        | Entrenando (prototipo interactivo, **referencia principal**; su `<script>` muestra la lógica de estados)                                                   | `entrenando/[workoutId]` |
-| `P04-Resumen.dc.html`           | Resumen con PR nuevo                                                                                                                                       | `resumen/[workoutId]`    |
-| `P05-Rutinas.dc.html`           | Mis rutinas, con el menú de rutina abierto                                                                                                                 | `(tabs)/rutinas`         |
-| `P06-Armar-Rutina.dc.html`      | Armar rutina                                                                                                                                               | `rutina/[routineId]`     |
-| `P07-Armar-Dia.dc.html`         | Armar día                                                                                                                                                  | `rutina/dia/[dayId]`     |
-| `P08-Elegir-Ejercicio.dc.html`  | Elegir ejercicio, selección múltiple                                                                                                                       | `elegir-ejercicio`       |
-| `P09-Progreso.dc.html`          | Progreso con datos (gráfico interactivo)                                                                                                                   | `(tabs)/progreso`        |
-| `P10-Progreso-Vacio.dc.html`    | Progreso, estado vacío                                                                                                                                     | `(tabs)/progreso`        |
-| `P11-Perfil.dc.html`            | Perfil                                                                                                                                                     | `(tabs)/perfil`          |
-| `S1-Tokens.dc.html`             | Tokens: color, tipografía, espaciado, radios, elevación                                                                                                    | `src/theme/`             |
-| `S2-Componentes.dc.html`        | Componentes: botones, card, inputs, fila de serie (estados), chip, tab bar, header, banner, vacío, diálogo, menú                                           | `src/components/`        |
-| `S3-Implementacion.dc.html`     | Notas para React Native: `theme.ts` listo, fuentes, dependencias, **tabla de microinteracciones**                                                          | —                        |
-| `S4-Notas-UX.dc.html`           | **Ajustes UX: notas para el desarrollador** (componentes, implementación en Expo Go, datos nuevos, bug del título). Referencia principal de los Ajustes UX | —                        |
-| `P06b-Armar-Rutina.dc.html`     | Ajustes UX · Armar rutina con título editable (prototipo)                                                                                                  | `rutina/[routineId]`     |
-| `P06c-Titulo-Estados.dc.html`   | Ajustes UX · Estados del título: normal, editando, vacío, error, largo, día recién creado                                                                  | (componente)             |
-| `P07b-Armar-Dia.dc.html`        | Ajustes UX · Armar día con lista cerrada (simple y por serie)                                                                                              | `rutina/dia/[dayId]`     |
-| `P07c-Editar-Ejercicio.dc.html` | Ajustes UX · Hoja de edición: series, reps y descanso (prototipo)                                                                                          | hoja (formSheet)         |
-| `P07c2-Estados.dc.html`         | Ajustes UX · Estados y transiciones de la hoja                                                                                                             | hoja (formSheet)         |
-| `P07d-Descanso.dc.html`         | Ajustes UX · Selector de descanso: presets + ±15 s                                                                                                         | hoja (formSheet)         |
-| `P08b-Crear-Ejercicio.dc.html`  | Ajustes UX · Crear ejercicio (prototipo); sin los campos "(propuesta)"                                                                                     | modal                    |
-| `P08c-Ejercicio-Propio.dc.html` | Ajustes UX · Ejercicio propio en la lista, edición y toast                                                                                                 | `elegir-ejercicio`       |
-| `P03b-Entrenando.dc.html`       | Ajustes UX · Entrenando con reps planificadas por serie                                                                                                    | `entrenando/[workoutId]` |
-| `Main.dc.html`                  | Exploración de Entrenando (referencia extra)                                                                                                               | —                        |
-| `canvas.json`                   | Índice del canvas                                                                                                                                          | —                        |
+| Archivo                         | Pantalla                                                                                                                                                                                    | Ruta en la app           |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `P01-Hoy.dc.html`               | Hoy con datos + banner "Continuar entrenamiento"                                                                                                                                            | `(tabs)/index`           |
+| `P02-Hoy-Vacio.dc.html`         | Hoy, estado vacío                                                                                                                                                                           | `(tabs)/index`           |
+| `P03-Entrenando.dc.html`        | Entrenando (prototipo interactivo, **referencia principal**; su `<script>` muestra la lógica de estados)                                                                                    | `entrenando/[workoutId]` |
+| `P04-Resumen.dc.html`           | Resumen con PR nuevo                                                                                                                                                                        | `resumen/[workoutId]`    |
+| `P05-Rutinas.dc.html`           | Mis rutinas, con el menú de rutina abierto                                                                                                                                                  | `(tabs)/rutinas`         |
+| `P06-Armar-Rutina.dc.html`      | Armar rutina                                                                                                                                                                                | `rutina/[routineId]`     |
+| `P07-Armar-Dia.dc.html`         | Armar día                                                                                                                                                                                   | `rutina/dia/[dayId]`     |
+| `P08-Elegir-Ejercicio.dc.html`  | Elegir ejercicio, selección múltiple                                                                                                                                                        | `elegir-ejercicio`       |
+| `P09-Progreso.dc.html`          | Progreso con datos (gráfico interactivo)                                                                                                                                                    | `(tabs)/progreso`        |
+| `P10-Progreso-Vacio.dc.html`    | Progreso, estado vacío                                                                                                                                                                      | `(tabs)/progreso`        |
+| `P11-Perfil.dc.html`            | Perfil                                                                                                                                                                                      | `(tabs)/perfil`          |
+| `S1-Tokens.dc.html`             | Tokens: color, tipografía, espaciado, radios, elevación                                                                                                                                     | `src/theme/`             |
+| `S2-Componentes.dc.html`        | Componentes: botones, card, inputs, fila de serie (estados), chip, tab bar, header, banner, vacío, diálogo, menú                                                                            | `src/components/`        |
+| `S3-Implementacion.dc.html`     | Notas para React Native: `theme.ts` listo, fuentes, dependencias, **tabla de microinteracciones**                                                                                           | —                        |
+| `S4-Notas-UX.dc.html`           | **Ajustes UX: notas para el desarrollador** (componentes, implementación en Expo Go, datos nuevos, bug del título). Referencia principal de los Ajustes UX                                  | —                        |
+| `P06b-Armar-Rutina.dc.html`     | Ajustes UX · Armar rutina con título editable (prototipo)                                                                                                                                   | `rutina/[routineId]`     |
+| `P06c-Titulo-Estados.dc.html`   | Ajustes UX · Estados del título: normal, editando, vacío, error, largo, día recién creado                                                                                                   | (componente)             |
+| `P07b-Armar-Dia.dc.html`        | Ajustes UX · Armar día con lista cerrada (simple y por serie)                                                                                                                               | `rutina/dia/[dayId]`     |
+| `P07c-Editar-Ejercicio.dc.html` | Ajustes UX · Hoja de edición: series, reps y descanso (prototipo)                                                                                                                           | hoja (modal)             |
+| `P07c2-Estados.dc.html`         | Ajustes UX · Estados y transiciones de la hoja                                                                                                                                              | hoja (modal)             |
+| `P07d-Descanso.dc.html`         | Ajustes UX · Selector de descanso: presets + ±15 s                                                                                                                                          | hoja (modal)             |
+| `P08b-Crear-Ejercicio.dc.html`  | Ajustes UX · Crear ejercicio (prototipo); sin los campos "(propuesta)"                                                                                                                      | modal                    |
+| `P08c-Ejercicio-Propio.dc.html` | Ajustes UX · Ejercicio propio en la lista, edición y toast                                                                                                                                  | `elegir-ejercicio`       |
+| `P03b-Entrenando.dc.html`       | Ajustes UX · Entrenando con reps planificadas por serie                                                                                                                                     | `entrenando/[workoutId]` |
+| `S5-Notas-Marca.dc.html`        | **Marca Kalk: notas para el desarrollador** (qué archivo va en cada lugar, `app.json`, componentes SVG, tokens, splash, textos, qué se valida en Expo Go). Referencia principal de la marca | —                        |
+| `L1-Revision-Logo.dc.html`      | Marca · Revisión del logo B3: reglas del naranja, hueso como token, tamaño mínimo del wordmark (16 px), viewBox 232                                                                         | —                        |
+| `L2-Icono-y-Splash.dc.html`     | Marca · Ícono (claro, oscuro, tintado), splash nativo, réplica de carga y transición a Hoy                                                                                                  | `app.json`, `_layout`    |
+| `L3-Marca-en-la-App.dc.html`    | Marca · Dónde va la marca (Hoy, Hoy vacío, Acerca de Kalk) y dónde no; tabla de textos que cambian                                                                                          | `(tabs)/index`, `perfil` |
+| `Main.dc.html`                  | Exploración de Entrenando (referencia extra)                                                                                                                                                | —                        |
+| `canvas.json`                   | Índice del canvas                                                                                                                                                                           | —                        |
 
 Las exploraciones B y C de la página "Direcciones" no se copiaron: no se usan.
 
@@ -83,3 +88,13 @@ Las exploraciones B y C de la página "Direcciones" no se copiaron: no se usan.
    calcula en el cliente con el mejor e1RM histórico (`getExerciseProgress`). Se implementa.
 5. **Descanso con "+15 s", "A LA BARRA" y cierre a los 5 s:** amplía la propuesta de temporizador; se
    implementa tal cual el diseño (sigue siendo no bloqueante y descartable).
+
+## Marca Kalk (resumen de L1 y S5)
+
+- El logo **nunca** se escribe con una tipografía: `KalkWordmark` y `KalkMark` (`react-native-svg`), con
+  `accessibilityLabel="Kalk"`, 16 px de alto mínimo y nunca dentro de un `Pressable`.
+- Dentro de pantallas con acciones, la marca va **una tinta hueso** (`tone="mono"`). A color (brazo naranja)
+  solo en el ícono, el splash y «Acerca de Kalk».
+- Colores de marca en `brand.*` (`bone`, `signal`, `ink`), literales y separados de `colors.*`.
+- Fuentes del ícono en `apps/mobile/assets/brand/src/icono/`. El viewBox del wordmark es `0 0 232 52`
+  (el paquete de marketing v1.0 dice 230 y recorta la punta de la última K).

@@ -356,8 +356,11 @@ export function importResultOf(snapshot: DataSnapshot): ImportResult {
   };
 }
 
-/** e.g. "gym-app-backup-2026-10-15.json" (the date in the device's local time). */
+/**
+ * e.g. "kalk-backup-2026-10-15.json" (the date in the device's local time). Before the Kalk rename
+ * it was "gym-app-backup-…"; import reads the content, never the file name, so both still import.
+ */
 export function exportFileName(date: Date = new Date()): string {
   const pad = (n: number): string => String(n).padStart(2, '0');
-  return `gym-app-backup-${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}.json`;
+  return `kalk-backup-${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}.json`;
 }

@@ -2,7 +2,7 @@
   "name": "@gym/core",
   "version": "0.1.0",
   "private": true,
-  "description": "Gym app local data layer and domain logic (the 'back').",
+  "description": "Kalk local data layer and domain logic (the 'back').",
   "main": "src/index.ts",
   "types": "src/index.ts",
   "scripts": {

@@ -449,11 +449,23 @@ describe('migrateExportPayload', () => {
 
 describe('exportFileName', () => {
   it('formats the local date with zero padding', () => {
-    expect(exportFileName(new Date(2026, 9, 15, 23, 59))).toBe('gym-app-backup-2026-10-15.json');
-    expect(exportFileName(new Date(2026, 0, 5, 0, 1))).toBe('gym-app-backup-2026-01-05.json');
+    expect(exportFileName(new Date(2026, 9, 15, 23, 59))).toBe('kalk-backup-2026-10-15.json');
+    expect(exportFileName(new Date(2026, 0, 5, 0, 1))).toBe('kalk-backup-2026-01-05.json');
   });
 
   it('defaults to today', () => {
-    expect(exportFileName()).toMatch(/^gym-app-backup-\d{4}-\d{2}-\d{2}\.json$/);
+    expect(exportFileName()).toMatch(/^kalk-backup-\d{4}-\d{2}-\d{2}\.json$/);
+  });
+
+  it('keeps importing files exported before the rename (gym-app-backup-…)', async () => {
+    // The file name changed, the content did not: old files carry the same format id.
+    expect(EXPORT_FORMAT).toBe('gym-app-export');
+    const source = createInMemoryRepositories();
+    const routine = await source.routines.create({ name: 'Mi rutina' });
+    const oldFile = JSON.stringify(await createDomainServices(source).exportAllData());
+    const target = createInMemoryRepositories({ seed: false });
+    const result = await createDomainServices(target).importAllData(JSON.parse(oldFile));
+    expect(result.routines).toBe(1);
+    expect((await target.routines.getById(routine.id))?.name).toBe('Mi rutina');
   });
 });

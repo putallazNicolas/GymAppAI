@@ -35,6 +35,15 @@ export const motion = {
   draw: 900,
   /** Reduced-motion fade duration. */
   reduced: 150,
+  /** Brand splash replica leaving (design/L2): K scales 1 -> 0.9 and fades. */
+  splashExit: 200,
+  splashExitScale: 0.9,
+  /** The app entering after the splash: fade + 8 pt up, 80 ms after the splash starts leaving. */
+  appEnter: 280,
+  appEnterDelay: 80,
+  appEnterOffset: 8,
+  /** "Preparando tus datos…" appears only if loading takes longer than this. */
+  splashSlowAfter: 1500,
   easeOut: Easing.bezier(0.22, 1, 0.36, 1),
   springPop: { damping: 12, stiffness: 300, mass: 0.6 },
   springSoft: { damping: 18, stiffness: 220 },

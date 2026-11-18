@@ -1,4 +1,4 @@
-# Gym App
+# Kalk
 
 App para registrar entrenamientos de gimnasio (Expo + React Native + TypeScript). V1: un usuario, datos
 guardados solo en el teléfono (SQLite).
@@ -10,6 +10,9 @@ guardados solo en el teléfono (SQLite).
 - **Probar en desarrollo:** `npm install` en la raíz, después `cd apps/mobile && npx expo start` y escaneá el
   QR con Expo Go.
 - **Reglas para agentes:** [CLAUDE.md](CLAUDE.md).
+- **Marca:** logo, ícono y splash en `apps/mobile/assets/brand/`; reglas de uso en `design/S5-Notas-Marca.dc.html`.
+  Internamente el repo, el proyecto de EAS (`gym-app`), el bundle ID y la base (`gym-app.db`) conservan el
+  nombre viejo a propósito.
 
 Estructura: `apps/mobile` (app Expo, expo-router), `packages/core` (datos y lógica: SQLite, servicios,
 export/import), `design/` (diseño de Claude Design), `docs/`.

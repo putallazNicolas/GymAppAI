@@ -13,6 +13,7 @@
     "export:ios": "expo export --platform ios",
     "update:preview": "eas update --branch preview --environment preview --message \"Update manual desde la PC\"",
     "build:ios": "eas build --platform ios --profile production",
+    "build:ios:preview": "eas build --platform ios --profile preview",
     "submit:ios": "eas submit --platform ios --profile production --latest"
   },
   "dependencies": {
@@ -20,6 +21,7 @@
     "@expo-google-fonts/barlow-condensed": "^0.4.1",
     "@gym/core": "*",
     "expo": "~58.0.26",
+    "expo-application": "~58.1.2",
     "expo-constants": "~58.0.16",
     "expo-document-picker": "~58.0.5",
     "expo-file-system": "~58.0.14",

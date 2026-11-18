@@ -1,5 +1,50 @@
 # Progreso
 
+## Marca Kalk (2026-11-18)
+
+La app se llama **Kalk**. Logo B3 (K maciza) aprobado; integración según `design/S5` (PRs #40, #41 y #42).
+
+**Qué cambió**
+
+- **Nombre y config** (`app.json`): `name: "Kalk"`, `scheme: "kalk"`, ícono de iOS en tres apariencias (claro,
+  oscuro, tintado), ícono adaptivo de Android, favicon y splash con la K (`imageWidth: 120`) sobre `#0B0B0C`
+  (antes había un negro verdoso `#0B0F0D`). No cambian el `slug`, el bundle ID, el proyecto de EAS, los updates
+  ni la base `gym-app.db`: tus datos siguen ahí.
+- **Assets** en `apps/mobile/assets/brand/`; los viejos de `assets/images/` se borraron.
+- **Componentes** `KalkWordmark` y `KalkMark` (SVG, nunca tipografía) y colores `brand.*` en el tema.
+- **Hoy:** wordmark chico arriba, en hueso (también vacío). Frase nueva: "…y **Kalk** te sugiere qué entrenar
+  cada día."
+- **Perfil:** bloque "Acerca de Kalk" (ícono a color, wordmark, frase y versión) y "Se exporta
+  kalk-backup-AAAA-MM-DD.json".
+- **Carga:** réplica del splash dibujada en la app; si tarda más de 1,5 s, "Preparando tus datos…"; al terminar
+  la K se achica y se va, y Hoy entra con un fundido.
+- **Exportar** genera `kalk-backup-AAAA-MM-DD.json`. Los `gym-app-backup-….json` viejos se siguen importando.
+- La marca **no** aparece en Entrenando, Resumen, la tab bar ni los headers de las otras pantallas.
+
+**Lo que ya podés probar en Expo Go** (update de `preview`)
+
+1. Hoy: el wordmark KΛLK arriba a la izquierda, chico y blanco hueso (sin naranja).
+2. Perfil, abajo de todo: "Acerca de Kalk" con el ícono a color y la versión.
+3. Al abrir la app: la K centrada y la transición a Hoy (la K se achica y se va, Hoy aparece subiendo un poco).
+   Si cargar tarda, aparece "Preparando tus datos…".
+4. Exportá desde Perfil: en la hoja de compartir el archivo se llama `kalk-backup-…json`. Importar un backup
+   viejo (`gym-app-backup-…`) tiene que funcionar igual.
+
+**Lo que necesita un build de preview** (Expo Go muestra su propio ícono y su splash)
+
+- El ícono en la pantalla de inicio en claro, oscuro y tintado (mantené apretado el fondo → Editar → Personalizar).
+- El splash nativo: que no haya salto de color ni de posición al pasar a la réplica.
+- El nombre **Kalk** debajo del ícono.
+
+Con la cuenta de Apple Developer, desde `apps/mobile` en la PC:
+
+```powershell
+npx eas-cli@latest device:create      # solo la primera vez: registra tu iPhone
+npm run build:ios:preview             # = eas build --platform ios --profile preview
+```
+
+Detalle en `docs/INSTALAR-EN-IPHONE.md` → "Build de preview". Los agentes nunca corren `eas build`.
+
 ## Para probar en el iPhone (2026-11-17)
 
 Arreglos de tres bugs que solo aparecían en iOS (PRs #38 y #39). Abrí el update más nuevo de `preview` en Expo

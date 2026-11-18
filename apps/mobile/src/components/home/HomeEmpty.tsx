@@ -60,7 +60,11 @@ export function HomeEmpty({ onCreateRoutine, onImport }: HomeEmptyProps) {
           La barra está vacía
         </Text>
         <Text variant="body" color="textBody" style={styles.message}>
-          Armá tu primera rutina y cada día te sugerimos qué entrenar.
+          Armá tu primera rutina y{' '}
+          <Text variant="bodyStrong" color="textPrimary">
+            Kalk
+          </Text>{' '}
+          te sugiere qué entrenar cada día.
         </Text>
         <View style={styles.actions}>
           <Button title="Armá tu primera rutina" size="lg" icon="add" onPress={onCreateRoutine} />

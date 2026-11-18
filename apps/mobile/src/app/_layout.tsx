@@ -12,17 +12,25 @@ import {
   useFonts,
 } from '@expo-google-fonts/barlow';
 import { DarkTheme, Stack, ThemeProvider } from 'expo-router';
-import { hideAsync, preventAutoHideAsync } from 'expo-splash-screen';
+import { preventAutoHideAsync } from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import type { Repositories } from '@gym/core';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, type ReactNode } from 'react';
+import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import Animated, {
+  useAnimatedStyle,
+  useReducedMotion,
+  useSharedValue,
+  withDelay,
+  withTiming,
+} from 'react-native-reanimated';
 
-import { ConfirmHost, ErrorState, LoadingState } from '../components';
+import { BrandSplash, ConfirmHost, ErrorState } from '../components';
 
 import { DataProvider } from '../data/DataProvider';
 import { createRepositories } from '../data/createRepositories';
-import { colors, fonts } from '../theme';
+import { colors, fonts, motion } from '../theme';
 
 export { ErrorBoundary } from 'expo-router';
 
@@ -90,88 +98,116 @@ export default function RootLayout() {
     setAttempt((n) => n + 1);
   }, []);
 
-  useEffect(() => {
-    if (fontsReady) hideAsync().catch(() => undefined);
-  }, [fontsReady]);
-
-  // The native splash stays up until the fonts are ready.
-  if (!fontsReady) return null;
-
-  if (!repositories) {
-    return (
-      <GestureHandlerRootView style={{ flex: 1, backgroundColor: colors.background }}>
-        <StatusBar style="light" />
-        {failed ? (
-          <ErrorState message="No pudimos abrir tus datos." onRetry={retry} />
-        ) : (
-          <LoadingState />
-        )}
-      </GestureHandlerRootView>
-    );
-  }
+  // The brand splash replica (design/L2) covers the app until fonts and SQLite are ready, then
+  // plays its exit while the app enters underneath.
+  const [splashGone, setSplashGone] = useState(false);
+  const onSplashGone = useCallback(() => setSplashGone(true), []);
+  const ready = fontsReady && repositories !== null;
 
   return (
-    <GestureHandlerRootView style={{ flex: 1, backgroundColor: colors.background }}>
-      <DataProvider repositories={repositories}>
-        <ThemeProvider value={navigationTheme}>
-          <StatusBar style="light" />
-          <Stack
-            screenOptions={{
-              headerStyle: { backgroundColor: colors.background },
-              headerShadowVisible: false,
-              headerTintColor: colors.textPrimary,
-              headerTitleStyle: { fontFamily: fonts.displayBold },
-              contentStyle: { backgroundColor: colors.background },
-              headerBackTitle: 'Atrás',
-            }}
-          >
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="rutina/[routineId]"
-              options={{ title: 'Armar rutina', headerShown: false }}
-            />
-            <Stack.Screen
-              name="rutina/dia/[dayId]"
-              options={{ title: 'Armar día', headerShown: false }}
-            />
-            <Stack.Screen
-              name="rutina/ejercicio/[plannedId]"
-              options={{ title: 'Editar ejercicio', ...sheetOptions }}
-            />
-            <Stack.Screen
-              name="rutina/descanso/[plannedId]"
-              options={{ title: 'Descanso', ...sheetOptions }}
-            />
-            <Stack.Screen
-              name="elegir-ejercicio"
-              options={{ title: 'Elegir ejercicio', presentation: 'modal', headerShown: false }}
-            />
-            <Stack.Screen
-              name="ejercicio/nuevo"
-              options={{ title: 'Crear ejercicio', presentation: 'modal', headerShown: false }}
-            />
-            <Stack.Screen
-              name="ejercicio/[exerciseId]/editar"
-              options={{ title: 'Editar ejercicio', presentation: 'modal', headerShown: false }}
-            />
-            <Stack.Screen
-              name="elegir-dia"
-              options={{ title: 'Elegir día', presentation: 'modal' }}
-            />
-            <Stack.Screen
-              name="entrenando/[workoutId]"
-              options={{
-                title: 'Entrenando',
-                headerShown: false,
-                gestureEnabled: false,
-                animation: 'fade',
-              }}
-            />
-            <Stack.Screen name="resumen/[workoutId]" options={{ title: 'Resumen' }} />
-          </Stack>
-          <ConfirmHost />
-        </ThemeProvider>
-      </DataProvider>
+    <GestureHandlerRootView style={styles.root}>
+      <StatusBar style="light" />
+      {repositories && fontsReady ? (
+        <AppEnter>
+          <App repositories={repositories} />
+        </AppEnter>
+      ) : null}
+      {splashGone ? null : (
+        <BrandSplash leaving={ready} onGone={onSplashGone} canShowText={fontsReady}>
+          {failed && fontsReady ? (
+            <ErrorState message="No pudimos abrir tus datos." onRetry={retry} />
+          ) : undefined}
+        </BrandSplash>
+      )}
     </GestureHandlerRootView>
   );
 }
+
+/** The app after the splash: fades in and rises 8 pt (design/L2); reduced motion: fade only. */
+function AppEnter({ children }: { children: ReactNode }) {
+  const reduced = useReducedMotion();
+  const progress = useSharedValue(0);
+  useEffect(() => {
+    progress.set(
+      reduced
+        ? withTiming(1, { duration: motion.reduced })
+        : withDelay(
+            motion.appEnterDelay,
+            withTiming(1, { duration: motion.appEnter, easing: motion.easeOut }),
+          ),
+    );
+  }, [progress, reduced]);
+  const style = useAnimatedStyle(() => ({
+    opacity: progress.get(),
+    transform: [{ translateY: reduced ? 0 : (1 - progress.get()) * motion.appEnterOffset }],
+  }));
+  return <Animated.View style={[styles.root, style]}>{children}</Animated.View>;
+}
+
+function App({ repositories }: { repositories: Repositories }) {
+  return (
+    <DataProvider repositories={repositories}>
+      <ThemeProvider value={navigationTheme}>
+        <Stack
+          screenOptions={{
+            headerStyle: { backgroundColor: colors.background },
+            headerShadowVisible: false,
+            headerTintColor: colors.textPrimary,
+            headerTitleStyle: { fontFamily: fonts.displayBold },
+            contentStyle: { backgroundColor: colors.background },
+            headerBackTitle: 'Atrás',
+          }}
+        >
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="rutina/[routineId]"
+            options={{ title: 'Armar rutina', headerShown: false }}
+          />
+          <Stack.Screen
+            name="rutina/dia/[dayId]"
+            options={{ title: 'Armar día', headerShown: false }}
+          />
+          <Stack.Screen
+            name="rutina/ejercicio/[plannedId]"
+            options={{ title: 'Editar ejercicio', ...sheetOptions }}
+          />
+          <Stack.Screen
+            name="rutina/descanso/[plannedId]"
+            options={{ title: 'Descanso', ...sheetOptions }}
+          />
+          <Stack.Screen
+            name="elegir-ejercicio"
+            options={{ title: 'Elegir ejercicio', presentation: 'modal', headerShown: false }}
+          />
+          <Stack.Screen
+            name="ejercicio/nuevo"
+            options={{ title: 'Crear ejercicio', presentation: 'modal', headerShown: false }}
+          />
+          <Stack.Screen
+            name="ejercicio/[exerciseId]/editar"
+            options={{ title: 'Editar ejercicio', presentation: 'modal', headerShown: false }}
+          />
+          <Stack.Screen
+            name="elegir-dia"
+            options={{ title: 'Elegir día', presentation: 'modal' }}
+          />
+          <Stack.Screen
+            name="entrenando/[workoutId]"
+            options={{
+              title: 'Entrenando',
+              headerShown: false,
+              gestureEnabled: false,
+              animation: 'fade',
+            }}
+          />
+          <Stack.Screen name="resumen/[workoutId]" options={{ title: 'Resumen' }} />
+        </Stack>
+        <ConfirmHost />
+      </ThemeProvider>
+    </DataProvider>
+  );
+}
+
+const styles = StyleSheet.create({
+  root: { flex: 1, backgroundColor: colors.background },
+});

@@ -1,5 +1,4 @@
 import { DEFAULT_SETTINGS, exportFileName, type WeightUnit } from '@gym/core';
-import Constants from 'expo-constants';
 import * as DocumentPicker from 'expo-document-picker';
 import { File, Paths } from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
@@ -7,6 +6,7 @@ import { useState } from 'react';
 import { Alert, Platform, ScrollView, StyleSheet, View } from 'react-native';
 
 import {
+  AboutKalk,
   Button,
   ErrorState,
   Icon,
@@ -21,6 +21,7 @@ import {
 import { useRepositories, useServices } from '../../data/DataProvider';
 import { useAsync } from '../../data/useAsync';
 import { useFocusAsync } from '../../data/useFocusAsync';
+import { configVersion } from '../../lib/appVersion';
 import { attempt } from '../../lib/errors';
 import { formatDayMonth, formatMonthYear, formatNumber, kgToUnit } from '../../lib/format';
 import { haptics } from '../../lib/haptics';
@@ -77,7 +78,7 @@ export default function PerfilScreen() {
   const lastExport = exportedAt ?? stats.data?.lastExport;
   const [exporting, setExporting] = useState(false);
   const [importing, setImporting] = useState(false);
-  const version = Constants.expoConfig?.version ?? '0.0.0';
+  const version = configVersion();
 
   if (loading && !data)
     return (
@@ -243,17 +244,12 @@ export default function PerfilScreen() {
             onPress={importData}
           />
           <Text variant="caption" color="textTertiary" style={styles.center}>
-            Se exporta un archivo .json con rutinas, entrenamientos y ejercicios.
+            Se exporta {exportFileName(new Date())}
           </Text>
         </View>
 
-        <View style={styles.version}>
-          <Text variant="numS" color="textTertiary">
-            GYM APP
-          </Text>
-          <Text variant="caption" color="textTertiary">
-            Versión {version}
-          </Text>
+        <View style={styles.about}>
+          <AboutKalk />
         </View>
       </ScrollView>
     </ScreenContainer>
@@ -333,5 +329,5 @@ const styles = StyleSheet.create({
     gap: space.md,
   },
   noticeTexts: { flex: 1, gap: 3 },
-  version: { marginTop: space.xxl, alignItems: 'center', gap: 2 },
+  about: { marginTop: space.xxxl + space.sm },
 });

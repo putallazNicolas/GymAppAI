@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "Gym App",
+    "name": "Kalk",
     "slug": "gym-app",
     "version": "0.2.0",
     "runtimeVersion": {
       "policy": "appVersion"
     },
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "gymapp",
+    "icon": "./assets/brand/ios/icon-1024.png",
+    "scheme": "kalk",
     "userInterfaceStyle": "dark",
     "ios": {
       "supportsTablet": false,
@@ -16,21 +16,25 @@
       "buildNumber": "1",
       "config": {
         "usesNonExemptEncryption": false
+      },
+      "icon": {
+        "light": "./assets/brand/ios/icon-1024.png",
+        "dark": "./assets/brand/ios/icon-dark-1024.png",
+        "tinted": "./assets/brand/ios/icon-tinted-1024.png"
       }
     },
     "android": {
       "package": "com.putallaznicolas.gymapp",
       "adaptiveIcon": {
-        "backgroundColor": "#0B0F0D",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "backgroundColor": "#0B0B0C",
+        "foregroundImage": "./assets/brand/android/adaptive-foreground-1024.png",
+        "monochromeImage": "./assets/brand/android/adaptive-monochrome-1024.png"
       },
       "predictiveBackGestureEnabled": false
     },
     "web": {
       "bundler": "metro",
-      "favicon": "./assets/images/favicon.png",
+      "favicon": "./assets/brand/web/favicon-48.png",
       "output": "single"
     },
     "plugins": [
@@ -38,9 +42,10 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/brand/splash/splash-icon-1024.png",
+          "imageWidth": 120,
           "resizeMode": "contain",
-          "backgroundColor": "#0B0F0D"
+          "backgroundColor": "#0B0B0C"
         }
       ]
     ],

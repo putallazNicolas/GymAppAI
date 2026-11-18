@@ -2,6 +2,7 @@ import { colors } from './colors';
 import { elevation, hit, motion, radii, space, stroke } from './spacing';
 import { fonts, type } from './typography';
 
+export * from './brand';
 export * from './colors';
 export * from './spacing';
 export * from './typography';

@@ -9,6 +9,7 @@ import {
   ErrorState,
   LoadingState,
   PressableScale,
+  KalkWordmark,
   ScreenContainer,
   ScreenHeader,
   Text,
@@ -235,6 +236,10 @@ export default function HoyScreen() {
 
   return (
     <ScreenContainer>
+      {/* The brand signs Hoy only (design/L3): one ink, 16 pt, not tappable. */}
+      <View style={styles.brand}>
+        <KalkWordmark height={16} tone="mono" />
+      </View>
       <ScreenHeader
         label={formatDate(now)}
         title={isEmpty ? 'Bienvenido' : greeting(now.getHours())}
@@ -245,6 +250,7 @@ export default function HoyScreen() {
 }
 
 const styles = StyleSheet.create({
+  brand: { paddingTop: space.md, flexDirection: 'row' },
   body: { flex: 1 },
   content: { gap: space.md, paddingBottom: space.xl },
   section: { marginTop: space.sm, gap: space.sm },

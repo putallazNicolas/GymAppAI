@@ -35,3 +35,7 @@ export { TabBar } from './TabBar';
 export { Text } from './Text';
 export { Toast } from './Toast';
 export { TextField } from './TextField';
+export { BrandSplash } from './brand/BrandSplash';
+export { KalkMark } from './brand/KalkMark';
+export { KalkWordmark } from './brand/KalkWordmark';
+export { AboutKalk } from './brand/AboutKalk';

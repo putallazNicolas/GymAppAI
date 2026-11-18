@@ -1,6 +1,7 @@
-# Instalar la app en el iPhone (sin Mac y sin la PC prendida)
+# Instalar Kalk en el iPhone (sin Mac y sin la PC prendida)
 
-Hay dos caminos. El repo ya está preparado para los dos:
+Hay dos caminos. El repo ya está preparado para los dos. El proyecto en expo.dev se sigue llamando
+**gym-app** (el `slug` no cambia con el nombre Kalk):
 
 - **Parte A · Expo Go (gratis, ya):** la app se publica en los servidores de Expo con EAS Update y la abrís
   desde Expo Go. Cada vez que se mergea un PR en `main`, GitHub publica la versión nueva solo.
@@ -136,10 +137,23 @@ así que **no hace falta una Mac**.
 
 4. **Instalala desde TestFlight:** en [App Store Connect](https://appstoreconnect.apple.com) → tu app →
    **TestFlight** → **Testers internos**, agregate con tu Apple ID. En el iPhone instalá la app
-   **TestFlight**, aceptá la invitación e instalá **Gym App**.
+   **TestFlight**, aceptá la invitación e instalá **Kalk**.
 5. Los builds de producción usan el canal `production` de EAS Update. Para mandar cambios sin compilar de
    nuevo: `eas update --branch production --environment production --message "…"`. Si cambiaste
    dependencias nativas, subí `version` en `app.json` y hacé un build nuevo: ver "Decisiones" abajo.
+
+### Build de preview: para ver el ícono, el splash y el nombre Kalk
+
+Expo Go muestra su propio ícono y su splash: el ícono de Kalk (claro, oscuro y tintado), el splash nativo y el
+nombre debajo del ícono solo se ven en un build. Con la cuenta de Apple Developer, desde `apps/mobile`:
+
+```powershell
+npx eas-cli@latest device:create      # solo la primera vez: registra tu iPhone (abrí el link en el iPhone)
+npm run build:ios:preview             # = eas build --platform ios --profile preview
+```
+
+Cuando termina, EAS muestra un QR: escanealo con la cámara del iPhone e instalá la app. Ese build usa el canal
+`preview`, así que después recibe solo los updates que publica el workflow.
 
 ### Antes de pasar de Expo Go a TestFlight: llevate tus datos
 

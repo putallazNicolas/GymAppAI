@@ -20,12 +20,15 @@ tabs. **Resumen** aparece al finalizar el entrenamiento.
 
 ## 4.1 Hoy (home)
 
+- Arriba de todo, el wordmark **Kalk** una tinta hueso de 16 pt (`KalkWordmark`, no se toca; también en el
+  estado vacío). Es el único header con marca (`design/L3`).
 - Fecha y saludo.
 - Card "Entrenamiento de hoy" con el día sugerido de la rutina activa (nombre del día y lista corta de
   ejercicios), botón grande **Empezar** y un link **"Elegir otro día"**.
 - Si hay un entrenamiento sin finalizar, un banner **"Continuar entrenamiento"** arriba de todo.
 - Últimos 3 entrenamientos (fecha, día, duración, volumen). Al tocar uno se ve su resumen.
-- Estado vacío (sin rutinas): CTA **"Armá tu primera rutina"** que lleva a Armar rutina.
+- Estado vacío (sin rutinas): CTA **"Armá tu primera rutina"** que lleva a Armar rutina. Frase: "Armá tu
+  primera rutina y **Kalk** te sugiere qué entrenar cada día."
 
 ## 4.2 Entrenando (entrenamiento activo) — decisiones CERRADAS
 
@@ -139,7 +142,17 @@ tabs. **Resumen** aparece al finalizar el entrenamiento.
   seguido."**
 - Botón **"Exportar datos"**: genera un JSON y abre el share sheet (`expo-file-system` + `expo-sharing`).
 - **(propuesta)** "Importar datos" desde un JSON.
-- Versión de la app.
+- Debajo del botón de importar: "Se exporta kalk-backup-AAAA-MM-DD.json".
+- Bloque **"Acerca de Kalk"** (`design/L3`): ícono a color, wordmark una tinta, "Tu planilla de fuerza, sin
+  papel. / Tus datos quedan en este teléfono." y la versión (`expo-application` en un build; en Expo Go, la de
+  `app.json`).
+
+## Carga de la app
+
+- Mientras cargan las fuentes y SQLite: `BrandSplash`, réplica exacta del splash nativo (fondo `brand.ink`, la K de
+  120 × 120 centrada). Oculta el splash nativo en su primer layout. Si tarda más de 1,5 s, "Preparando tus
+  datos…". Al terminar, la K escala a 0,9 y se desvanece (200 ms) y la app entra con fundido subiendo 8 pt
+  (280 ms, 80 ms después). Con Reduce Motion, solo fundido de 150 ms. Si falla, el error va sobre el mismo fondo.
 
 ## Rutas sugeridas (expo-router, `apps/mobile/src/app/`)
 

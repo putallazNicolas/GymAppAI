@@ -20,7 +20,11 @@ interface TodayCardProps {
   totalSets: number;
   /** "jue 8 oct"; omitted when the day was never trained. */
   lastTime?: string;
-  /** Another workout is in progress: starting is disabled. */
+  /**
+   * Another workout is in progress (design/L5): the day name comes back at 30 pt and "Empezar
+   * <día>" becomes a secondary, disabled button, so "Continuar" is the only filled orange.
+   * Otherwise the day name is the Hoy headline and the card does not repeat it.
+   */
   blocked: boolean;
   onStart: () => void;
   onPickDay: () => void;
@@ -68,9 +72,11 @@ export function TodayCard({
           Entrenamiento de hoy
         </Text>
         <Text variant="caption">{caption}</Text>
-        <Text variant="displayXL" style={styles.day} numberOfLines={2}>
-          {dayName}
-        </Text>
+        {blocked ? (
+          <Text variant="dayNameS" style={styles.day} numberOfLines={2}>
+            {dayName}
+          </Text>
+        ) : null}
       </View>
       {shown.length > 0 ? (
         <View style={styles.list}>
@@ -92,13 +98,17 @@ export function TodayCard({
         <Text variant="caption">{summary}</Text>
         {lastTime ? <Text variant="caption">Última vez: {lastTime}</Text> : null}
       </View>
-      <Button
-        title="Empezar"
-        size="lg"
-        icon="play"
-        disabled={blocked || exercises.length === 0}
-        onPress={onStart}
-      />
+      {blocked ? (
+        <Button title={`Empezar ${dayName}`} variant="secondary" disabled onPress={onStart} />
+      ) : (
+        <Button
+          title="Empezar"
+          size="lg"
+          icon="play"
+          disabled={exercises.length === 0}
+          onPress={onStart}
+        />
+      )}
       <Button
         title="Elegir otro día"
         variant="ghost"
@@ -117,7 +127,7 @@ export function TodayCard({
 
 const styles = StyleSheet.create({
   card: {
-    paddingTop: space.lg + 2,
+    paddingTop: space.lg,
     paddingHorizontal: space.lg,
     paddingBottom: space.sm,
     borderRadius: radii.xl + 2,
@@ -127,8 +137,8 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   rings: { position: 'absolute', right: -58, top: -52 },
-  head: { gap: space.xs },
-  day: { marginTop: space.xs },
+  head: { gap: 2 },
+  day: { marginTop: space.sm },
   list: { marginTop: space.md + 2 },
   item: {
     minHeight: 32,

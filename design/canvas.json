@@ -2,6 +2,14 @@
   "v": 3,
   "attachments": {},
   "boards": {
+    "L5-Hoy-y-Navegacion.dc.html": {
+      "h": 6300,
+      "page": "ajustes-hoy",
+      "title": "L5 · Hoy (B actual + 2 opciones) y navegación de stack (2 opciones) · esperan elección",
+      "w": 1400,
+      "x": 0,
+      "y": 0
+    },
     "L4-Marca-en-Hoy.dc.html": {
       "h": 2860,
       "page": "marca",
@@ -35,7 +43,7 @@
       "y": 3000
     },
     "S5-Notas-Marca.dc.html": {
-      "h": 3150,
+      "h": 3800,
       "page": "marca",
       "title": "S5 · Notas de marca para el desarrollador",
       "w": 1100,
@@ -455,7 +463,8 @@
     "L2-Icono-y-Splash.dc.html",
     "L3-Marca-en-la-App.dc.html",
     "S5-Notas-Marca.dc.html",
-    "L4-Marca-en-Hoy.dc.html"
+    "L4-Marca-en-Hoy.dc.html",
+    "L5-Hoy-y-Navegacion.dc.html"
   ],
   "pages": [
     {
@@ -473,6 +482,10 @@
     {
       "id": "marca",
       "name": "Marca"
+    },
+    {
+      "id": "ajustes-hoy",
+      "name": "Ajustes Hoy"
     }
   ],
   "title": "Gym App Rediseño"

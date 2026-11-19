@@ -7,6 +7,7 @@ import { AboutKalk } from '../components/brand/AboutKalk';
 import { BrandSplash } from '../components/brand/BrandSplash';
 import { KalkMark } from '../components/brand/KalkMark';
 import { KalkWordmark } from '../components/brand/KalkWordmark';
+import { HoyHeader } from '../components/home/HoyHeader';
 import HomeEmpty from './homeEmptyHarness';
 import { brand } from '../theme';
 
@@ -42,7 +43,7 @@ describe('KalkWordmark', () => {
 });
 
 describe('KalkMark', () => {
-  it('crop: the K alone, framed tight, with size as its height (Hoy header, design/L4 B)', async () => {
+  it('crop: the K alone, framed tight, with size as its height (S5 §3)', async () => {
     expect(fills(KalkMark({ crop: true, tile: true, tone: 'mono' }))).toEqual([
       brand.bone,
       brand.bone,
@@ -119,8 +120,62 @@ describe('AboutKalk', () => {
 });
 
 describe('HomeEmpty', () => {
-  it('names the app once, as text', async () => {
+  it('keeps the barbell, the CTA and the steps, without title or line (they are in the headline)', async () => {
     await render(<HomeEmpty />);
-    expect(screen.getByText(/Kalk.*te sugiere qué entrenar cada día/)).toBeTruthy();
+    expect(screen.getByText('Armá tu primera rutina')).toBeTruthy();
+    expect(screen.getByText('Creá una rutina y ponele nombre')).toBeTruthy();
+    expect(screen.queryByText('La barra está vacía')).toBeNull();
+    expect(screen.queryByText(/te sugiere/)).toBeNull();
+  });
+});
+
+describe('HoyHeader', () => {
+  it('only the wordmark while loading', async () => {
+    await render(<HoyHeader />);
+    expect(screen.getByLabelText('Kalk').props.height).toBe(20);
+    expect(screen.queryByRole('header')).toBeNull();
+  });
+
+  it('"HOY TOCA" with the last workout, the PR chip and the weekly meter', async () => {
+    await render(
+      <HoyHeader
+        headline={{
+          label: 'Hoy toca',
+          title: 'Piernas A',
+          support: 'Último entreno hace 3 días',
+          pr: { set: '140 × 5', exercise: 'Sentadilla' },
+        }}
+        week={{ done: 1, planned: 4 }}
+      />,
+    );
+    expect(screen.getByRole('header', { name: 'Piernas A' })).toBeTruthy();
+    expect(screen.getByText('Último entreno hace 3 días ·')).toBeTruthy();
+    expect(screen.getByText('PR')).toBeTruthy();
+    expect(screen.getByText('140 × 5')).toBeTruthy();
+    expect(screen.getByText('en sentadilla')).toBeTruthy();
+    expect(screen.getByLabelText('Esta semana: 1 de 4 entrenamientos')).toBeTruthy();
+    // The brand is never a button.
+    expect(screen.queryAllByRole('button')).toHaveLength(0);
+  });
+
+  it('the meter text never goes past the plan (VoiceOver says the real count)', async () => {
+    await render(
+      <HoyHeader
+        headline={{ label: 'Hoy toca', title: 'Día 1', support: 'Ya entrenaste hoy' }}
+        week={{ done: 2, planned: 1 }}
+      />,
+    );
+    expect(screen.getByText('1/1')).toBeTruthy();
+    expect(screen.getByLabelText('Esta semana: 2 de 1 entrenamiento')).toBeTruthy();
+  });
+
+  it('no meter and no chip when there is no routine', async () => {
+    await render(
+      <HoyHeader
+        headline={{ label: 'Primer paso', title: 'Armá tu rutina', support: 'Tarda dos minutos.' }}
+      />,
+    );
+    expect(screen.queryByLabelText(/^Esta semana/)).toBeNull();
+    expect(screen.queryByText('PR')).toBeNull();
   });
 });

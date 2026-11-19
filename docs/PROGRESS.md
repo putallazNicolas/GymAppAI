@@ -1,5 +1,12 @@
 # Progreso
 
+## Hoy rediseñada: KALK arriba y titular (2026-11-19)
+
+Opción 1 de `design/L5` (reemplaza a la B). **En Expo Go:** arriba de Hoy, "KΛLK" centrado en hueso; debajo un
+titular que cambia: "HOY TOCA" + el día (con cuándo fue el último entreno y el PR de las últimas dos semanas, si
+hay), "QUEDÓ A MEDIAS" si dejaste un entreno sin terminar (ahí el único botón naranja es "Continuar"), o
+"PRIMER PASO" con la app vacía. A la derecha, "SEMANA x/N": entrenos de esta semana sobre los días de tu rutina.
+
 ## La K de Kalk en Hoy (2026-11-19)
 
 Opción **B** de `design/L4` (la que eligió el dueño; reemplaza a la firma al pie de #43). **En Expo Go, sin

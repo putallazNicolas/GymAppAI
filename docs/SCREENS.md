@@ -20,9 +20,9 @@ tabs. **Resumen** aparece al finalizar el entrenamiento.
 
 ## 4.1 Hoy (home)
 
-- Header: fecha y saludo, sin marca (el "SEMANA 1/4" de P01 sigue fuera de V1).
-- **Firma al pie** (`design/L4`, opción C): `KalkWordmark` gris (`tone="muted"`, 16 pt) centrado como último
-  elemento del scroll, 32 pt debajo del último bloque. En el estado vacío queda pegado al fondo. No se toca.
+- Header (`design/L4`, opción B): la K de Kalk (`KalkMark cropped`, hueso, 22 pt, no se toca) + un filete fino +
+  la fecha en la misma línea; abajo, el saludo como título. Igual en el estado vacío. (El "SEMANA 1/4" de P01
+  sigue fuera de V1.)
 - Card "Entrenamiento de hoy" con el día sugerido de la rutina activa (nombre del día y lista corta de
   ejercicios), botón grande **Empezar** y un link **"Elegir otro día"**.
 - Si hay un entrenamiento sin finalizar, un banner **"Continuar entrenamiento"** arriba de todo.

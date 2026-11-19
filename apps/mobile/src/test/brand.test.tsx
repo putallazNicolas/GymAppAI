@@ -39,13 +39,20 @@ describe('KalkWordmark', () => {
     expect(color.filter((f) => f === brand.signal)).toHaveLength(1);
     expect(color[1]).toBe(brand.signal);
   });
-
-  it('"muted" is the whole wordmark in one gray ink (the signature at the foot of Hoy)', () => {
-    expect(new Set(fills(KalkWordmark({ tone: 'muted' })))).toEqual(new Set([brand.muted]));
-  });
 });
 
 describe('KalkMark', () => {
+  it('cropped: the K alone, framed tight, with size as its height (Hoy header, design/L4 B)', async () => {
+    expect(fills(KalkMark({ cropped: true, tile: true, tone: 'mono' }))).toEqual([
+      brand.bone,
+      brand.bone,
+    ]);
+    await render(<KalkMark size={22} cropped tone="mono" />);
+    const svg = screen.getByLabelText('Kalk');
+    expect(svg.props.height).toBe(22);
+    expect(svg.props.width).toBeCloseTo((22 * 51) / 52);
+  });
+
   it('draws the ink tile only when asked, and is labelled "Kalk"', async () => {
     expect(fills(KalkMark({ tile: true }))).toEqual([brand.ink, brand.bone, brand.signal]);
     expect(fills(KalkMark({ tone: 'mono' }))).toEqual([brand.bone, brand.bone]);

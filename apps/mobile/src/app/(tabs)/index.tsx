@@ -1,6 +1,6 @@
 import { summarizePlannedSets, type WeightUnit, type WorkoutListItem } from '@gym/core';
 import { useRouter } from 'expo-router';
-import { ScrollView, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 import {
   Banner,
@@ -9,7 +9,7 @@ import {
   ErrorState,
   LoadingState,
   PressableScale,
-  KalkWordmark,
+  KalkMark,
   ScreenContainer,
   ScreenHeader,
   Text,
@@ -75,18 +75,6 @@ function RecentRow({
   );
 }
 
-/**
- * The brand signature at the foot of Hoy (design/L4, option C): the wordmark in gray, centered,
- * at the end of the scroll. Not tappable.
- */
-function Signature({ style }: { style: StyleProp<ViewStyle> }) {
-  return (
-    <View style={[styles.signature, style]}>
-      <KalkWordmark height={16} tone="muted" />
-    </View>
-  );
-}
-
 export default function HoyScreen() {
   const repos = useRepositories();
   const services = useServices();
@@ -137,10 +125,7 @@ export default function HoyScreen() {
     body = <ErrorState message="No pudimos cargar tu día." onRetry={reload} />;
   else if (data && isEmpty)
     body = (
-      <ScrollView contentContainerStyle={styles.emptyContent} showsVerticalScrollIndicator={false}>
-        <HomeEmpty onCreateRoutine={createFirstRoutine} onImport={() => router.push('/perfil')} />
-        <Signature style={styles.signatureBottom} />
-      </ScrollView>
+      <HomeEmpty onCreateRoutine={createFirstRoutine} onImport={() => router.push('/perfil')} />
     );
   else if (data) {
     const { inProgress, inProgressDetail, active, suggested, recent, lastSameDay } = data;
@@ -245,7 +230,6 @@ export default function HoyScreen() {
             </View>
           )}
         </View>
-        <Signature style={styles.signatureAfter} />
       </ScrollView>
     );
   }
@@ -253,6 +237,7 @@ export default function HoyScreen() {
   return (
     <ScreenContainer>
       <ScreenHeader
+        labelLeading={<KalkMark size={22} cropped tone="mono" />}
         label={formatDate(now)}
         title={isEmpty ? 'Bienvenido' : greeting(now.getHours())}
       />
@@ -264,12 +249,6 @@ export default function HoyScreen() {
 const styles = StyleSheet.create({
   body: { flex: 1 },
   content: { gap: space.md, paddingBottom: space.xl },
-  emptyContent: { flexGrow: 1, paddingBottom: space.xl },
-  signature: { alignItems: 'center' },
-  /** 32 pt below the last block (the content gap already adds space.md). */
-  signatureAfter: { marginTop: space.xxxl - space.md },
-  /** Empty state: pushed to the bottom, at least 32 pt below the steps. */
-  signatureBottom: { marginTop: 'auto', paddingTop: space.xxxl },
   section: { marginTop: space.sm, gap: space.sm },
   sectionLabel: { paddingTop: space.xs },
   recentList: { gap: space.xs + 2 },

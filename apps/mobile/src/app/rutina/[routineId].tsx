@@ -1,10 +1,9 @@
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Keyboard, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import Animated, { LinearTransition, useReducedMotion } from 'react-native-reanimated';
 
 import {
-  BackBar,
   DashedAddButton,
   EditableTitle,
   EmptyState,
@@ -106,7 +105,8 @@ export default function RoutineScreen() {
 
   return (
     <Shell>
-      <BackBar label="Rutinas" right={<SavedIndicator stamp={saved} />} />
+      {/* Native header (design/L5 option A): only the chevron; the save status goes on the right. */}
+      <Stack.Screen options={{ headerRight: () => <SavedIndicator stamp={saved} /> }} />
       <ScrollView
         automaticallyAdjustKeyboardInsets
         contentContainerStyle={styles.content}
@@ -216,12 +216,14 @@ export default function RoutineScreen() {
   );
 }
 
+/** Under the native stack header: no top safe area (the header already has it). */
 function Shell({ children }: { children: React.ReactNode }) {
-  return <ScreenContainer>{children}</ScreenContainer>;
+  return <ScreenContainer edges={['left', 'right']}>{children}</ScreenContainer>;
 }
 
 const styles = StyleSheet.create({
-  content: { gap: space.lg + 2, paddingTop: space.sm + 2, paddingBottom: space.xxxl },
+  /** The title is the first thing, 8 pt below the bar (S5 box "22:30", navigation point 3). */
+  content: { gap: space.lg + 2, paddingTop: space.sm, paddingBottom: space.xxxl },
   activeCard: {
     minHeight: 68,
     flexDirection: 'row',

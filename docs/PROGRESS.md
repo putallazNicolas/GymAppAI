@@ -7,6 +7,20 @@ titular que cambia: "HOY TOCA" + el día (con cuándo fue el último entreno y e
 hay), "QUEDÓ A MEDIAS" si dejaste un entreno sin terminar (ahí el único botón naranja es "Continuar"), o
 "PRIMER PASO" con la app vacía. A la derecha, "SEMANA x/N": entrenos de esta semana sobre los días de tu rutina.
 
+## Navegación: solo la flecha (2026-11-19)
+
+Opción A de `design/L5`. **En Expo Go, en el iPhone:**
+
+- En Armar rutina, Armar día, Elegir ejercicio, Crear/Editar ejercicio, Elegir día y Resumen, arriba a la
+  izquierda hay solo un chevron blanco hueso: sin "Rutinas", sin el nombre de la rutina y sin naranja.
+- Mantené apretado el chevron: el menú muestra los nombres de las pantallas ("Rutina", "Día"…), nunca "HELLO
+  WORLD".
+- Deslizar desde el borde izquierdo sigue volviendo atrás.
+- Elegir ejercicio y Crear ejercicio ahora entran deslizando de costado (antes eran hojas que subían).
+- En Armar rutina y Armar día, "✓ Guardado" aparece arriba a la derecha.
+- En la hoja de editar ejercicio, "Listo" es blanco hueso.
+- El fondo de vidrio de los botones de iOS 26 solo aparece en un build hecho con el SDK de iOS 26.
+
 ## La K de Kalk en Hoy (2026-11-19)
 
 Opción **B** de `design/L4` (la que eligió el dueño; reemplaza a la firma al pie de #43). **En Expo Go, sin

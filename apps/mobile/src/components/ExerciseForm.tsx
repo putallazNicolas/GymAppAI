@@ -28,7 +28,6 @@ import { attempt } from '../lib/errors';
 import { haptics } from '../lib/haptics';
 import { colors, hit, inputHeight, inputType, motion, radii, space, stroke } from '../theme';
 
-import { BackBar } from './BackBar';
 import { Button } from './Button';
 import { Chip } from './Chip';
 import { ErrorState } from './ErrorState';
@@ -61,16 +60,14 @@ export function ExerciseForm({ exerciseId, dayId, initialName }: ExerciseFormPro
 
   if (exerciseId && loading && data === undefined) {
     return (
-      <ScreenContainer>
-        <BackBar label="Cancelar" noChevron />
+      <ScreenContainer edges={['left', 'right']}>
         <LoadingState />
       </ScreenContainer>
     );
   }
   if (exerciseId && (error || !data || !data.isCustom || data.archived)) {
     return (
-      <ScreenContainer>
-        <BackBar label="Cancelar" noChevron />
+      <ScreenContainer edges={['left', 'right']}>
         <ErrorState
           message={
             error
@@ -183,8 +180,7 @@ function FormBody({
     : `Falta ${trimmed.length === 0 ? 'el nombre' : 'el grupo'}`;
 
   return (
-    <ScreenContainer>
-      <BackBar label="Cancelar" noChevron />
+    <ScreenContainer edges={['left', 'right']}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
@@ -394,7 +390,8 @@ function FormBody({
 }
 
 const styles = StyleSheet.create({
-  title: { marginTop: space.xs },
+  /** First thing under the native header (design/L5 option A): 8 pt. */
+  title: { marginTop: space.sm },
   form: { paddingTop: space.lg, gap: space.xl - 2 },
   field: { gap: space.sm },
   labelRow: { flexDirection: 'row', alignItems: 'baseline', gap: space.xs },

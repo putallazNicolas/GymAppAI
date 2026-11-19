@@ -30,7 +30,7 @@ import { BrandSplash, ConfirmHost, ErrorState } from '../components';
 
 import { DataProvider } from '../data/DataProvider';
 import { createRepositories } from '../data/createRepositories';
-import { colors, fonts, motion } from '../theme';
+import { colors, motion } from '../theme';
 
 export { ErrorBoundary } from 'expo-router';
 
@@ -148,25 +148,24 @@ function App({ repositories }: { repositories: Repositories }) {
   return (
     <DataProvider repositories={repositories}>
       <ThemeProvider value={navigationTheme}>
+        {/*
+         * Stack navigation, option A of design/L5 (S5 box "22:30"): native header with only the back
+         * chevron, in bone, no title in the bar (the big title lives in the content) and no orange.
+         * `title` on every screen is still set: VoiceOver and the long-press back menu read it.
+         */}
         <Stack
           screenOptions={{
-            headerStyle: { backgroundColor: colors.background },
-            headerShadowVisible: false,
+            headerBackButtonDisplayMode: 'minimal',
             headerTintColor: colors.textPrimary,
-            headerTitleStyle: { fontFamily: fonts.displayBold },
+            headerTitle: '',
+            headerShadowVisible: false,
+            headerStyle: { backgroundColor: colors.background },
             contentStyle: { backgroundColor: colors.background },
-            headerBackTitle: 'Atrás',
           }}
         >
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="rutina/[routineId]"
-            options={{ title: 'Armar rutina', headerShown: false }}
-          />
-          <Stack.Screen
-            name="rutina/dia/[dayId]"
-            options={{ title: 'Armar día', headerShown: false }}
-          />
+          <Stack.Screen name="rutina/[routineId]" options={{ title: 'Rutina' }} />
+          <Stack.Screen name="rutina/dia/[dayId]" options={{ title: 'Día' }} />
           <Stack.Screen
             name="rutina/ejercicio/[plannedId]"
             options={{ title: 'Editar ejercicio', ...sheetOptions }}
@@ -175,22 +174,13 @@ function App({ repositories }: { repositories: Repositories }) {
             name="rutina/descanso/[plannedId]"
             options={{ title: 'Descanso', ...sheetOptions }}
           />
-          <Stack.Screen
-            name="elegir-ejercicio"
-            options={{ title: 'Elegir ejercicio', presentation: 'modal', headerShown: false }}
-          />
-          <Stack.Screen
-            name="ejercicio/nuevo"
-            options={{ title: 'Crear ejercicio', presentation: 'modal', headerShown: false }}
-          />
+          <Stack.Screen name="elegir-ejercicio" options={{ title: 'Elegir ejercicio' }} />
+          <Stack.Screen name="ejercicio/nuevo" options={{ title: 'Crear ejercicio' }} />
           <Stack.Screen
             name="ejercicio/[exerciseId]/editar"
-            options={{ title: 'Editar ejercicio', presentation: 'modal', headerShown: false }}
+            options={{ title: 'Editar ejercicio' }}
           />
-          <Stack.Screen
-            name="elegir-dia"
-            options={{ title: 'Elegir día', presentation: 'modal' }}
-          />
+          <Stack.Screen name="elegir-dia" options={{ title: 'Elegir día' }} />
           <Stack.Screen
             name="entrenando/[workoutId]"
             options={{

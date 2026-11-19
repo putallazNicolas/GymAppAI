@@ -1,5 +1,5 @@
 export { ActionMenu, type ActionMenuItem, type MenuAnchor } from './ActionMenu';
-export { BackBar, SavedIndicator } from './BackBar';
+export { SavedIndicator } from './SavedIndicator';
 export { Banner, Notice } from './Banner';
 export { Button } from './Button';
 export { Card } from './Card';

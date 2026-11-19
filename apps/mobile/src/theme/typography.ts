@@ -81,6 +81,12 @@ export const type = {
   numD: { fontFamily: fonts.display, fontSize: 28, lineHeight: 28, ...tnum },
   numMd: { fontFamily: fonts.displayBold, fontSize: 20, lineHeight: 22, ...tnum },
   badge: { fontFamily: fonts.display, fontSize: 13, lineHeight: 16, ...tnum },
+  /** Day name on the Hoy card while another workout is in progress (design/L5): 30/28. */
+  dayNameS: { fontFamily: fonts.display, fontSize: 30, lineHeight: 28, ...upper },
+  /** The record in the Hoy headline ("140 × 5"), Barlow Condensed 16 (design/L5). */
+  prNum: { fontFamily: fonts.displayBold, fontSize: 16, lineHeight: 20, ...tnum },
+  /** The "x/N" of the weekly meter on Hoy (design/P01, L5). */
+  meterNum: { fontFamily: fonts.displayBold, fontSize: 15, lineHeight: 18, ...tnum },
   body: { fontFamily: fonts.body, fontSize: 16, lineHeight: 22 },
   bodyStrong: { fontFamily: fonts.bodyBold, fontSize: 16, lineHeight: 22 },
   bodyM: { fontFamily: fonts.body, fontSize: 15, lineHeight: 20 },

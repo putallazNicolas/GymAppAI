@@ -25,9 +25,13 @@ Las hojas de edición no llevan este header.
 
 ## 4.1 Hoy (home)
 
-- Header (`design/L4`, opción B): la K de Kalk (`KalkMark crop`, hueso, 22 pt, no se toca) + un filete fino +
-  la fecha en la misma línea; abajo, el saludo como título. Igual en el estado vacío. (El "SEMANA 1/4" de P01
-  sigue fuera de V1.)
+- Header (`design/L5`, opción 1): `KalkWordmark` hueso de 20 pt centrado arriba (no se toca) y, 18 pt abajo, un
+  **titular según el estado** (sin fecha ni saludo): "HOY TOCA" + el día sugerido + "Último entreno hace N días"
+  (y el PR de los últimos 14 días, si hay); "QUEDÓ A MEDIAS" + el entreno + avance y cuándo empezó; "PRIMER PASO"
+  - "Armá tu rutina". A la derecha, con rutina activa, el medidor "SEMANA x/N": entrenamientos terminados esta
+    semana (lunes a domingo) sobre los días de la rutina.
+- Card del día sin el título grande (está en el titular). Con un entreno a medias, el nombre a 30 pt y "Empezar
+  <día>" como botón secundario: el único naranja lleno es "Continuar". Estado vacío: la card sin título ni frase.
 - Card "Entrenamiento de hoy" con el día sugerido de la rutina activa (nombre del día y lista corta de
   ejercicios), botón grande **Empezar** y un link **"Elegir otro día"**.
 - Si hay un entrenamiento sin finalizar, un banner **"Continuar entrenamiento"** arriba de todo.

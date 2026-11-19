@@ -45,7 +45,8 @@ export function SheetHeader({
         onPress={onDone ?? (() => (router.canGoBack() ? router.back() : router.replace('/')))}
         style={styles.done}
       >
-        <Text variant="bodyStrong" color="accent">
+        {/* Bone, not orange: no orange in any header (design/L5, navigation option A). */}
+        <Text variant="bodyStrong" color="textPrimary">
           Listo
         </Text>
       </PressableScale>

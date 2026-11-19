@@ -1,10 +1,9 @@
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Keyboard, ScrollView, StyleSheet, View } from 'react-native';
 import Animated, { LinearTransition, useReducedMotion } from 'react-native-reanimated';
 
 import {
-  BackBar,
   DashedAddButton,
   EditableTitle,
   EmptyState,
@@ -36,7 +35,6 @@ export default function DayScreen() {
     return {
       day,
       names: new Map(exercises.map((e) => [e.id, e.name])),
-      routineName: routine?.name ?? 'Rutina',
       position: routine ? routine.days.findIndex((d) => d.id === day.id) + 1 : 0,
     };
   }, [dayId]);
@@ -61,7 +59,7 @@ export default function DayScreen() {
       </Shell>
     );
 
-  const { day, names, routineName, position } = data;
+  const { day, names, position } = data;
   const ids = day.exercises.map((e) => e.id);
   const totalSets = day.exercises.reduce((sum, e) => sum + e.plannedSets.length, 0);
 
@@ -86,7 +84,8 @@ export default function DayScreen() {
 
   return (
     <Shell>
-      <BackBar label={routineName} right={<SavedIndicator stamp={saved} />} />
+      {/* Native header (design/L5 option A): only the chevron; the save status goes on the right. */}
+      <Stack.Screen options={{ headerRight: () => <SavedIndicator stamp={saved} /> }} />
       <ScrollView
         automaticallyAdjustKeyboardInsets
         contentContainerStyle={styles.content}
@@ -171,12 +170,14 @@ export default function DayScreen() {
   );
 }
 
+/** Under the native stack header: no top safe area (the header already has it). */
 function Shell({ children }: { children: React.ReactNode }) {
-  return <ScreenContainer>{children}</ScreenContainer>;
+  return <ScreenContainer edges={['left', 'right']}>{children}</ScreenContainer>;
 }
 
 const styles = StyleSheet.create({
-  content: { gap: space.lg + 2, paddingTop: space.sm + 2, paddingBottom: space.xxxl },
+  /** The title is the first thing, 8 pt below the bar (S5 box "22:30", navigation point 3). */
+  content: { gap: space.lg + 2, paddingTop: space.sm, paddingBottom: space.xxxl },
   inlineRow: { flexDirection: 'row', alignItems: 'baseline', gap: space.xs + 1 },
   sectionHead: {
     flexDirection: 'row',

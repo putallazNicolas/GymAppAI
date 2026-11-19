@@ -8,6 +8,11 @@
 Tabs inferiores **Hoy · Rutinas · Progreso · Perfil**. **Entrenando** abre a pantalla completa, fuera de los
 tabs. **Resumen** aparece al finalizar el entrenamiento.
 
+Pantallas de stack (Armar rutina, Armar día, Elegir ejercicio, Crear/Editar ejercicio, Elegir día, Resumen):
+header nativo con **solo el chevron** de atrás, en hueso, sin texto ni título en la barra (`design/L5`, opción
+A). El título grande vive en el contenido, 8 pt debajo de la barra. Las acciones del header van a la derecha.
+Las hojas de edición no llevan este header.
+
 ## Estilo
 
 - Tema oscuro por defecto y **verde** como color de "completado".

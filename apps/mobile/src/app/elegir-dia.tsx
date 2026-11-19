@@ -1,7 +1,14 @@
 import { useRouter } from 'expo-router';
 import { FlatList, StyleSheet } from 'react-native';
 
-import { EmptyState, ErrorState, ListItem, LoadingState, ScreenContainer } from '../components';
+import {
+  EmptyState,
+  ErrorState,
+  ListItem,
+  LoadingState,
+  ScreenContainer,
+  Text,
+} from '../components';
 import { useRepositories, useServices } from '../data/DataProvider';
 import { useAsync } from '../data/useAsync';
 import { attempt } from '../lib/errors';
@@ -46,9 +53,18 @@ export default function PickDayScreen() {
       />
     );
 
-  return <ScreenContainer edges={['bottom', 'left', 'right']}>{body}</ScreenContainer>;
+  // The bar has no title (design/L5 option A): the title is the first thing in the content.
+  return (
+    <ScreenContainer edges={['bottom', 'left', 'right']}>
+      <Text variant="displayL" accessibilityRole="header" style={styles.title}>
+        Elegir día
+      </Text>
+      {body}
+    </ScreenContainer>
+  );
 }
 
 const styles = StyleSheet.create({
+  title: { marginTop: space.sm },
   list: { paddingVertical: space.md },
 });

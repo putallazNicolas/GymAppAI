@@ -15,7 +15,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
   ActionMenu,
-  BackBar,
   Button,
   Chip,
   ErrorState,
@@ -258,8 +257,7 @@ export default function PickExerciseScreen() {
     );
 
   return (
-    <ScreenContainer edges={['top', 'left', 'right']}>
-      <BackBar label="Cancelar" noChevron />
+    <ScreenContainer edges={['left', 'right']}>
       <Text variant="displayL" accessibilityRole="header" style={styles.title}>
         Elegir ejercicio
       </Text>
@@ -351,7 +349,8 @@ export default function PickExerciseScreen() {
 }
 
 const styles = StyleSheet.create({
-  title: { marginTop: space.xs },
+  /** First thing under the native header (design/L5 option A): 8 pt. */
+  title: { marginTop: space.sm },
   search: {
     height: 48,
     marginTop: space.md + 2,

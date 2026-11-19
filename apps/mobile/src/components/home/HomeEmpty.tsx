@@ -50,22 +50,15 @@ function EmptyBarbell() {
   );
 }
 
-/** Hoy without routines (design/P02): empty barbell, CTA, import and the 3-step list. */
+/**
+ * Hoy without routines (design/P02, L5 option 1): empty barbell, CTA, import and the 3-step list.
+ * The title and the line are in the Hoy headline ("PRIMER PASO · Armá tu rutina").
+ */
 export function HomeEmpty({ onCreateRoutine, onImport }: HomeEmptyProps) {
   return (
     <View style={styles.root}>
       <View style={styles.card}>
         <EmptyBarbell />
-        <Text variant="displayL" style={styles.title}>
-          La barra está vacía
-        </Text>
-        <Text variant="body" color="textBody" style={styles.message}>
-          Armá tu primera rutina y{' '}
-          <Text variant="bodyStrong" color="textPrimary">
-            Kalk
-          </Text>{' '}
-          te sugiere qué entrenar cada día.
-        </Text>
         <View style={styles.actions}>
           <Button title="Armá tu primera rutina" size="lg" icon="add" onPress={onCreateRoutine} />
           <Button title="Importar datos" variant="secondary" onPress={onImport} />
@@ -91,7 +84,7 @@ const styles = StyleSheet.create({
   root: { gap: space.xxl },
   card: {
     alignItems: 'center',
-    paddingTop: space.xxl + 4,
+    paddingTop: space.xl + 2,
     paddingHorizontal: space.xl,
     paddingBottom: space.xl,
     borderRadius: radii.xxl,
@@ -99,9 +92,8 @@ const styles = StyleSheet.create({
     borderWidth: stroke.hairline,
     borderColor: colors.border,
   },
-  title: { marginTop: space.lg + 2, textAlign: 'center' },
-  message: { marginTop: space.sm + 2, maxWidth: 290, textAlign: 'center' },
-  actions: { alignSelf: 'stretch', gap: space.sm, marginTop: space.xl + 2 },
+  /** The title and the line now live in the Hoy headline (design/L5): 18 pt to the CTA. */
+  actions: { alignSelf: 'stretch', gap: space.sm, marginTop: space.lg + 2 },
   step: { flexDirection: 'row', alignItems: 'center', gap: space.md + 2, minHeight: 52 },
   stepBorder: { borderBottomWidth: stroke.hairline, borderBottomColor: colors.divider },
   n: { width: 28 },

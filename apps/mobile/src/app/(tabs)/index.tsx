@@ -237,7 +237,7 @@ export default function HoyScreen() {
   return (
     <ScreenContainer>
       <ScreenHeader
-        labelLeading={<KalkMark size={22} cropped tone="mono" />}
+        labelLeading={<KalkMark size={22} crop tone="mono" />}
         label={formatDate(now)}
         title={isEmpty ? 'Bienvenido' : greeting(now.getHours())}
       />

@@ -20,7 +20,7 @@ tabs. **Resumen** aparece al finalizar el entrenamiento.
 
 ## 4.1 Hoy (home)
 
-- Header (`design/L4`, opción B): la K de Kalk (`KalkMark cropped`, hueso, 22 pt, no se toca) + un filete fino +
+- Header (`design/L4`, opción B): la K de Kalk (`KalkMark crop`, hueso, 22 pt, no se toca) + un filete fino +
   la fecha en la misma línea; abajo, el saludo como título. Igual en el estado vacío. (El "SEMANA 1/4" de P01
   sigue fuera de V1.)
 - Card "Entrenamiento de hoy" con el día sugerido de la rutina activa (nombre del día y lista corta de

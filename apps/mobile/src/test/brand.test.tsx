@@ -42,12 +42,12 @@ describe('KalkWordmark', () => {
 });
 
 describe('KalkMark', () => {
-  it('cropped: the K alone, framed tight, with size as its height (Hoy header, design/L4 B)', async () => {
-    expect(fills(KalkMark({ cropped: true, tile: true, tone: 'mono' }))).toEqual([
+  it('crop: the K alone, framed tight, with size as its height (Hoy header, design/L4 B)', async () => {
+    expect(fills(KalkMark({ crop: true, tile: true, tone: 'mono' }))).toEqual([
       brand.bone,
       brand.bone,
     ]);
-    await render(<KalkMark size={22} cropped tone="mono" />);
+    await render(<KalkMark size={22} crop tone="mono" />);
     const svg = screen.getByLabelText('Kalk');
     expect(svg.props.height).toBe(22);
     expect(svg.props.width).toBeCloseTo((22 * 51) / 52);

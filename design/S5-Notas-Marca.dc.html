@@ -16,14 +16,14 @@ pre,code{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace}
 code{color:#F4F4F2;font-size:12.5px}
 </style>
 </helmet>
-<div style="width:1100px;height:2900px;box-sizing:border-box;padding:48px;background:#0B0B0C;color:#F4F4F2;font-family:'Barlow',sans-serif;display:flex;flex-direction:column;gap:32px">
+<div style="width:1100px;height:3150px;box-sizing:border-box;padding:48px;background:#0B0B0C;color:#F4F4F2;font-family:'Barlow',sans-serif;display:flex;flex-direction:column;gap:32px">
 
   <header style="display:flex;flex-direction:column;gap:6px">
     <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#FF5B1F">S5 · KALK · PARA CUANDO SE APRUEBE EL LOGO</span>
     <h1 class="num" style="margin:0;font-size:56px;line-height:0.92;font-weight:800;text-transform:uppercase">Notas de marca para el desarrollador</h1>
   </header>
 
-  <div style="padding:16px 18px;border-radius:14px;background:#141416;box-shadow:inset 0 0 0 1.5px #F4F4F2;font-size:14px;line-height:1.55;color:#C9C9CC;display:flex;flex-direction:column;gap:6px"><span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#FF5B1F">ACTUALIZADO 18 NOV · APROBADO POR NICOLÁS · L4, OPCIÓN C «FIRMA AL PIE» + ACERCA DE CON ÍCONO SOLO</span><span>Reemplaza lo que decían L3 y este documento sobre el header de Hoy:</span><span><b style="color:#F4F4F2">1. Header de Hoy (con datos y vacío): sin wordmark.</b> Vuelve a la fecha y el saludo a la izquierda y el medidor semanal a la derecha, en la misma fila, como en P01 y P02. Se saca el renglón que agregaron los PRs #40–#42.</span><span><b style="color:#F4F4F2">2. Firma al pie:</b> <code>&lt;KalkWordmark height={16} tone="muted" /&gt;</code> centrado, como último elemento del ScrollView de Hoy, 32 pt debajo del último bloque y con <code>paddingBottom</code> suficiente para quedar arriba de la tab bar. En el estado vacío se pega al fondo: <code>contentContainerStyle={{ flexGrow: 1 }}</code> y la firma con <code>marginTop: 'auto'</code>.</span><span><b style="color:#F4F4F2">3. Excepción aprobada a la regla de tinta:</b> la firma va en gris <code>#7C7C82</code> (4,7:1), declarado como <code>brand.muted</code>. Es el único uso del gris en la marca. Dentro de las pantallas sigue sin haber naranja de marca.</span><span><b style="color:#F4F4F2">4.</b> No es <code>Pressable</code> y lleva <code>accessibilityLabel="Kalk"</code>. La carga no cambia.</span><span><b style="color:#F4F4F2">5. Acerca de Kalk (Perfil):</b> sale el wordmark. Queda solo <code>&lt;KalkMark size={80} tile tone="color" /&gt;</code> centrado, la frase de siempre y, en lugar de «Versión x», el nombre como texto junto a la versión: «Kalk» en Barlow 600, 14 pt, <code>textPrimary</code>, y «1.0.0 (12)» en Barlow Condensed 500, 15 pt, <code>textTertiary</code>, en la misma línea. El orden queda: label ACERCA DE KALK, ícono, frase y nombre con versión.</span></div>
+  <div style="padding:16px 18px;border-radius:14px;background:#141416;box-shadow:inset 0 0 0 1.5px #F4F4F2;font-size:14px;line-height:1.55;color:#C9C9CC;display:flex;flex-direction:column;gap:6px"><span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#FF5B1F">ACTUALIZADO 18 NOV, 21:10 · APROBADO POR NICOLÁS · L4, OPCIÓN B «LA K FIRMA» + ACERCA DE CON ÍCONO SOLO</span><span><b style="color:#FF4D6A">Corrige la versión anterior de este recuadro: la elegida es la B, no la C.</b> Si la C ya está en el repo, se deshace (punto 4). Reemplaza lo que decía L3 sobre el header de Hoy. La referencia visual es la columna B de L4.</span><span><b style="color:#F4F4F2">1. Header de Hoy, con datos:</b> arriba, una fila con la K, un filete y la fecha. Debajo, el saludo como título. El medidor semanal va a la derecha, alineado abajo con el saludo. Reemplaza el renglón del wordmark que agregaron los PRs #40–#42.</span><span><b style="color:#F4F4F2">2. Medidas:</b><br>• Contenedor: <code>flexDirection: 'row'</code>, <code>justifyContent: 'space-between'</code>, <code>alignItems: 'flex-end'</code>, <code>gap: 12</code>, <code>paddingHorizontal: space.lg</code> (16). Arranca donde arrancaba el header antes del logo.<br>• Columna izquierda: <code>gap: 8</code> entre la fila de la K y el saludo.<br>• Fila de la K: <code>flexDirection: 'row'</code>, <code>alignItems: 'center'</code>, <code>gap: 10</code>.<br>• K: <code>&lt;KalkMark size={22} crop tone="mono" /&gt;</code>. Mide 21,6 × 22 pt, en una tinta <code>brand.bone</code> (el brazo también va en hueso) y sin baldosa. <code>crop</code> usa <code>viewBox="25 24 51 52"</code> para que la K ocupe los 22 pt sin aire (punto 3, código).<br>• Filete: 1 × 14 pt, <code>colors.borderStrong</code> (#3A3A3F), centrado en vertical por la fila.<br>• Fecha: el mismo estilo de hoy (label en mayúsculas, 12 pt, <code>textSecondary</code>), sin cambios.<br>• Saludo: <code>type.displayL</code> (38/36), sin cambios.<br>• Medidor: el de P01 («SEMANA 1/4» y cuatro segmentos de 14 × 5) con <code>paddingBottom: 3</code>, para que la base de los segmentos quede alineada con la base del saludo. No se alinea con la fila de la K.<br>• El header queda unos 10 pt más alto que el original (22 + 8 + 36). Lo de abajo no se mueve de lugar.</span><span><b style="color:#F4F4F2">3. Hoy vacía (P02):</b> el mismo header, sin medidor. El saludo dice «Bienvenido». El estado vacío no lleva otra marca: la frase «…y Kalk te sugiere…» la nombra como texto.</span><span><b style="color:#F4F4F2">4. Deshacer la C:</b> se van la firma al pie de Hoy (el <code>KalkWordmark</code> gris y el <code>flexGrow</code> / <code>marginTop: 'auto'</code> que se agregaron para ella), <code>tone="muted"</code> y <code>brand.muted</code>. En Hoy no hay wordmark en ningún lado.</span><span><b style="color:#F4F4F2">5. Reglas:</b> la K no es <code>Pressable</code> y lleva <code>accessibilityLabel="Kalk"</code>. Cumple el mínimo de 16 pt y la tinta hueso, así que no hay ninguna excepción. La carga no cambia.</span><span><b style="color:#F4F4F2">6. Acerca de Kalk (Perfil), sin cambios respecto de lo ya implementado:</b> sale el wordmark. Queda solo <code>&lt;KalkMark size={80} tile tone="color" /&gt;</code> centrado, la frase de siempre y, en lugar de «Versión x», el nombre como texto junto a la versión: «Kalk» en Barlow 600, 14 pt, <code>textPrimary</code>, y «1.0.0 (12)» en Barlow Condensed 500, 15 pt, <code>textTertiary</code>, en la misma línea. El orden queda: label ACERCA DE KALK, ícono, frase y nombre con versión.</span></div>
 
   <div style="padding:14px 18px;border-radius:14px;background:rgba(255,91,31,0.10);box-shadow:inset 0 0 0 1px rgba(255,91,31,0.45);font-size:14px;line-height:1.5;color:#C9C9CC"><b style="color:#F4F4F2">Paquete revisado</b> (<code>Kalk-logo-B3.zip</code>, LEEME v1.0). La sección 3 de <code>app.json</code> queda <b style="color:#F4F4F2">confirmada con tres correcciones</b>:<br>1. <code>imageWidth</code> del splash va en <b style="color:#F4F4F2">120</b>, no 200: el arte viene recortado a la K (90 % del cuadrado).<br>2. El array <code>plugins</code> tiene que conservar <code>"expo-router"</code>. Si se copia el ejemplo tal cual, se pierde y la navegación se rompe.<br>3. Se suma <code>web.favicon</code>.<br>Verifiqué los PNG: el ícono por defecto y el tintado son RGB sin alfa, y el oscuro, el splash y los de Android son RGBA, como corresponde.</div>
 
@@ -95,12 +95,11 @@ code{color:#F4F4F2;font-size:12.5px}
 import Svg, { Polygon } from 'react-native-svg';
 import { brand } from '../../theme';
 
-type Props = { height?: number; tone?: 'mono' | 'color' | 'muted' };
+type Props = { height?: number; tone?: 'mono' | 'color' };
 
-/** 232 × 52. 'mono' = una tinta hueso. 'muted' = firma gris al pie de Hoy. */
+/** 232 × 52. tone 'mono' = una tinta hueso (default en la UI). */
 export function KalkWordmark({ height = 16, tone = 'mono' }: Props) {
-  const ink = tone === 'muted' ? brand.muted : brand.bone;
-  const arm = tone === 'color' ? brand.signal : ink;
+  const arm = tone === 'color' ? brand.signal : brand.bone;
   return (
     &lt;Svg
       width={(height * 232) / 52}
@@ -109,12 +108,12 @@ export function KalkWordmark({ height = 16, tone = 'mono' }: Props) {
       accessibilityRole="image"
       accessibilityLabel="Kalk"
     &gt;
-      &lt;Polygon fill={ink} points="0,0 12,0 12,20 32,0 48,0 20,28 12,36 12,52 0,52" /&gt;
+      &lt;Polygon fill={brand.bone} points="0,0 12,0 12,20 32,0 48,0 20,28 12,36 12,52 0,52" /&gt;
       &lt;Polygon fill={arm} points="22,30 51,52 32,52 14,38" /&gt;
-      &lt;Polygon fill={ink} points="64,52 82,0 98,0 116,52 102,52 90,17 78,52" /&gt;
-      &lt;Polygon fill={ink} points="130,0 142,0 142,40 166,40 166,52 130,52" /&gt;
-      &lt;Polygon fill={ink} points="180,0 192,0 192,20 212,0 228,0 200,28 192,36 192,52 180,52" /&gt;
-      &lt;Polygon fill={ink} points="202,30 231,52 212,52 194,38" /&gt;
+      &lt;Polygon fill={brand.bone} points="64,52 82,0 98,0 116,52 102,52 90,17 78,52" /&gt;
+      &lt;Polygon fill={brand.bone} points="130,0 142,0 142,40 166,40 166,52 130,52" /&gt;
+      &lt;Polygon fill={brand.bone} points="180,0 192,0 192,20 212,0 228,0 200,28 192,36 192,52 180,52" /&gt;
+      &lt;Polygon fill={brand.bone} points="202,30 231,52 212,52 194,38" /&gt;
     &lt;/Svg&gt;
   );
 }
@@ -122,12 +121,14 @@ export function KalkWordmark({ height = 16, tone = 'mono' }: Props) {
 // src/components/brand/KalkMark.tsx: viewBox 0 0 100 100
 // K:      25,24 37,24 37,44 57,24 73,24 45,52 37,60 37,76 25,76
 // brazo:  47,54 76,76 57,76 39,62
-// props: size, tile?: boolean (rect rx 22.4 fill brand.ink), tone</pre>
+// props: size, tile?: boolean (rect rx 22.4 fill brand.ink), tone,
+//        crop?: boolean (viewBox "25 24 51 52": solo la K, sin aire;
+//        ancho = size * 51 / 52). Header de Hoy: size 22, crop, mono.</pre>
     </div>
     <div style="display:flex;flex-direction:column;gap:10px;font-size:13.5px;line-height:1.5;color:#C9C9CC">
       <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#9A9A9F">REGLAS DE CÓDIGO</span>
       <div style="padding:12px 14px;border-radius:12px;background:#141416;border:1px solid #2A2A2E">Nunca <code>&lt;Text&gt;KALK&lt;/Text&gt;</code> con Barlow imitando el logo. El nombre como texto corrido («Kalk te sugiere…») sí va con la tipografía del cuerpo.</div>
-      <div style="padding:12px 14px;border-radius:12px;background:#141416;border:1px solid #2A2A2E">El wordmark mide 16 px de alto como mínimo en pantalla. En Hoy va <b style="color:#F4F4F2">al pie del scroll, no en el header</b>: <code>height={16}</code>, <code>tone="muted"</code>.</div>
+      <div style="padding:12px 14px;border-radius:12px;background:#141416;border:1px solid #2A2A2E">El wordmark mide 16 px de alto como mínimo en pantalla. En Hoy <b style="color:#F4F4F2">no va el wordmark</b>: va la K sola (<code>KalkMark size={22} crop</code>), en la línea de la fecha.</div>
       <div style="padding:12px 14px;border-radius:12px;background:#141416;border:1px solid #2A2A2E"><code>tone="color"</code> solo en el ícono de «Acerca de Kalk» (que ya no lleva wordmark) y en la réplica del splash.</div>
       <div style="padding:12px 14px;border-radius:12px;background:#141416;border:1px solid #2A2A2E">Nunca dentro de un <code>Pressable</code>: la marca no es un botón.</div>
       <div style="padding:12px 14px;border-radius:12px;background:#141416;border:1px solid #2A2A2E">Las coordenadas de la K son las del SVG de marketing, ya con el <code>translate(-1,0)</code> aplicado. El ícono de la app y el componente quedan idénticos al píxel.</div>
@@ -140,7 +141,6 @@ export const brand = {
   signal: '#FF5B1F',
   ink: '#0B0B0C',
   tileRaised: '#1C1C1F', // a confirmar
-  muted: '#7C7C82', // solo la firma al pie de Hoy (L4 · C)
 } as const;</pre>
     </div>
   </section>
@@ -159,7 +159,7 @@ export const brand = {
         <span><code>app.json</code> · <code>name</code>: Gym App → <b style="color:#F4F4F2">Kalk</b></span>
         <span><code>(tabs)/perfil.tsx</code>: «GYM APP / Versión» → bloque <b style="color:#F4F4F2">Acerca de Kalk</b>: ícono de 80 pt y «Kalk 1.0.0 (12)» como texto (L4)</span>
         <span><code>home/HomeEmpty.tsx</code>: «…y <b style="color:#F4F4F2">Kalk</b> te sugiere qué entrenar cada día.»</span>
-        <span><code>(tabs)/index.tsx</code>: header de Hoy <b style="color:#F4F4F2">sin</b> wordmark y firma <code>KalkWordmark tone="muted"</code> al pie del scroll (con datos y vacío)</span>
+        <span><code>(tabs)/index.tsx</code>: header de Hoy con <code>KalkMark size={22} crop</code> + filete + fecha y el saludo como título (con datos y vacío). Sin wordmark ni firma al pie</span>
         <span>core · <code>exportFileName</code>: <code>gym-app-backup-…</code> → <code>kalk-backup-…</code> (es back: va como tarea aparte, con su test)</span>
         <span><code>README.md</code>, <code>docs/INSTALAR-EN-IPHONE.md</code>, descripción de <code>packages/core</code>: Gym App → Kalk</span>
       </div>
@@ -184,7 +184,7 @@ export const brand = {
   </section>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1100,"height":2900}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1100,"height":3150}}'>
 class Component extends DCLogic {
   renderVals() {
     return {};

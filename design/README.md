@@ -1,7 +1,7 @@
 # Diseño · Dirección "A · Plataforma"
 
 Copia del canvas de Claude Design **"Gym App Rediseño"** (página "Ajustes UX" agregada el 2026-11-17, versión `1794918701-acd6`;
-página "Marca" agregada el 2026-11-18, versión `1794969608-9c5a`; L4 y S5 actualizado: versión `1795042489-bff7`)
+página "Marca" agregada el 2026-11-18, versión `1794969608-9c5a`; L4 y S5 actualizados: versión `1795047098-c39a`)
 (`https://claude.ai/artifact/GRHkNGiBdDzJVLgxnrFNec`, versión `1792031927-2d26`), para que los agentes
 lo tengan en el repo. Cada `.dc.html` es HTML con CSS inline: los valores exactos (colores, tamaños,
 pesos, radios, espaciados y textos) están ahí. Abrilos como texto; no hace falta renderizarlos.

@@ -4,7 +4,8 @@
 
 Opción **B** de `design/L4` (la que eligió el dueño; reemplaza a la firma al pie de #43). **En Expo Go, sin
 build:** en Hoy, con datos y vacía, a la izquierda de la fecha tiene que verse la K blanca hueso (sin naranja ni
-baldosa), un filete gris fino y la fecha; abajo, el saludo grande como siempre. Al final de Hoy ya no hay
+baldosa), un filete gris fino y la fecha; abajo, el saludo grande como siempre (sin medidor semanal: queda
+fuera de V1). Al final de Hoy ya no hay
 firma. «Acerca de Kalk» y la carga no cambian.
 
 ## Marca Kalk (2026-11-18)
